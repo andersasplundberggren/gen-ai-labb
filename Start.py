@@ -70,7 +70,7 @@ menu()
 st.image("images/logo_main.png", width = 400)
 st.markdown("###### ")
 
-st.image("images/header.jpg")
+st.image("images/background.png")
 st.markdown("###### ")
 
 st.markdown("""
