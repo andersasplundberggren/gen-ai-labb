@@ -70,8 +70,8 @@ menu()
 st.image("images/logome.png", width = 400)
 st.markdown("###### ")
 
-st.image("images/me.png")
-st.markdown("###### ")
+#st.image("images/me.png")
+#st.markdown("###### ")
 
 st.markdown("""
             __Välkommen till min labbyta för generativ AI__"""
