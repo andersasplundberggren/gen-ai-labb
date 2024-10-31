@@ -6,7 +6,7 @@ from datetime import datetime
 import hashlib
 import hmac
 from concurrent.futures import ThreadPoolExecutor
-pip install fpdf
+
 
 
 # External imports
