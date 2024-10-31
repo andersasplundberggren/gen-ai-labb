@@ -19,7 +19,7 @@ import config as c
 
 ### CSS AND STYLING
 
-st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
+st.logo("images/logome.png", icon_image = "images/logo_small.png")
 
 page_config()
 styling()
