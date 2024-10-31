@@ -99,7 +99,7 @@ def main():
     # Radera anteckningar
     if st.button("Radera anteckningar"):
         st.session_state['notes'] = ""  # Rensa anteckningarna
-        st.success("Anteckningarna har raderats.")  # Bekräftelsemeddelande
+        st.experimental_rerun()  # Uppdatera sidan för att rensa textfältet
 
 if __name__ == "__main__":
     main()
