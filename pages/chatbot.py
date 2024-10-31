@@ -23,8 +23,9 @@ page_config()
 styling()
 
 
-# Lägg till fritext högst upp på sidan
-st.write("Här är lite text")
+# Utfällbar textruta
+with st.expander("Välkommen"):
+    st.write("Välkommen till vår AI-assistent! Här kan du få hjälp med dina frågor och hitta svar.")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
