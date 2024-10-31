@@ -14,7 +14,7 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
+st.logo("images/logome.png", icon_image = "images/logo_small.png")
 
 page_config()
 styling()
@@ -67,7 +67,7 @@ menu()
 
 ### MAIN PAGE
 
-st.image("images/logo_main.png", width = 400)
+st.image("images/logome.png", width = 400)
 st.markdown("###### ")
 
 st.image("images/me.png")
