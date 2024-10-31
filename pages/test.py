@@ -64,14 +64,20 @@ if st.session_state["pwd_on"] == "true":
 
 ############
 
-from fpdf import FPDF  # Installera fpdf med pip install fpdf
+from fpdf import FPDF
 
 def create_pdf(text):
     """Create a PDF file from the text."""
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 10, text)
+    
+    # Konvertera texten till latin1 om det behövs
+    try:
+        pdf.multi_cell(0, 10, text.encode('latin1', 'replace').decode('latin1'))
+    except Exception as e:
+        st.error(f"Det gick inte att skapa PDF: {e}")
+        return None
     
     # Spara PDF till en fil
     pdf_file_name = "anteckningar.pdf"
