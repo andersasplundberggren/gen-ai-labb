@@ -22,6 +22,10 @@ st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
+
+# Lägg till fritext högst upp på sidan
+st.write("Här är lite text")
+
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
     st.session_state['language'] = "Svenska"  # Default language
