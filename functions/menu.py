@@ -20,8 +20,8 @@ def menu():
     # Sidebar for language selection
     st.sidebar.selectbox(
         "Språk", 
-        ("Svenska", "Utomrikiska"),
-        index = ["Svenska", "Utomrikiska"].index(st.session_state['language']),
+        ("Svenska", "Engelska"),
+        index = ["Svenska", "Engelska"].index(st.session_state['language']),
         key = "selected_language",  # Temporary key for selected value
         on_change = update_language,  # Trigger update when changed
         label_visibility = "collapsed"
