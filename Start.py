@@ -67,14 +67,14 @@ menu()
 
 ### MAIN PAGE
 
-st.image("images/logo_main.png", width = 400)
+st.image("images/me.png", width = 400)
 st.markdown("###### ")
 
 st.image("images/header.jpg")
 st.markdown("###### ")
 
 st.markdown("""
-            __Välkommen till vår labbyta för generativ AI__"""
+            __Välkommen till min labbyta för generativ AI__"""
 )
 st.markdown("""
             Här i verktygslådan hittar du verktyg för att labba med generativ AI.
