@@ -1,3 +1,4 @@
+
 # External imports
 import streamlit as st
 
@@ -13,11 +14,10 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-# Move page_config and styling to the beginning
+st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
+
 page_config()
 styling()
-
-st.logo("images/logo_main.png", icon_image="images/logo_small.png")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
@@ -30,12 +30,14 @@ st.session_state["pwd_on"] = st.secrets.pwd_on
 if st.session_state["pwd_on"] == "true":
 
     def check_password():
+
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
         else:
-            passwd = os.environ.get("password")
+            passwd = environ.get("password")
 
         def password_entered():
+
             if hmac.compare_digest(st.session_state["password"], passwd):
                 st.session_state["password_correct"] = True
                 del st.session_state["password"]  # Don't store the password.
@@ -49,6 +51,7 @@ if st.session_state["pwd_on"] == "true":
         if "password_correct" in st.session_state:
             st.error("😕 Ooops. Fel lösenord.")
         return False
+
 
     if not check_password():
         st.stop()
@@ -64,56 +67,17 @@ menu()
 
 ### MAIN PAGE
 
-st.image("images/logo_main.png", width=400)
+st.image("images/logo_main.png", width = 400)
 st.markdown("###### ")
 
-st.image("images/me.png")
+st.image("images/header.jpg")
 st.markdown("###### ")
 
-st.markdown("__Välkommen till min labbyta för generativ AI__")
-st.markdown("Testa att labba under de olika tjänsterna till vänster.")
-
-# Define the subpages with titles, descriptions, and image paths
-subpages = [
-    {
-        "title": "Chat",
-        "description": "Kort beskrivning av chat.",
-        "image": "images/image.png",  # Byt ut till rätt bildväg
-        # Byt ut till rätt länk
-    },
-    {
-        "title": "Bild",
-        "description": "Kort beskrivning av bild.",
-        "image": "images/image.png",
-        
-    },
-    {
-        "title": "Bildanalys",
-        "description": "Kort beskrivning av bildanalys.",
-        "image": "images/image.png",
-    },
-    {
-        "title": "Dokumentchat",
-        "description": "Kort beskrivning av dokumentchat.",
-        "image": "images/image.png",
-    },
-    {
-        "title": "Transkribering",
-        "description": "Kort beskrivning av transkribering.",
-        "image": "images/image.png",
-        
-    },
-]
-
-# Display the subpages
-for page in subpages:
-    cols = st.columns([1, 2])  # Förhållande mellan kolumnerna (1:2)
+st.markdown("""
+            __Välkommen till vår labbyta för generativ AI__"""
+)
+st.markdown("""
+            Här i verktygslådan hittar du verktyg för att labba med generativ AI.
+            """)
     
-    with cols[0]:
-        st.image(page['image'], use_column_width=True)  # Bilden till vänster
-    
-    with cols[1]:
-        st.markdown(f"### [{page['title']}]({page['link']})")  # Länk med titel
-        st.markdown(page['description'])  # Beskrivning
-    
-    st.markdown("---")  # Separator mellan undersidor
+st.markdown("# ")
