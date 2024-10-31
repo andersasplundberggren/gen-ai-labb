@@ -78,7 +78,7 @@ subpages = [
     {
         "title": "Chat",
         "description": "Kort beskrivning av chat.",
-        "image": "images/chat.png",  # Byt ut till rätt bildväg
+        "image": "images/image.png",  # Byt ut till rätt bildväg
         "link": "https://aspislabb.streamlit.app/chatbot"  # Byt ut till rätt länk
     },
     {
@@ -96,13 +96,13 @@ subpages = [
     {
         "title": "Dokumentchat",
         "description": "Kort beskrivning av dokumentchat.",
-        "image": "images/description.png",
+        "image": "images/image.png",
         "link": "https://aspislabb.streamlit.app/chat_with_document"
     },
     {
         "title": "Transribering",
         "description": "Kort beskrivning av transkribering.",
-        "image": "images/transcribe.png",
+        "image": "images/image.png",
         "link": "https://aspislabb.streamlit.app/transcribe"
     },
 ]
