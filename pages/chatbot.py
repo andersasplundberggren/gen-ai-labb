@@ -22,10 +22,14 @@ st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
+# Utfällbar textruta med text, bilder och en "Stäng"-knapp
+with st.expander("Välkommen", expanded=True) as expander:
+    st.write("Välkommen till vår AI-assistent! Här kan du få hjälp med dina frågor.")
+    st.image("images/me.png", caption="Din hjälpsamma AI-assistent")
 
-# Utfällbar textruta
-with st.expander("Välkommen"):
-    st.write("Välkommen till vår AI-assistent! Här kan du få hjälp med dina frågor och hitta svar.")
+    # Fler bilder eller text
+    st.write("Vi finns här för att assistera dig med dina frågor och ge de bästa svaren.")
+    st.image("images/background.png", caption="Alltid redo att hjälpa dig!")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
