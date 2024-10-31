@@ -32,7 +32,7 @@ with st.expander("Välkommen"):
     
     # Ytterligare text och bild
     st.write("Vi finns här för att assistera dig med dina frågor och ge de bästa svaren.")
-    st.image("images/me.png", caption="Alltid redo att hjälpa dig!")
+    st.image("images/background.png", caption="Alltid redo att hjälpa dig!")
 
 
 # Check if language is already in session_state, else initialize it with a default value
