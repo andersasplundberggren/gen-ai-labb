@@ -96,5 +96,10 @@ def main():
         st.success("PDF skapad! Ladda ner den nedan.")
         st.download_button("Ladda ner PDF", pdf_file, file_name="anteckningar.pdf")
 
+    # Radera anteckningar
+    if st.button("Radera anteckningar"):
+        st.session_state['notes'] = ""  # Rensa anteckningarna
+        st.success("Anteckningarna har raderats.")  # Bekräftelsemeddelande
+
 if __name__ == "__main__":
     main()
