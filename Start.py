@@ -67,10 +67,10 @@ menu()
 
 ### MAIN PAGE
 
-st.image("images/me.png", width = 400)
+st.image("images/logo_main.png", width = 400)
 st.markdown("###### ")
 
-st.image("images/header.jpg")
+st.image("images/me.jpg")
 st.markdown("###### ")
 
 st.markdown("""
