@@ -43,7 +43,7 @@ def menu():
         st.sidebar.page_link("pages/chat_with_document.py", label="Chatta med dina dokument", icon=":material/description:")
         st.sidebar.page_link("pages/transcribe.py", label="Transkribering", icon=":material/transcribe:")
         #ny sida
-        st.sidebar.page_link("pages/test.py", label="Test", icon=":material/forum:")
+        st.sidebar.page_link("pages/test.py", label="Test", icon=":material/labs:")
 
 
         st.sidebar.markdown("# ")
