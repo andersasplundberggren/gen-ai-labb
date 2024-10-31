@@ -1,4 +1,3 @@
-
 # External imports
 import streamlit as st
 
@@ -14,7 +13,7 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
+st.logo("images/logo_main.png", icon_image="images/logo_small.png")
 
 page_config()
 styling()
@@ -30,14 +29,12 @@ st.session_state["pwd_on"] = st.secrets.pwd_on
 if st.session_state["pwd_on"] == "true":
 
     def check_password():
-
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
         else:
-            passwd = environ.get("password")
+            passwd = os.environ.get("password")
 
         def password_entered():
-
             if hmac.compare_digest(st.session_state["password"], passwd):
                 st.session_state["password_correct"] = True
                 del st.session_state["password"]  # Don't store the password.
@@ -51,7 +48,6 @@ if st.session_state["pwd_on"] == "true":
         if "password_correct" in st.session_state:
             st.error("😕 Ooops. Fel lösenord.")
         return False
-
 
     if not check_password():
         st.stop()
@@ -67,17 +63,58 @@ menu()
 
 ### MAIN PAGE
 
-st.image("images/logo_main.png", width = 400)
+st.image("images/logo_main.png", width=400)
 st.markdown("###### ")
 
 st.image("images/me.png")
 st.markdown("###### ")
 
-st.markdown("""
-            __Välkommen till min labbyta för generativ AI__"""
-)
-st.markdown("""
-            Testa att labba under de olika tjnästerna till vänster.
-            """)
+st.markdown("__Välkommen till min labbyta för generativ AI__")
+st.markdown("Testa att labba under de olika tjänsterna till vänster.")
+
+# Define the subpages with titles, descriptions, and image paths
+subpages = [
+    {
+        "title": "Chat",
+        "description": "Kort beskrivning av chat.",
+        "image": "images/chat.png",  # Byt ut till rätt bildväg
+        "link": "https://aspislabb.streamlit.app/chatbot"  # Byt ut till rätt länk
+    },
+    {
+        "title": "Bild",
+        "description": "Kort beskrivning av bild.",
+        "image": "images/image.png",
+        "link": "https://aspislabb.streamlit.app/image"
+    },
+    {
+        "title": "Bildanalys",
+        "description": "Kort beskrivning av bildanalys.",
+        "image": "images/image.png",
+        "link": "https://aspislabb.streamlit.app/image_analysis"
+    },
+    {
+        "title": "Dokumentchat",
+        "description": "Kort beskrivning av dokumentchat.",
+        "image": "images/description.png",
+        "link": "https://aspislabb.streamlit.app/chat_with_document"
+    },
+    {
+        "title": "Transribering",
+        "description": "Kort beskrivning av transkribering.",
+        "image": "images/transcribe.png",
+        "link": "https://aspislabb.streamlit.app/transcribe"
+    },
+]
+
+# Display the subpages
+for page in subpages:
+    cols = st.columns([1, 2])  # Förhållande mellan kolumnerna (1:2)
     
-st.markdown("# ")
+    with cols[0]:
+        st.image(page['image'], use_column_width=True)  # Bilden till vänster
+    
+    with cols[1]:
+        st.markdown(f"### [{page['title']}]({page['link']})")  # Länk med titel
+        st.markdown(page['description'])  # Beskrivning
+    
+    st.markdown("---")  # Separator mellan undersidor
