@@ -22,12 +22,14 @@ st.logo("images/logo_main.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
-# Utfällbar textruta med text, bilder och en "Stäng"-knapp
-with st.expander("Välkommen", expanded=True) as expander:
+# Utfällbar textruta med bilder och text
+with st.expander("Välkommen"):
     st.write("Välkommen till vår AI-assistent! Här kan du få hjälp med dina frågor.")
+    
+    # Lägg till en bild
     st.image("images/me.png", caption="Din hjälpsamma AI-assistent")
-
-    # Fler bilder eller text
+    
+    # Ytterligare text och bild
     st.write("Vi finns här för att assistera dig med dina frågor och ge de bästa svaren.")
     st.image("images/background.png", caption="Alltid redo att hjälpa dig!")
 
