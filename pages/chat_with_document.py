@@ -228,4 +228,26 @@ elif 'indexed_file_paths' in st.session_state:
 
 if "messages" not in st.session_state.keys(): 
     st.session_state.messages = [
-        {"role": "
+        {"role": "assistant", "content": assistant_hello}
+    ]
+
+if st.button("Ställ fråga"):  # Knappar för att ställa en fråga
+    if len(st.session_state.indexed_file_paths) == 0:
+        st.warning("Ingen dokument har laddats. Var god ladda upp ett dokument för att starta.")
+    else:
+        index = load_data(user_data_folder)
+        question = st.text_input(f"{chat_input_text}")
+        if question and index is not None:
+            st.session_state.messages.append({"role": "user", "content": question})
+
+            with st.spinner(f"{thinking_text}"):
+                response = index.query(question)
+                st.session_state.messages.append({"role": "assistant", "content": response})
+
+# Visa chattkonversationen
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.markdown(f"<div style='text-align: right;'>👤: {message['content']}</div>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<div style='text-align: left;'>🤖: {message['content']}</div>", unsafe_allow_html=True)
+
