@@ -24,9 +24,7 @@ styling()
 
 # Utfällbar textruta med bilder och text
 with st.expander("Övning"):
-    st.write("Sammanfatta text Gå till wikipedia och leta rätt på en artikel, exempelvis på Wikipedia. Markera därefter texten i artikeln och kopiera.
-1. Skriv en prompt där du ber att chatbotten summerar och förklarar artikeln som om du vore 10 år. Klistra därefter in texten du kopierade från artikeln.
-2. Be att chatboten skapar ett quiz på 10 frågor utifrån artikeln.")
+    st.write("Sammanfatta text.  Gå till wikipedia och leta rätt på en artikel, exempelvis på Wikipedia. Markera därefter texten i artikeln och kopiera. Skriv en prompt där du ber att chatbotten summerar och förklarar artikeln som om du vore 10 år. Klistra därefter in texten du kopierade från artikeln.Be att chatboten skapar ett quiz på 10 frågor utifrån artikeln.")
     
     # Lägg till en bild
     st.image("images/me.png", caption="Din hjälpsamma AI-assistent")
