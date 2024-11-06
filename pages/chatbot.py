@@ -34,6 +34,9 @@ with st.expander("Övning"):
     - Skriv en prompt för att be chatbotten summera artikeln.
     - Klistra in texten och be om en quiz med 10 frågor.
     """)
+    
+    st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
+    
      # Lägg till en bild
     st.image("images/me.png", caption="Lycka till!")
 
