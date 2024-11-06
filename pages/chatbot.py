@@ -23,8 +23,10 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och text
-with st.expander("Välkommen"):
-    st.write("Välkommen till vår AI-assistent! Här kan du få hjälp med dina frågor.")
+with st.expander("Övning"):
+    st.write("Sammanfatta text Gå till wikipedia och leta rätt på en artikel, exempelvis "Artificiell Intelligens". Markera därefter texten i artikeln och kopiera.
+1. Skriv en prompt där du ber att chatbotten summerar och förklarar artikeln som om du vore 10 år. Klistra därefter in texten du kopierade från artikeln.
+2. Be att chatboten skapar ett quiz på 10 frågor utifrån artikeln.")
     
     # Lägg till en bild
     st.image("images/me.png", caption="Din hjälpsamma AI-assistent")
