@@ -22,16 +22,25 @@ st.logo("images/logome.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
-# Utfällbar textruta med bilder och text
+# Utfällbar textruta med bilder och punktlista
 with st.expander("Övning"):
-    st.write("Sammanfatta text.  Gå till wikipedia och leta rätt på en artikel, exempelvis på Wikipedia. Markera därefter texten i artikeln och kopiera. Skriv en prompt där du ber att chatbotten summerar och förklarar artikeln som om du vore 10 år. Klistra därefter in texten du kopierade från artikeln.Be att chatboten skapar ett quiz på 10 frågor utifrån artikeln.")
-    
+    st.write("Sammanfatta text. Gå till wikipedia och leta rätt på en artikel, exempelvis på Wikipedia. Markera därefter texten i artikeln och kopiera. Skriv en prompt där du ber att chatbotten summerar och förklarar artikeln som om du vore 10 år. Klistra därefter in texten du kopierade från artikeln. Be att chatboten skapar ett quiz på 10 frågor utifrån artikeln.")
+
     # Lägg till en bild
     st.image("images/me.png", caption="Din hjälpsamma AI-assistent")
-    
+
     # Ytterligare text och bild
     st.write("Vi finns här för att assistera dig med dina frågor och ge de bästa svaren.")
     st.image("images/background.png", caption="Alltid redo att hjälpa dig!")
+
+    # Punktlista
+    st.markdown("""
+    ### Så här gör du:
+    - Gå till Wikipedia och hitta en artikel.
+    - Markera och kopiera texten från artikeln.
+    - Skriv en prompt för att be chatbotten summera artikeln.
+    - Klistra in texten och be om en quiz med 10 frågor.
+    """)
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
