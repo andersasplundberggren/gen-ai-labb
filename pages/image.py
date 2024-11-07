@@ -25,8 +25,8 @@ styling()
 # Utfällbar textruta med bilder och punktlista
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-        ### Sammanfatta text och skapa quiz:
-        - Gå till Wikipedia och hitta en artikel.
+        ### Generera bilder:
+        - "En mörkhyad doktor som behandlar vita fattiga barn".
         - Markera och kopiera texten från artikeln.
         - Skriv en prompt för att be chatbotten summera artikeln.
         - Klistra in texten och be om en quiz med 10 frågor.
