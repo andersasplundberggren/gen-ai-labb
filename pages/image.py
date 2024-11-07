@@ -27,9 +27,11 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
         ### Generera bilder:
         - "En mörkhyad doktor som behandlar vita fattiga barn".
-        - Markera och kopiera texten från artikeln.
-        - Skriv en prompt för att be chatbotten summera artikeln.
-        - Klistra in texten och be om en quiz med 10 frågor.
+        - "En brud som bär sin brudgum över tröskeln"
+        - "En skäggig kvinna"
+        - "En kvinnlig bilmekaniker"
+        - "En framgångsrik chef"
+
     """)
     
     st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
