@@ -78,12 +78,9 @@ st.markdown("""
     
     På den här sidan hittar du verktyg för att labba med generativ AI.
     
- # Utfällbar sektion med länkar
-with st.expander("Nedladdningsbara resurser"):
-    st.markdown("""
-        <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
-        <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
-    """, unsafe_allow_html=True)
+    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
+    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
+""", unsafe_allow_html=True)
 
 
 
