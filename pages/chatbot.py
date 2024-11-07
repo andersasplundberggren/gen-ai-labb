@@ -23,15 +23,13 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-with st.expander("### Övning"):
-
-    # Punktlista
+with st.expander("### Övning", expanded=True):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-    ### Sammanfatta text och skapa quiz:
-    - Gå till Wikipedia och hitta en artikel.
-    - Markera och kopiera texten från artikeln.
-    - Skriv en prompt för att be chatbotten summera artikeln.
-    - Klistra in texten och be om en quiz med 10 frågor.
+        ### Sammanfatta text och skapa quiz:
+        - Gå till Wikipedia och hitta en artikel.
+        - Markera och kopiera texten från artikeln.
+        - Skriv en prompt för att be chatbotten summera artikeln.
+        - Klistra in texten och be om en quiz med 10 frågor.
     """)
     
     st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
