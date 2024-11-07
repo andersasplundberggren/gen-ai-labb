@@ -23,7 +23,7 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-with st.expander("Övning"):
+with st.expander("### Övning"):
 
     # Punktlista
     st.markdown("""
