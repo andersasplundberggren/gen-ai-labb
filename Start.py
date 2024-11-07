@@ -74,19 +74,13 @@ st.markdown("###### ")
 #st.markdown("###### ")
 
 st.markdown("""
-            __Välkommen till min labbyta för generativ AI__"""
-)
-st.markdown("""
-            Här i verktygslådan hittar du verktyg för att labba med generativ AI.
-            """)
-
-
-st.markdown("""
     __Välkommen till min labbyta för generativ AI__
     
-    Här i verktygslådan hittar du verktyg för att labba med generativ AI.
+    På den här sidan hittar du verktyg för att labba med generativ AI.
     
-    <a href="https://github.com/ditt-användarnamn/ditt-repo" target="_blank">Besök min GitHub för mer information</a>
+    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>
+""", unsafe_allow_html=True)
+<a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>
 """, unsafe_allow_html=True)
 
 
