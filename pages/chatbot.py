@@ -23,7 +23,7 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-with st.expander("### Övning", expanded=True):  # Gör rubriken lika stor som underrubriken
+with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
         ### Sammanfatta text och skapa quiz:
         - Gå till Wikipedia och hitta en artikel.
