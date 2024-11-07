@@ -24,7 +24,6 @@ styling()
 
 # Utfällbar textruta med bilder och punktlista
 with st.expander("Övning"):
-    st.write("Intro till sidan.")
 
     # Punktlista
     st.markdown("""
