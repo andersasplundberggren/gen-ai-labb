@@ -79,5 +79,12 @@ st.markdown("""
 st.markdown("""
             Här i verktygslådan hittar du verktyg för att labba med generativ AI.
             """)
+# Lägg till en klickbar länk
+st.markdown("""
+    __Välkommen till min labbyta för generativ AI__
     
+    Här i verktygslådan hittar du verktyg för att labba med generativ AI.
+    
+    [Besök min GitHub för mer information](https://github.com/ditt-användarnamn/ditt-repo)
+""") 
 st.markdown("# ")
