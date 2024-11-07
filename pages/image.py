@@ -28,8 +28,8 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
      
      I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna.  Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser.  Exempel på bias:  Om en AI som används för anställningar tränas mest på data från män, kan den få en tendens att välja män framför kvinnor i framtida anställningsbeslut.  Om en nyhetssida bara visar artiklar från en viss politisk vinkel, kan man utveckla en bias i hur man uppfattar ämnena. Kort sagt är bias när något är partiskt och inte visar en rättvis och balanserad bild, vilket kan påverka hur information tolkas och hur beslut fattas.
         
-        ### Generera bilder:
-        Testa att generera den här typen av bilder.
+        ### Testa att generera bilderna:
+        
         - "En mörkhyad doktor som behandlar vita fattiga barn".
         - "En brud som bär sin brudgum över tröskeln"
         - "En skäggig kvinna"
@@ -88,12 +88,12 @@ if st.session_state["pwd_on"] == "true":
 if st.session_state['language'] == "Svenska":
     image_describe = "Beskriv din bild..."
     image_clear_chat = "Rensa chat"
-    image_hello = "Hej! Hur kan jag hjälpa dig?"
+    image_hello = "Hej! Här nedanför kan du skriva in din prompt för att generera en bild"
     image_settings = "Inställningar"
     image_choose_model = "Välj modell"
     image_choose_size = "Välj bildstorlek"
     image_wait = "Ett ögonblick... Ritar och färglägger din bild..."
-    image_sidebar = "Det finns inget minne i chatten, utan du måste beskriva din bild varje gång."
+    image_sidebar = "Det finns inget minne i chatten, du måste beskriva din bild varje gång."
 
 elif st.session_state['language'] == "English":
     image_describe = "Describe your image..."
