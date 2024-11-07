@@ -88,7 +88,7 @@ if st.session_state["pwd_on"] == "true":
 if st.session_state['language'] == "Svenska":
     image_describe = "Beskriv din bild..."
     image_clear_chat = "Rensa chat"
-    image_hello = "Hej! Här nedanför kan du skriva in din prompt för att generera en bild"
+    image_hello = "Hej! Hur kan jag hjälpa dig?"
     image_settings = "Inställningar"
     image_choose_model = "Välj modell"
     image_choose_size = "Välj bildstorlek"
