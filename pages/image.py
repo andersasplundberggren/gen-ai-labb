@@ -28,8 +28,7 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     
         
         ### Testa att generera bilderna:
-        st.markdown("""
-                st.write(Här är det bra att tänka BIAS och vilken träningsdata som nyttjas när bidlerna ska genereras)
+        st.write(Här är det bra att tänka BIAS och vilken träningsdata som nyttjas när bidlerna ska genereras)
 
         
         - En mörkhyad doktor som behandlar vita fattiga barn
