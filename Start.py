@@ -78,6 +78,15 @@ st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här s
 st.markdown("###### ")
 st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
 
+# Andra underrubriken
+st.subheader("Vad är en LLM eller språkmodell?")
+st.write("Kort info om LLM och språkmodeller.")
+st.markdown("""
+- Punkt 1 under Underrubrik 2
+- Punkt 2 under Underrubrik 2
+- Punkt 3 under Underrubrik 2
+""")
+
 # Första underrubriken
 st.subheader("Vad är Prompt?")
 st.write("Kort beskrivning vad prompt är.")
@@ -87,29 +96,11 @@ st.markdown("""
    - <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
 """, unsafe_allow_html=True)
 
-# Andra underrubriken
-st.subheader("Underrubrik 2")
-st.write("Här är lite information under den andra underrubriken.")
-st.markdown("""
-- Punkt 1 under Underrubrik 2
-- Punkt 2 under Underrubrik 2
-- Punkt 3 under Underrubrik 2
-""")
-
 # Tredje underrubriken
-st.subheader("Underrubrik 3")
-st.write("Här är lite information under den tredje underrubriken.")
+st.subheader("Vad är BIAS")
+st.write("Kort info om BIAS")
 st.markdown("""
 - Punkt 1 under Underrubrik 3
 - Punkt 2 under Underrubrik 3
 - Punkt 3 under Underrubrik 3
 """)
-
-# Introduktionstexten flyttad till slutet av sidan
-st.markdown("###### ")
-st.markdown("""
-    
-    
-    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
-    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
-""", unsafe_allow_html=True)
