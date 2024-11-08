@@ -21,7 +21,7 @@ styling()
 
 ### CSS AND STYLING
 
-st.image("images/logome.png", width=400)  # Logga högst upp
+#st.image("images/logome.png", width=400)  # Logga högst upp
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
