@@ -84,6 +84,7 @@ if st.session_state['language'] == "Svenska":
     image_title = "Bildanalys"
     image_upload_image = "Ladda upp bild"
     image_allowed_formats = "Tillåtna format: PNG, JPG, JPEG"
+    image_clear_chat = "Rensa chat"
     image_user_input = "Ditt meddelande"
     image_error_upload_image = "Du måste ladda upp en bild innan du skickar."
     image_error_upload_text = "Skriv en prompt först."
@@ -108,6 +109,8 @@ menu()
 
 # Title of the app
 st.markdown(f"### :material/image: {image_title}")
+
+
 
 if c.deployment == "streamlit":
     api_key = st.secrets.openai_key
@@ -202,5 +205,14 @@ if st.button(f":material/send: {image_send}"):
 
         except Exception as e:
             st.error(f"An unexpected error occurred: {e}")
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button(f"{image_clear_chat}", type="secondary"):
+        if "messages" in st.session_state.keys(): # Initialize the chat message history
+            st.session_state.messages = [
+                {"role": "assistant", "content": f"""
+                    {image_hello}"""}
+        ]
 
 st.markdown("# ")
