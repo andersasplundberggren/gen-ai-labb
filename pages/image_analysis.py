@@ -151,7 +151,7 @@ if uploaded_image:
 
 
 # Layout för knapparna
-col1, col2 = st.columns([1, 1])  # Skapa två lika stora kolumner
+col1, col2 = st.columns([5, 1])  # Gör vänstra kolumnen större för att ha knappen "Skicka" till vänster
 
 # Skicka-knappen till vänster (col1)
 with col1:
