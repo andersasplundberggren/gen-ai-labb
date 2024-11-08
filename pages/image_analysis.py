@@ -150,68 +150,71 @@ if uploaded_image:
         st.error(f"An unexpected error occurred: {e}")
 
 
-# Send button
-if st.button(f":material/send: {image_send}"):
-    if 'uploaded_image' not in st.session_state:
-        st.error(f"{image_error_upload_image}")
-    elif not user_input.strip():
-        st.error(f"{image_error_upload_text}")
-    else:
-        try:
-            # Get the base64 image from session state
-            data_uri = st.session_state['uploaded_image']
+# Layout för knapparna
+col1, col2 = st.columns([1, 1])  # Skapa två lika stora kolumner
 
-            # Construct the payload for the OpenAI Vision API
-            with st.status(f"{image_analyzing}", expanded=True):
-                payload = {
-                    "model": "gpt-4o",  # Replace with the correct model name if different
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": user_input},
-                                {
-                                    "type": "image_url",
-                                    "image_url": {
-                                        "url": data_uri,
-                                    },
-                                },
-                            ],
-                        }
-                    ],
-                    "max_tokens": 300,
-                }
-
-                # Set up headers for the request
-                headers = {
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {api_key}",
-                }
-
-                # Make the POST request to OpenAI's Chat Completions API
-                response = requests.post(
-                    "https://api.openai.com/v1/chat/completions",
-                    headers=headers,
-                    json=payload,
-                )
-
-                # Check for successful response
-                if response.status_code == 200:
-                    response_json = response.json()
-                    assistant_reply = response_json['choices'][0]['message']['content']
-                    st.markdown("__Svar:__")
-                    st.write(assistant_reply)
-                else:
-                    st.error(f"Error {response.status_code}: {response.text}")
-
-        except Exception as e:
-            st.error(f"An unexpected error occurred: {e}")
-
-col1, col2 = st.columns(2)
-
+# Skicka-knappen till vänster (col1)
 with col1:
+    if st.button(f":material/send: {image_send}"):
+        if 'uploaded_image' not in st.session_state:
+            st.error(f"{image_error_upload_image}")
+        elif not user_input.strip():
+            st.error(f"{image_error_upload_text}")
+        else:
+            try:
+                # Get the base64 image from session state
+                data_uri = st.session_state['uploaded_image']
+
+                # Construct the payload for the OpenAI Vision API
+                with st.status(f"{image_analyzing}", expanded=True):
+                    payload = {
+                        "model": "gpt-4o",  # Replace with the correct model name if different
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "text", "text": user_input},
+                                    {
+                                        "type": "image_url",
+                                        "image_url": {
+                                            "url": data_uri,
+                                        },
+                                    },
+                                ],
+                            }
+                        ],
+                        "max_tokens": 300,
+                    }
+
+                    # Set up headers for the request
+                    headers = {
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {api_key}",
+                    }
+
+                    # Make the POST request to OpenAI's Chat Completions API
+                    response = requests.post(
+                        "https://api.openai.com/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                    )
+
+                    # Check for successful response
+                    if response.status_code == 200:
+                        response_json = response.json()
+                        assistant_reply = response_json['choices'][0]['message']['content']
+                        st.markdown("__Svar:__")
+                        st.write(assistant_reply)
+                    else:
+                        st.error(f"Error {response.status_code}: {response.text}")
+
+            except Exception as e:
+                st.error(f"An unexpected error occurred: {e}")
+
+# Rensa chatt-knappen till höger (col2)
+with col2:
     if st.button(f"{image_clear_chat}", type="secondary"):
-        if "messages" in st.session_state.keys(): # Initialize the chat message history
+        if "messages" in st.session_state.keys():  # Initialize the chat message history
             st.session_state.messages = [
                 {"role": "assistant", "content": f"{image_hello}"}
             ]
