@@ -90,11 +90,11 @@ st.markdown("""
     <i class="material-icons">language</i>
     <div>
         <h4>Vad är en LLM eller språkmodell?</h4>
-        <p>Kort info om LLM och språkmodeller.</p>
+        <p>En språkmodell eller LLM (Large Language Model) är en typ av AI som tränas på enorma mängder text för att förstå och generera mänskligt språk. Dessa modeller kan skapa text, svara på frågor och hjälpa med olika språkliga uppgifter genom att identifiera mönster i datan de har tränats på. LLM används ofta i chatbots, översättningstjänster och andra system som kräver förståelse och generering av text. De är kraftfulla, men kan också spegla och förstärka snedvridningar i den data de tränas på.</p>
         <ul>
-            <li>Punkt 1 under Underrubrik 2</li>
-            <li>Punkt 2 under Underrubrik 2</li>
-            <li>Punkt 3 under Underrubrik 2</li>
+            <li>En LLM är en AI som tränas på stora mängder text för att förstå och skapa mänskligt språk.</li>
+            <li>En LLM används för att generera text, svara på frågor och utföra språkliga uppgifter.</li>
+            <li>Viktigt att tänka på. En LLM kan spegla snedvridningar i träningsdata, vilket kan leda till bias eller orättvisa resultat.</li>
         </ul>
     </div>
 </div>
@@ -106,7 +106,7 @@ st.markdown("""
     <i class="material-icons">token</i>
     <div>
         <h4>Vad är Prompt?</h4>
-        <p>Kort beskrivning vad prompt är.</p>
+        <p>En prompt är en instruktion eller fråga som du ger till en AI för att få ett svar eller en åtgärd. Det är det du skriver in för att "be" AI göra något, som att generera text, svara på en fråga eller skapa en bild. Till exempel, om du skriver "Skriv en berättelse om en drake", så är det en prompt som AI svarar på genom att skapa en berättelse. Här nedför kan du ladda ned en promptguide och ett promptbibliotek framtaget av RISE som kan ge dig lite vägledning kring hur du kan prompta på ett effektivt sätt. </p>
         <ul>
             <li><a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a></li>
             <li><a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a></li>
@@ -120,8 +120,9 @@ st.markdown("""
 <div class="icon-section">
     <i class="material-icons">hub</i>
     <div>
-        <h4>Vad är BIAS</h4>
-        <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser.</p>
+        <h4>Vad är BIAS?</h4>
+        <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser. Språkmodeller kan ha olika typer av bias, som könsbaserad, etnisk eller åldersrelaterad, ofta beroende på snedvridna träningsdata. Det kan leda till att AI
+förstärker stereotyper eller behandlar vissa grupper orättvist. Även om man försöker kan det vara svårt att helt undvika bias, och det kan även handla om vad som inte sägs. För att minska bias kan man använda prompts som uppmuntrar mångfald och inkludering, och noggrant granska AI-genererat innehåll för att ta bort partisk språk.</p>
         <ul>
             <li>AI kan bli snedvriden om träningsdata inte är rättvis eller representativ.</li>
             <li>Om datan är ojämnt fördelad mellan olika grupper, kan AI fatta orättvisa beslut.</li>
