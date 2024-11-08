@@ -75,6 +75,9 @@ st.markdown("###### ")
 st.header("Välkommen till AILABBET")
 st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här sparas så om du får fram en bra text eller snygg bild får du se till att spara den.")
 
+st.markdown("###### ")
+st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
+
 # Första underrubriken
 st.subheader("Underrubrik 1")
 st.write("Här är lite information under den första underrubriken.")
