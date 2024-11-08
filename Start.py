@@ -80,7 +80,7 @@ st.markdown("""
   
     <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
     <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
-""", unsafe_allow_html=True)
+
 
 # Huvudrubrik
 st.header("Huvudrubrik för Innehåll")
@@ -112,6 +112,7 @@ st.markdown("""
 - Punkt 3 under Underrubrik 3
 """)
 
+""", unsafe_allow_html=True)
 
 
 st.markdown("# ")
