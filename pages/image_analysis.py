@@ -27,14 +27,14 @@ styling()
 # Utfällbar textruta med bilder och punktlista
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-        ### Sammanfatta text och skapa quiz:
-        - Gå till Wikipedia och hitta en artikel.
-        - Markera och kopiera texten från artikeln.
-        - Skriv en prompt för att be chatbotten summera artikeln.
-        - Klistra in texten och be om en quiz med 10 frågor.
+        ### Dags för bildanalys:
+        Här kan du testa att ladda upp en bild du har på din dator eller söka efter en bild på internet och använda den.  
+        - Har du och den AI som analyserar bilden samma idé om vad bilden innehåller?
+        - Ladda upp en bild och be AI att generera en prompt för att få fram en liknande bild, använd sedan denna prompt för att generera en bild. Blir bilderna lika varandra?
+        - Testa att ladda upp en handskriven lapp eller ett kluster av post-it, be sedan AI att sammanfatta.
     """)
     
-    st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
+    st.write("Tips. Om något krånglar för dig kan du klicka på Rensa chatten.")
     
      # Lägg till en bild
     st.image("images/me.png", caption="Lycka till!")
