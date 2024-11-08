@@ -12,7 +12,7 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-#st.logo("images/logome.png", icon_image = "images/logo_small.png")
+st.logo("images/logome.png", icon_image = "images/logo_small.png")
 
 ### PAGE CONFIGURATION ###
 
@@ -68,7 +68,7 @@ menu()
 
 ### MAIN PAGE
 
-st.image("images/logome.png", width=400)
+st.image("images/logome.png", width=200)
 st.markdown("###### ")
 
 # Nytt innehåll med huvudrubrik, underrubriker och punktlistor
