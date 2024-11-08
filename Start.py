@@ -10,6 +10,10 @@ import config as c
 from functions.styling import page_config, styling
 from functions.menu import menu
 
+### CSS AND STYLING
+
+st.logo("images/logome.png", icon_image = "images/logo_small.png")
+
 ### PAGE CONFIGURATION ###
 
 page_config()  # Flytta page_config() högst upp för att undvika felet
