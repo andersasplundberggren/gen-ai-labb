@@ -76,7 +76,16 @@ st.markdown("###### ")
 st.markdown("""
     __Välkommen till min labbyta för generativ AI__
     
-    På den här sidan hittar du verktyg för att labba med generativ AI.
+    På den här sidan hittar du verktyg för att labba med generativ AI.  
+    st.markdown("""
+            
+    __Saker som kan vara bra att ha lite koll på__
+
+    BIAS
+    I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser. 
+    
+    Exempel på bias: Om en AI som används för anställningar tränas mest på data från män, kan den få en tendens att välja män framför kvinnor i framtida anställningsbeslut. Om en nyhetssida bara visar artiklar från en viss politisk vinkel, kan man utveckla en bias i hur man uppfattar ämnena. Kort sagt är bias när något är partiskt och inte visar en rättvis och balanserad bild, vilket kan påverka hur information tolkas och hur beslut fattas.
+    st.markdown("# ")
     
     <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
     <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
