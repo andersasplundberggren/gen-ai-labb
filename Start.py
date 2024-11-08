@@ -121,11 +121,11 @@ st.markdown("""
     <i class="material-icons">hub</i>
     <div>
         <h4>Vad är BIAS</h4>
-        <p>Kort info om BIAS</p>
+        <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser.</p>
         <ul>
-            <li>Punkt 1 under Underrubrik 3</li>
-            <li>Punkt 2 under Underrubrik 3</li>
-            <li>Punkt 3 under Underrubrik 3</li>
+            <li>AI kan bli snedvriden om träningsdata inte är rättvis eller representativ.</li>
+            <li>Om datan är ojämnt fördelad mellan olika grupper, kan AI fatta orättvisa beslut.</li>
+            <li>Detta kan leda till att vissa grupper gynnas, medan andra behandlas orättvist.</li>
         </ul>
     </div>
 </div>
