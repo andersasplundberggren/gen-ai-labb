@@ -72,7 +72,7 @@ st.image("images/logome.png", width=400)
 st.markdown("###### ")
 
 # Nytt innehåll med huvudrubrik, underrubriker och punktlistor
-st.header("Huvudrubrik för Innehåll")
+st.header("Välkommen till AILABBET där du kan testa olika funktioner inom AI")
 
 # Första underrubriken
 st.subheader("Underrubrik 1")
@@ -104,10 +104,8 @@ st.markdown("""
 # Introduktionstexten flyttad till slutet av sidan
 st.markdown("###### ")
 st.markdown("""
-    __Välkommen till min labbyta för generativ AI__
     
-    På den här sidan hittar du verktyg för att labba med generativ AI.  
-  
+    
     <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
     <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
 """, unsafe_allow_html=True)
