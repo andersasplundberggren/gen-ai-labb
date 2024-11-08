@@ -89,7 +89,7 @@ st.markdown("""
 <div class="icon-section">
     <i class="material-icons">language</i>
     <div>
-        <h3>Vad är en LLM eller språkmodell?</h3>
+        <h4>Vad är en LLM eller språkmodell?</h4>
         <p>Kort info om LLM och språkmodeller.</p>
         <ul>
             <li>Punkt 1 under Underrubrik 2</li>
