@@ -28,7 +28,7 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     
         
         ### Testa att generera bilderna:
-        st.write(Här är det bra att tänka BIAS och vilken träningsdata som nyttjas när bidlerna ska genereras)
+        Här bör vi tänka BIAS och vilken träningsdata som nyttjas när bidlerna ska genereras. Det finns risk för att du inte alls får de bilder du är på jakt efter.
 
         
         - En mörkhyad doktor som behandlar vita fattiga barn
