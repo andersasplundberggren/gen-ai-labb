@@ -122,7 +122,7 @@ st.markdown("""
     <div>
         <h4>Vad är BIAS?</h4>
         <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser. Språkmodeller kan ha olika typer av bias, som könsbaserad, etnisk eller åldersrelaterad, ofta beroende på snedvridna träningsdata. Det kan leda till att AI
-förstärker stereotyper eller behandlar vissa grupper orättvist. Även om man försöker kan det vara svårt att helt undvika bias, och det kan även handla om vad som inte sägs. För att minska bias kan man använda prompts som uppmuntrar mångfald och inkludering, och noggrant granska AI-genererat innehåll för att ta bort partisk språk.</p>
+förstärker stereotyper eller behandlar vissa grupper orättvist. Även om man försöker kan det vara svårt att helt undvika bias, och det kan även handla om vad som inte sägs. För att minska bias kan man använda prompts som uppmuntrar mångfald och inkludering, och noggrant granska AI-genererat innehåll och justera innehållet.</p>
         <ul>
             <li>AI kan bli snedvriden om träningsdata inte är rättvis eller representativ.</li>
             <li>Om datan är ojämnt fördelad mellan olika grupper, kan AI fatta orättvisa beslut.</li>
