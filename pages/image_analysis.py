@@ -33,7 +33,7 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
         - Testa att ladda upp en handskriven lapp eller ett kluster av post-it, be sedan AI att sammanfatta.
     """)
     
-    st.write("Tips. Om något krånglar för dig kan du klicka på Rensa chatten.")
+    st.write("Tips. Om något krånglar för dig kan du klicka på Rensa chatten och börja om. En uppladdad bild som du inte vill ha kvar får du ta bort genom att klicka på krysset till höger om namnet på bilden.")
     
      # Lägg till en bild
     #st.image("images/me.png", caption="Lycka till!")
