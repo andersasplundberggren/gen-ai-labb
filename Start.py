@@ -10,12 +10,14 @@ import config as c
 from functions.styling import page_config, styling
 from functions.menu import menu
 
+### PAGE CONFIGURATION ###
+
+page_config()  # Flytta page_config() högst upp för att undvika felet
+styling()
+
 ### CSS AND STYLING
 
-st.image("images/logome.png", width=400)  # Ersätter st.logo med st.image
-
-page_config()
-styling()
+st.image("images/logome.png", width=400)  # Logga högst upp
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
