@@ -12,16 +12,21 @@ def styling():
         <style>
             @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
             
-            /* Ikon och rubrik i samma rad */
-            .icon-header {
+            /* Flexbox för att placera ikonerna till vänster om texten */
+            .icon-section {
                 display: flex;
-                align-items: center;
-                gap: 8px; /* Justerar avståndet mellan ikon och text */
-                font-family: 'Material Icons';
-                font-size: 24px; /* Justera storlek på ikonen */
+                align-items: flex-start;
+                gap: 16px; /* Avstånd mellan ikon och text */
             }
-            .icon-header i {
-                color: #666; /* Valfri färg för ikoner */
+            .icon-section .material-icons {
+                font-size: 30px; /* Justera storlek på ikonen */
+                color: #666; /* Färg för ikonen */
+            }
+            .icon-section h3 {
+                margin: 0; /* Tar bort standardmarginal för att justera texten bättre */
+            }
+            .icon-section p {
+                margin-top: 0; /* Tar bort extra marginal för justerad text */
             }
         </style>
     """, unsafe_allow_html=True)
@@ -79,28 +84,49 @@ st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här s
 
 st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
 
-# Första underrubriken med ikon
-st.markdown('<div class="icon-header"><i class="material-icons">info</i><h3>Vad är en LLM eller språkmodell?</h3></div>', unsafe_allow_html=True)
-st.write("Kort info om LLM och språkmodeller.")
+# Första underrubriken med ikon och justerad layout
 st.markdown("""
-- Punkt 1 under Underrubrik 2
-- Punkt 2 under Underrubrik 2
-- Punkt 3 under Underrubrik 2
-""")
-
-# Andra underrubriken med ikon
-st.markdown('<div class="icon-header"><i class="material-icons">question_answer</i><h3>Vad är Prompt?</h3></div>', unsafe_allow_html=True)
-st.write("Kort beskrivning vad prompt är.")
-st.markdown("""
-   - <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
-   - <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
+<div class="icon-section">
+    <i class="material-icons">info</i>
+    <div>
+        <h3>Vad är en LLM eller språkmodell?</h3>
+        <p>Kort info om LLM och språkmodeller.</p>
+        <ul>
+            <li>Punkt 1 under Underrubrik 2</li>
+            <li>Punkt 2 under Underrubrik 2</li>
+            <li>Punkt 3 under Underrubrik 2</li>
+        </ul>
+    </div>
+</div>
 """, unsafe_allow_html=True)
 
-# Tredje underrubriken med ikon
-st.markdown('<div class="icon-header"><i class="material-icons">warning</i><h3>Vad är BIAS</h3></div>', unsafe_allow_html=True)
-st.write("Kort info om BIAS")
+# Andra underrubriken med ikon och justerad layout
 st.markdown("""
-- Punkt 1 under Underrubrik 3
-- Punkt 2 under Underrubrik 3
-- Punkt 3 under Underrubrik 3
-""")
+<div class="icon-section">
+    <i class="material-icons">question_answer</i>
+    <div>
+        <h3>Vad är Prompt?</h3>
+        <p>Kort beskrivning vad prompt är.</p>
+        <ul>
+            <li><a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a></li>
+            <li><a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a></li>
+        </ul>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Tredje underrubriken med ikon och justerad layout
+st.markdown("""
+<div class="icon-section">
+    <i class="material-icons">warning</i>
+    <div>
+        <h3>Vad är BIAS</h3>
+        <p>Kort info om BIAS</p>
+        <ul>
+            <li>Punkt 1 under Underrubrik 3</li>
+            <li>Punkt 2 under Underrubrik 3</li>
+            <li>Punkt 3 under Underrubrik 3</li>
+        </ul>
+    </div>
+</div>
+""", unsafe_allow_html=True)
