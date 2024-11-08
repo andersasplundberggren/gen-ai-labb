@@ -85,7 +85,7 @@ st.write("Här nedanför finns lite information som kan vara bra att ha koll på
 st.markdown("""
 <div class="header-section">
     <h3>Vad är en LLM eller språkmodell?</h3>
-    <i class="material-icons">info</i>
+    <i class="material-icons">language</i>
 </div>
 <p>Kort info om LLM och språkmodeller.</p>
 <ul>
@@ -99,7 +99,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-section">
     <h3>Vad är Prompt?</h3>
-    <i class="material-icons">question_answer</i>
+    <i class="material-icons">prompt_suggestion</i>
 </div>
 <p>Kort beskrivning vad prompt är.</p>
 <ul>
@@ -112,7 +112,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-section">
     <h3>Vad är BIAS</h3>
-    <i class="material-icons">warning</i>
+    <i class="material-icons">quick_reference</i>
 </div>
 <p>Kort info om BIAS</p>
 <ul>
