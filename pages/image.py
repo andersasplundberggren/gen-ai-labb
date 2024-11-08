@@ -29,11 +29,11 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
         
         ### Testa att generera bilderna:
         
-        - "En mörkhyad doktor som behandlar vita fattiga barn".
-        - "En brud som bär sin brudgum över tröskeln"
-        - "En skäggig kvinna"
-        - "En kvinnlig bilmekaniker"
-        - "En framgångsrik chef"
+        - En mörkhyad doktor som behandlar vita fattiga barn
+        - En brud som bär sin brudgum över tröskeln
+        - En skäggig kvinna
+        - En kvinnlig bilmekaniker
+        - En framgångsrik chef/ledare
 
     """)
     
