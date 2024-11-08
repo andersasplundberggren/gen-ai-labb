@@ -12,7 +12,7 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-st.image("images/logome.png", width=200)  # Ändrad från st.logo till st.image
+st.logo("images/logome.png", icon_image="images/logo_small.png")
 
 page_config()
 styling()
@@ -32,7 +32,7 @@ if st.session_state["pwd_on"] == "true":
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
         else:
-            passwd = os.environ.get("password")
+            passwd = environ.get("password")
 
         def password_entered():
 
@@ -46,7 +46,7 @@ if st.session_state["pwd_on"] == "true":
             return True
 
         st.text_input("Lösenord", type="password", on_change=password_entered, key="password")
-        if "password_correct" in st.session_state and not st.session_state["password_correct"]:
+        if "password_correct" in st.session_state:
             st.error("😕 Ooops. Fel lösenord.")
         return False
 
@@ -68,7 +68,7 @@ st.markdown("###### ")
 st.markdown("""
     __Välkommen till min labbyta för generativ AI__
     
-    På den här sidan hittar du verktyg för att labba lite med generativ AI.  
+    På den här sidan hittar du verktyg för att labba med generativ AI.  
   
     <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
     <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
