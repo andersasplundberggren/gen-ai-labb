@@ -12,8 +12,7 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-st.image("images/logome.png", width=400)  # Logga högst upp
-st.header("Välkommen till labbytan för generativ AI")  # Huvudrubrik direkt under bilden
+st.image("images/logome.png", width=200)  # Ändrad från st.logo till st.image
 
 page_config()
 styling()
@@ -61,7 +60,24 @@ st.session_state["update_date"] = c.update_date
 
 menu()
 
-### MAIN CONTENT
+### MAIN PAGE
+
+st.image("images/logome.png", width=400)
+st.markdown("###### ")
+
+st.markdown("""
+    __Välkommen till min labbyta för generativ AI__
+    
+    På den här sidan hittar du verktyg för att labba med generativ AI.  
+  
+    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
+    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
+""", unsafe_allow_html=True)
+
+st.markdown("# ")
+
+# Nytt innehåll med huvudrubrik, underrubriker och punktlistor
+st.header("Huvudrubrik för Innehåll")
 
 # Första underrubriken
 st.subheader("Underrubrik 1")
@@ -89,16 +105,3 @@ st.markdown("""
 - Punkt 2 under Underrubrik 3
 - Punkt 3 under Underrubrik 3
 """)
-
-# Introduktionstexten flyttad till slutet av sidan
-st.markdown("###### ")
-
-
-st.markdown("""
-    __Välkommen till min labbyta för generativ AI__
-    
-    På den här sidan hittar du verktyg för att labba med generativ AI.  
-  
-    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
-    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
-""", unsafe_allow_html=True)
