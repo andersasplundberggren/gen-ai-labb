@@ -99,7 +99,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-section">
     <h3>Vad är Prompt?</h3>
-    <i class="material-icons">prompt_suggestion</i>
+    <i class="material-icons">token</i>
 </div>
 <p>Kort beskrivning vad prompt är.</p>
 <ul>
