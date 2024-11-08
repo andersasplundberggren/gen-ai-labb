@@ -79,13 +79,13 @@ st.markdown("###### ")
 st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
 
 # Första underrubriken
-st.subheader("Underrubrik 1")
-st.write("Här är lite information under den första underrubriken.")
+st.subheader("Vad är Prompt?")
+st.write("Kort beskrivning vad prompt är.")
 st.markdown("""
-- Punkt 1 under Underrubrik 1
-- Punkt 2 under Underrubrik 1
-- Punkt 3 under Underrubrik 1
-""")
+    
+   - <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
+   - <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
+""", unsafe_allow_html=True)
 
 # Andra underrubriken
 st.subheader("Underrubrik 2")
