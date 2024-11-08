@@ -66,13 +66,7 @@ st.image("images/logome.png", width=400)
 st.markdown("###### ")
 
 st.markdown("""
-    __Välkommen till min labbyta för generativ AI__
     
-    På den här sidan hittar du verktyg för att labba med generativ AI.  
-  
-    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
-    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
-""", unsafe_allow_html=True)
 
 st.markdown("# ")
 
@@ -105,3 +99,15 @@ st.markdown("""
 - Punkt 2 under Underrubrik 3
 - Punkt 3 under Underrubrik 3
 """)
+
+__Välkommen till min labbyta för generativ AI__
+    
+    På den här sidan hittar du verktyg för att labba med generativ AI.  
+  
+    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
+    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
+""", unsafe_allow_html=True)
+
+
+
+
