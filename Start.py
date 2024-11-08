@@ -112,7 +112,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-section">
     <h3>Vad är BIAS</h3>
-    <i class="material-icons">quick_reference</i>
+    <i class="material-icons">hub</i>
 </div>
 <p>Kort info om BIAS</p>
 <ul>
