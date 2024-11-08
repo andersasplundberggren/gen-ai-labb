@@ -82,35 +82,7 @@ st.markdown("""
     <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
 
 
-# Huvudrubrik
-st.header("Huvudrubrik för Innehåll")
 
-# Första underrubriken
-st.subheader("Underrubrik 1")
-st.write("Här är lite information under den första underrubriken.")
-st.markdown("""
-- Punkt 1 under Underrubrik 1
-- Punkt 2 under Underrubrik 1
-- Punkt 3 under Underrubrik 1
-""")
-
-# Andra underrubriken
-st.subheader("Underrubrik 2")
-st.write("Här är lite information under den andra underrubriken.")
-st.markdown("""
-- Punkt 1 under Underrubrik 2
-- Punkt 2 under Underrubrik 2
-- Punkt 3 under Underrubrik 2
-""")
-
-# Tredje underrubriken
-st.subheader("Underrubrik 3")
-st.write("Här är lite information under den tredje underrubriken.")
-st.markdown("""
-- Punkt 1 under Underrubrik 3
-- Punkt 2 under Underrubrik 3
-- Punkt 3 under Underrubrik 3
-""")
 
 """, unsafe_allow_html=True)
 
