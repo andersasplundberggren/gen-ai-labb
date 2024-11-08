@@ -12,7 +12,7 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-st.logo("images/logome.png", icon_image = "images/logo_small.png")
+#st.logo("images/logome.png", icon_image = "images/logo_small.png")
 
 ### PAGE CONFIGURATION ###
 
@@ -72,7 +72,8 @@ st.image("images/logome.png", width=400)
 st.markdown("###### ")
 
 # Nytt innehåll med huvudrubrik, underrubriker och punktlistor
-st.header("Välkommen till AILABBET där du kan testa olika funktioner inom AI")
+st.header("Välkommen till AILABBET")
+st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här sparas så om du får fram en bra text eller snygg bild får du se till att spara den.")
 
 # Första underrubriken
 st.subheader("Underrubrik 1")
