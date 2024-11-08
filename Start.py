@@ -12,7 +12,8 @@ from functions.menu import menu
 
 ### CSS AND STYLING
 
-st.logo("images/logome.png", icon_image="images/logo_small.png")
+st.image("images/logome.png", width=400)  # Logga högst upp
+st.header("Välkommen till labbytan för generativ AI")  # Huvudrubrik direkt under bilden
 
 page_config()
 styling()
@@ -32,7 +33,7 @@ if st.session_state["pwd_on"] == "true":
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
         else:
-            passwd = environ.get("password")
+            passwd = os.environ.get("password")
 
         def password_entered():
 
@@ -46,7 +47,7 @@ if st.session_state["pwd_on"] == "true":
             return True
 
         st.text_input("Lösenord", type="password", on_change=password_entered, key="password")
-        if "password_correct" in st.session_state:
+        if "password_correct" in st.session_state and not st.session_state["password_correct"]:
             st.error("😕 Ooops. Fel lösenord.")
         return False
 
@@ -60,26 +61,7 @@ st.session_state["update_date"] = c.update_date
 
 menu()
 
-### MAIN PAGE
-
-st.image("images/logome.png", width=400)
-st.markdown("###### ")
-
-st.markdown("""
-
-    __Välkommen till min labbyta för generativ AI__
-    
-    På den här sidan hittar du verktyg för att labba med generativ AI.  
-  
-    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
-    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
-""", unsafe_allow_html=True)
-
-
-st.markdown("# ")
-
-# Nytt innehåll med huvudrubrik, underrubriker och punktlistor
-st.header("Huvudrubrik för Innehåll")
+### MAIN CONTENT
 
 # Första underrubriken
 st.subheader("Underrubrik 1")
@@ -108,7 +90,15 @@ st.markdown("""
 - Punkt 3 under Underrubrik 3
 """)
 
+# Introduktionstexten flyttad till slutet av sidan
+st.markdown("###### ")
 
 
-
-
+st.markdown("""
+    __Välkommen till min labbyta för generativ AI__
+    
+    På den här sidan hittar du verktyg för att labba med generativ AI.  
+  
+    <a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a>  
+    <a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a>  
+""", unsafe_allow_html=True)
