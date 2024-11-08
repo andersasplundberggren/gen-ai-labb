@@ -105,7 +105,7 @@ st.markdown("""
 <div class="icon-section">
     <i class="material-icons">token</i>
     <div>
-        <h3>Vad är Prompt?</h3>
+        <h4>Vad är Prompt?</h4>
         <p>Kort beskrivning vad prompt är.</p>
         <ul>
             <li><a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a></li>
@@ -120,7 +120,7 @@ st.markdown("""
 <div class="icon-section">
     <i class="material-icons">hub</i>
     <div>
-        <h3>Vad är BIAS</h3>
+        <h4>Vad är BIAS</h4>
         <p>Kort info om BIAS</p>
         <ul>
             <li>Punkt 1 under Underrubrik 3</li>
