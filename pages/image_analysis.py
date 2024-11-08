@@ -1,4 +1,3 @@
-
 # External importa
 import streamlit as st
 from openai import OpenAI
@@ -90,6 +89,7 @@ if st.session_state['language'] == "Svenska":
     image_error_upload_text = "Skriv en prompt först."
     image_analyzing = "Analyserar bilden..."
     image_send = "Skicka"
+    image_hello = "Hej! Hur kan jag hjälpa dig med bildanalys?"  # Definierar image_hello här
     
 elif st.session_state['language'] == "English":
     image_title = "Image Analysis"
@@ -100,6 +100,7 @@ elif st.session_state['language'] == "English":
     image_error_upload_text = "Please enter a prompt first."
     image_analyzing = "Analyzing the image..."
     image_send = "Send"
+    image_hello = "Hello! How can I assist you with image analysis?"  # Definierar image_hello här
 
 
 ### SIDEBAR
@@ -205,14 +206,14 @@ if st.button(f":material/send: {image_send}"):
 
         except Exception as e:
             st.error(f"An unexpected error occurred: {e}")
+
 col1, col2 = st.columns(2)
 
 with col1:
     if st.button(f"{image_clear_chat}", type="secondary"):
         if "messages" in st.session_state.keys(): # Initialize the chat message history
             st.session_state.messages = [
-                {"role": "assistant", "content": f"""
-                    {image_hello}"""}
-        ]
+                {"role": "assistant", "content": f"{image_hello}"}
+            ]
 
 st.markdown("# ")
