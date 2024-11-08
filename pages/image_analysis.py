@@ -37,7 +37,7 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.write("Tips. Om något krånglar för dig kan du klicka på Rensa chatten.")
     
      # Lägg till en bild
-    st.image("images/me.png", caption="Lycka till!")
+    #st.image("images/me.png", caption="Lycka till!")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
