@@ -25,8 +25,7 @@ styling()
 # Utfällbar textruta med bilder och punktlista
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-     
-     I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna.  Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser.  Exempel på bias:  Om en AI som används för anställningar tränas mest på data från män, kan den få en tendens att välja män framför kvinnor i framtida anställningsbeslut.  Om en nyhetssida bara visar artiklar från en viss politisk vinkel, kan man utveckla en bias i hur man uppfattar ämnena. Kort sagt är bias när något är partiskt och inte visar en rättvis och balanserad bild, vilket kan påverka hur information tolkas och hur beslut fattas.
+    
         
         ### Testa att generera bilderna:
         
