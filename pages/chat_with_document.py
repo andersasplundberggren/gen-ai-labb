@@ -26,17 +26,18 @@ styling()
 # Utfällbar textruta med bilder och punktlista
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-        ### Sammanfatta text och skapa quiz:
-        - Gå till Wikipedia och hitta en artikel.
-        - Markera och kopiera texten från artikeln.
-        - Skriv en prompt för att be chatbotten summera artikeln.
-        - Klistra in texten och be om en quiz med 10 frågor.
+        ### Analysera dokument med hjälp av AI:
+        Här nedanför kan du ladda upp dokument från din dator och sedan chatta med innehållet. Du kan ställa frågor om innehållet, som om du hade en konversation med någon som känner till dokumentets innehåll. OpenAI
+system kommer att läsa och analysera dokumentet och kan ge svar, förklaringar eller sammanfattningar baserade på texten i filen. Du kan använda det här för att snabbt hitta specifik information, få sammanfattningar eller få hjälp med att förstå svåra avsnitt utan att behöva läsa hela dokumentet själv.
+        - Ladda upp ett dokument på 3-4 sidor. Längre dokument tar längre tid att analysera och kan i värsta fall innehålla för mycket information vilket innebär att tjänsten inte fungerar. Detta är en labbmiljö 😇
+        - Skriv en prompt där du ber om en sammanfattning av innehållet.
+        - Skriv en prompt för att få förslag på vidareutveckling av texten.
+      
     """)
     
-    st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
+    #st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
     
-     # Lägg till en bild
-    st.image("images/me.png", caption="Lycka till!")
+    
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
