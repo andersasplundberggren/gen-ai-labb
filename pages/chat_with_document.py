@@ -24,21 +24,24 @@ page_config()
 styling()
 
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
-    st.markdown("### Analysera dokument med hjälp av AI")
-
-    # Lägger till en fritext som användaren kan fylla i
-    Här nedanför kan du ladda upp dokument från din dator och sedan chatta med innehållet. 
-    Du kan ställa frågor om innehållet, som om du hade en konversation med någon som känner till dokumentets innehåll. 
-    OpenAI:s system kommer att läsa och analysera dokumentet och kan ge svar, förklaringar eller sammanfattningar baserade på texten i filen. 
-    Du kan använda det här för att snabbt hitta specifik information, få sammanfattningar eller få hjälp med att förstå svåra avsnitt 
-    utan att behöva läsa hela dokumentet själv.
-
-    # Punktlista efter fritexten
     st.markdown("""
+    
+        
+        ### Analysera dokument med hjälp av AI:
+        Här nedanför kan du ladda upp dokument från din dator och sedan chatta med innehållet. 
+        Du kan ställa frågor om innehållet, som om du hade en konversation med någon som känner till dokumentets innehåll. 
+        OpenAI:s system kommer att läsa och analysera dokumentet och kan ge svar, förklaringar eller sammanfattningar baserade på texten i filen. 
+        Du kan använda det här för att snabbt hitta specifik information, få sammanfattningar eller få hjälp med att förstå svåra avsnitt 
+        utan att behöva läsa hela dokumentet själv.
+
+        
         - Ladda upp ett dokument på 3-4 sidor. Längre dokument tar längre tid att analysera och kan i värsta fall innehålla för mycket information vilket innebär att tjänsten inte fungerar. Detta är en labbmiljö 😇
         - Skriv en prompt där du ber om en sammanfattning av innehållet.
         - Skriv en prompt för att få förslag på vidareutveckling av texten.
+        
+
     """)
+
 
 
 
