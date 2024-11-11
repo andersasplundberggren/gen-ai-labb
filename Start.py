@@ -13,22 +13,30 @@ def styling():
     st.markdown("""
         <style>
             @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-            
+
             /* Flexbox för att placera ikonerna till vänster om texten */
             .icon-section {
                 display: flex;
                 align-items: flex-start;
-                gap: 16px; /* Avstånd mellan ikon och text */
+                gap: 16px;
             }
             .icon-section .material-icons {
-                font-size: 30px; /* Justera storlek på ikonen */
-                color: #666; /* Färg för ikonen */
+                font-size: 30px;
+                color: #666;
             }
-            .icon-section h3 {
-                margin: 0; /* Tar bort standardmarginal för att justera texten bättre */
+            .icon-section h4 {
+                margin: 0;
             }
             .icon-section p {
-                margin-top: 0; /* Tar bort extra marginal för justerad text */
+                margin-top: 0;
+            }
+
+            /* Bakgrundsfärg och ram med rundade hörn */
+            .section-background {
+                background-color: #e0f7fa; /* Ljusblå bakgrundsfärg */
+                border-radius: 12px; /* Rundade hörn */
+                padding: 16px; /* Inre marginal */
+                margin-bottom: 20px; /* Avstånd mellan sektionerna */
             }
         </style>
     """, unsafe_allow_html=True)
@@ -86,9 +94,9 @@ st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här s
 
 st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
 
-# Första underrubriken med ikon och justerad layout
+# Första underrubriken med ikon och ljusblå bakgrund
 st.markdown("""
-<div class="icon-section">
+<div class="icon-section section-background">
     <i class="material-icons">language</i>
     <div>
         <h4>Vad är en LLM eller språkmodell?</h4>
@@ -102,9 +110,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Andra underrubriken med ikon och justerad layout
+# Andra underrubriken med ikon och ljusblå bakgrund
 st.markdown("""
-<div class="icon-section">
+<div class="icon-section section-background">
     <i class="material-icons">token</i>
     <div>
         <h4>Vad är Prompt?</h4>
@@ -117,14 +125,13 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Tredje underrubriken med ikon och justerad layout
+# Tredje underrubriken med ikon och ljusblå bakgrund
 st.markdown("""
-<div class="icon-section">
+<div class="icon-section section-background">
     <i class="material-icons">hub</i>
     <div>
         <h4>Vad är BIAS?</h4>
-        <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser. Språkmodeller kan ha olika typer av bias, som könsbaserad, etnisk eller åldersrelaterad, ofta beroende på snedvridna träningsdata. Det kan leda till att AI
-förstärker stereotyper eller behandlar vissa grupper orättvist. Även om man försöker kan det vara svårt att helt undvika bias, och det kan även handla om vad som inte sägs. För att minska bias kan man använda prompts som uppmuntrar mångfald och inkludering, och noggrant granska AI-genererat innehåll och justera innehållet.</p>
+        <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser.</p>
         <ul>
             <li>AI kan bli snedvriden om träningsdata inte är rättvis eller representativ.</li>
             <li>Om datan är ojämnt fördelad mellan olika grupper, kan AI fatta orättvisa beslut.</li>
@@ -134,13 +141,13 @@ förstärker stereotyper eller behandlar vissa grupper orättvist. Även om man 
 </div>
 """, unsafe_allow_html=True)
 
-# Tredje underrubriken med ikon och justerad layout
+# Fjärde underrubriken med ikon och ljusblå bakgrund
 st.markdown("""
-<div class="icon-section">
+<div class="icon-section section-background">
     <i class="material-icons">payments</i>
     <div>
         <h4>Kostar det något att använda AI?</h4>
-        <p>Att använda AI kostar en slant men hur mycket kostar det egentligen? Det enkla, men långt ifrån bästa, svaret är. Det beror på. Du kan skaffa en pluslicens på ChatGPT där du kan chatta och generera bilder obegränsat för 250 kronor per månad. Tjänsten på den här sidan är istället skapad där betalning sker löpande baserat på nyttjande av <b>tokens</b>. I AI-sammanhang är en token en liten del av text, som kan vara ett ord, en del av ett ord eller till och med ett enstaka tecken. När en AI-modell, som exempelvis en språkmodell, bearbetar text, bryter den ner texten till dessa små enheter (tokens) för att bättre kunna förstå och generera språk. Att dela texten i tokens gör det lättare för AI att bearbeta språket. Istället för att behandla hela meningen på en gång analyserar modellen varje token separat och bedömer vilken token som ska komma härnäst. Det gör att modellen kan hantera både korta och längre textsträngar effektivt. Beroende på vilken språkmodell som används så är priset olika. Om vi tar ett exempel där vi använder GPT-4o som är den senaste språkmodellen så betalar vi 2.5 dollar för en miljon tokens. Som jämförelse innehåller kommunallagen med sina drygt 100 000 tecken typ 36 000 tokens. Om vi genererar bilder eller behandlar ljud blir kostnaden högre.</p>
+        <p>Att använda AI kostar en slant men hur mycket kostar det egentligen? Det enkla, men långt ifrån bästa, svaret är att det beror på. Om vi genererar bilder eller behandlar ljud blir kostnaden högre.</p>
         <ul>
             <li>Att använda AI kostar en slant men inga jättesummor.</li>
             <li>Text är billigare än ljud och bild.</li>
@@ -148,4 +155,3 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
