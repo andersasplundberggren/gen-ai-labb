@@ -107,6 +107,11 @@ elif st.session_state['language'] == "English":
 
 menu()
 
+st.sidebar.warning("""Det här är en prototyp där information du matar in 
+                       bearbetas med en språkmodell. 
+                       Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
+                       som körs på servrar i USA.""")
+
 
 # Title of the app
 st.markdown(f"### :material/image: {image_title}")
