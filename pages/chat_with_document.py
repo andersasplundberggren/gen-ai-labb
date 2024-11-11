@@ -27,11 +27,11 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("### Analysera dokument med hjälp av AI")
 
     # Lägger till en fritext som användaren kan fylla i
-    user_text = st.text_area("""Här nedanför kan du ladda upp dokument från din dator och sedan chatta med innehållet. 
+    st.write("Här nedanför kan du ladda upp dokument från din dator och sedan chatta med innehållet. 
     Du kan ställa frågor om innehållet, som om du hade en konversation med någon som känner till dokumentets innehåll. 
     OpenAI:s system kommer att läsa och analysera dokumentet och kan ge svar, förklaringar eller sammanfattningar baserade på texten i filen. 
     Du kan använda det här för att snabbt hitta specifik information, få sammanfattningar eller få hjälp med att förstå svåra avsnitt 
-    utan att behöva läsa hela dokumentet själv.""")
+    utan att behöva läsa hela dokumentet själv.")
 
     # Punktlista efter fritexten
     st.markdown("""
