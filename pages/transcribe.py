@@ -27,7 +27,7 @@ st.logo("images/logome.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
-with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
+with st.expander("### Övning"):  
     st.markdown("""
     
         
@@ -165,7 +165,7 @@ def main():
 
     ###### SIDEBAR SETTINGS
     
-    #st.sidebar.warning("""Det här är en prototyp som transkriberar ljud och 
+    st.sidebar.warning("""Det här är en prototyp som transkriberar ljud och 
     #                   bearbetas med en språkmodell, baserat på den mall du väljer. 
     #                   Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
     #                   som körs på servrar i USA. Testa endast med okej data.""")
