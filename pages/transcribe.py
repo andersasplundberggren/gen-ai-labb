@@ -27,20 +27,20 @@ st.logo("images/logome.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
-# Utfällbar textruta med bilder och punktlista
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-        ### Sammanfatta text och skapa quiz:
-        - Gå till Wikipedia och hitta en artikel.
-        - Markera och kopiera texten från artikeln.
-        - Skriv en prompt för att be chatbotten summera artikeln.
-        - Klistra in texten och be om en quiz med 10 frågor.
+    
+        
+        ### Transkribering:
+        Här nedanför kan du ladda upp eller spela in ljudfiler som sedan kommer transkriberas till text. 
+        
+        
+        - Testa spela in och prata på, när du klickar stopp avslutas inspelningen och du får ut det du sgt som text.
+        - Visste du att du kan använda transkribering i Word? Om inte testa genom att öppna ett worddokument och välj **Diktera** under menyn **Start**.
+    
+        
+
     """)
-    
-    st.write("Tips. Klistra in texten först, gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Skriv sedan din prompt.")
-    
-     # Lägg till en bild
-    st.image("images/me.png", caption="Lycka till!")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
