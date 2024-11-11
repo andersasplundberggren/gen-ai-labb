@@ -166,9 +166,9 @@ def main():
     ###### SIDEBAR SETTINGS
     
     st.sidebar.warning("""Det här är en prototyp som transkriberar ljud och 
-    #                   bearbetas med en språkmodell, baserat på den mall du väljer. 
-    #                   Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
-    #                   som körs på servrar i USA. Testa endast med okej data.""")
+                       bearbetas med en språkmodell, baserat på den mall du väljer. 
+                       Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
+                       som körs på servrar i USA. Testa endast med okej data.""")
     
 
     ### ### ### ### ### ### ### ### ### ### ###
