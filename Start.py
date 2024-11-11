@@ -7,6 +7,8 @@ from functions.menu import menu
 
 ### CSS AND STYLING ###
 
+st.logo("images/logome.png", icon_image = "images/logo_small.png")
+
 def styling():
     st.markdown("""
         <style>
