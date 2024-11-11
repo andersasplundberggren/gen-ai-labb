@@ -114,7 +114,7 @@ if 'system_prompt' not in st.session_state:
 if "llm_temperature" not in st.session_state:
     st.session_state["llm_temperature"] = 0.7
 if "llm_chat_model" not in st.session_state:
-    st.session_state["llm_chat_model"] = "OpenAI GPT-4o"
+    st.session_state["llm_chat_model"] = "OpenAI GPT-4o mini"
 
 
 ### SIDEBAR
