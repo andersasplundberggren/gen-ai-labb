@@ -35,7 +35,7 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
         utan att behöva läsa hela dokumentet själv.
 
         
-        - Ladda upp ett dokument på 3-4 sidor. Längre dokument tar längre tid att analysera och kan i värsta fall innehålla för mycket information vilket innebär att tjänsten inte fungerar. Detta är en labbmiljö 😇
+        - Ladda upp ett dokument på 3-4 sidor. Längre dokument tar längre tid att analysera och kan i värsta fall innehålla för mycket information vilket innebär att tjänsten inte fungerar och du får felmeddelanden. Detta är en labbmiljö 😇
         - Skriv en prompt där du ber om en sammanfattning av innehållet.
         - Skriv en prompt för att få förslag på vidareutveckling av texten.
         
