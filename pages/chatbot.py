@@ -121,6 +121,11 @@ if "llm_chat_model" not in st.session_state:
 
 menu()
 
+st.sidebar.warning("""Det här är en prototyp där information du matar in 
+                       bearbetas med en språkmodell. 
+                       Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
+                       som körs på servrar i USA.""")
+
 
 ### MAIN PAGE
 
