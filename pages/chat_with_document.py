@@ -170,6 +170,8 @@ Settings.node_parser = SentenceSplitter(chunk_size=1024, chunk_overlap=20)
 
 menu()
 
+st.sidebar.warning("""Tänk på vilken typ av dokument du laddar upp. Denna prototyp är **inte GDPR-säkrad**, använd bara dokument som innehåller information som inte är känslig.""")
+
 
 ### MAIN PAGE
 
