@@ -99,6 +99,22 @@ st.markdown("""
 <div class="icon-section section-background">
     <i class="material-icons">language</i>
     <div>
+        <h4>Generativ AI, say what??</h4>
+        <p>Generativ AI är en typ av artificiell intelligens som kan skapa nytt innehåll – som texter, bilder, musik eller kod – istället för att bara analysera eller bearbeta redan existerande data. Den fungerar genom att lära sig av stora mängder data, som exempelvis miljontals bilder eller texter, för att sedan kunna producera något som liknar det den lärt sig. Många gånger kan generativ AI nästan upplevas som mänsklig intelligens.</p>
+        <ul>
+            <li>Generativ AI kan skapa text, bilder och musik istället för att bara analysera saker.</li>
+            <li>AI tränas med massor av exempel (som texter och bilder) för att förstå mönster.</li>
+            <li>När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.</li>
+        </ul>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Första underrubriken med ikon och ljusblå bakgrund
+st.markdown("""
+<div class="icon-section section-background">
+    <i class="material-icons">language</i>
+    <div>
         <h4>Vad är en LLM eller språkmodell?</h4>
         <p>En språkmodell eller LLM (Large Language Model) är en typ av AI som tränas på enorma mängder text för att förstå och generera mänskligt språk. Dessa modeller kan skapa text, svara på frågor och hjälpa med olika språkliga uppgifter genom att identifiera mönster i datan de har tränats på. LLM används ofta i chatbots, översättningstjänster och andra system som kräver förståelse och generering av text. De är kraftfulla, men kan också spegla och förstärka snedvridningar i den data de tränas på.</p>
         <ul>
