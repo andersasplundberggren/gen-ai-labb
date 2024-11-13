@@ -6,6 +6,9 @@ from functions.styling import page_config, styling
 from functions.menu import menu
 
 # Sidkonfiguration och styling
+
+st.logo("images/logome.png", icon_image = "images/logo_small.png")
+
 page_config()
 styling()
 
