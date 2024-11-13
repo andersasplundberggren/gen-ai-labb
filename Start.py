@@ -99,11 +99,11 @@ st.markdown("""
 <div class="icon-section section-background">
     <i class="material-icons">psychology_alt</i>
     <div>
-        <h4>Generativ AI, say what??</h4>
+        <h4>Generativ AI, say what!?</h4>
         <p>Generativ AI är en typ av artificiell intelligens som kan skapa nytt innehåll – som texter, bilder, musik eller kod – istället för att bara analysera eller bearbeta redan existerande data. Den fungerar genom att lära sig av stora mängder data, som exempelvis miljontals bilder eller texter, för att sedan kunna producera något som liknar det den lärt sig. Många gånger kan generativ AI nästan upplevas som mänsklig intelligens.</p>
         <ul>
             <li>Generativ AI kan skapa text, bilder och musik istället för att bara analysera saker.</li>
-            <li>AI tränas med massor av exempel (som texter och bilder) för att förstå mönster.</li>
+            <li>AI tränas med massor av exempel som texter och bilder för att förstå mönster.</li>
             <li>När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.</li>
         </ul>
     </div>
