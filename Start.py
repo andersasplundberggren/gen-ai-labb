@@ -50,7 +50,7 @@ menu()
 # Huvudsida
 st.image("images/logome.png", width=200)
 st.header("Välkommen till AILABBET")
-st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här sparas, så om du får fram en bra text eller snygg bild får du se till att spara den.")
+
 st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
 
 # Expanderbara sektioner med ljusblå bakgrund
@@ -121,3 +121,5 @@ for title, content in sections:
                 {content}
             </div>
         """, unsafe_allow_html=True)
+
+st.write("Här till vänster kan du testa olika tjänster inom AI. Inget av det du gör här sparas, så om du får fram en bra text eller snygg bild får du se till att spara den.")
