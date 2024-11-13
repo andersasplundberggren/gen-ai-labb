@@ -68,9 +68,7 @@ sections = [
         - När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.
     """),
     ("OpenAI & LLaMa. Vad är vad?", """
-        Generativ AI är en typ av artificiell intelligens som kan skapa nytt innehåll – som texter, bilder, musik eller kod – istället för att bara analysera eller bearbeta redan existerande data.
-        Den fungerar genom att lära sig av stora mängder data, som exempelvis miljontals bilder eller texter, för att sedan kunna producera något som liknar det den lärt sig.
-        Många gånger kan generativ AI nästan upplevas som mänsklig intelligens.
+        OpenAI GPT och LLaMA är båda avancerade språkmodeller, skapade av olika företag, och är designade för att förstå och generera text på ett naturligt sätt. Båda modellerna är exempel på hur AI och maskininlärning används för att skapa kraftfulla verktyg som kan hjälpa inom många områden – från kundtjänst och automatisering till kreativt skrivande och forskning.
 
         - OpenAI - GPT-modeller (Generative Pre-trained Transformer) är en serie av stora språkmodeller. Dessa modeller är tränade på enorma mängder textdata och kan generera text, svara på frågor, översätta språk, och utföra många andra textbaserade uppgifter. OpenAI har släppt flera versioner, där de mest kända är GPT-3 och GPT-4. Modellen fungerar så att den förutspår nästa ord i en sekvens baserat på tidigare ord, vilket gör att den kan generera sammanhängande och realistiska svar på en rad olika frågor och instruktioner.
         - LLaMA - Språkmodeller utvecklade av Meta (tidigare Facebook). LLaMA-modellerna är designade för att vara högpresterande men mer resurssnåla jämfört med andra stora språkmodeller, vilket gör dem enklare att köra på mindre enheter och för specifika uppgifter. Meta har släppt flera versioner, inklusive LLaMA 1 och 2. LLaMA har designats för att vara forskningsvänlig, och den släpps oftast som öppen källkod, vilket ger forskare och utvecklare möjlighet att studera och vidareutveckla modellen.
