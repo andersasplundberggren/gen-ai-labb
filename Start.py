@@ -109,7 +109,7 @@ sections = [
         Om vi genererar bilder eller behandlar ljud blir kostnaden högre.
 
         - Att använda AI kostar en slant men inga jättesummor.
-        - Text är billigare än ljud och bild.
+        - Arbete med text är billigare än ljud och bild.
     """)
 ]
 
