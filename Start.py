@@ -9,39 +9,7 @@ from functions.menu import menu
 
 st.logo("images/logome.png", icon_image = "images/logo_small.png")
 
-def styling():
-    st.markdown("""
-        <style>
-            @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-
-            /* Flexbox för att placera ikonerna till vänster om texten */
-            .icon-section {
-                display: flex;
-                align-items: flex-start;
-                gap: 16px;
-            }
-            .icon-section .material-icons {
-                font-size: 30px;
-                color: #666;
-            }
-            .icon-section h4 {
-                margin: 0;
-            }
-            .icon-section p {
-                margin-top: 0;
-            }
-
-            /* Bakgrundsfärg och ram med rundade hörn */
-            .section-background {
-                background-color: #e0f7fa; /* Ljusblå bakgrundsfärg */
-                border-radius: 12px; /* Rundade hörn */
-                padding: 16px; /* Inre marginal */
-                margin-bottom: 20px; /* Avstånd mellan sektionerna */
-            }
-        </style>
-    """, unsafe_allow_html=True)
-
-# Konfiguration av sidan och styling
+# Sidkonfiguration och styling
 page_config()
 styling()
 
@@ -52,7 +20,6 @@ if 'language' not in st.session_state:
 st.session_state["pwd_on"] = st.secrets.pwd_on
 
 ### Lösenordsskydd ###
-
 if st.session_state["pwd_on"] == "true":
 
     def check_password():
@@ -64,7 +31,7 @@ if st.session_state["pwd_on"] == "true":
         def password_entered():
             if hmac.compare_digest(st.session_state["password"], passwd):
                 st.session_state["password_correct"] = True
-                del st.session_state["password"]  # Ta bort lösenordet efter inmatning.
+                del st.session_state["password"]
             else:
                 st.session_state["password_correct"] = False
 
@@ -91,84 +58,47 @@ menu()
 st.image("images/logome.png", width=200)
 st.header("Välkommen till AILABBET")
 st.write("Här kan du testa olika tjänster inom AI. Inget av det du gör här sparas, så om du får fram en bra text eller snygg bild får du se till att spara den.")
-
 st.write("Här nedanför finns lite information som kan vara bra att ha koll på innan du kör igång.")
 
-# Första underrubriken med ikon och ljusblå bakgrund
-st.markdown("""
-<div class="icon-section section-background">
-    <i class="material-icons">psychology_alt</i>
-    <div>
-        <h4>Generativ AI, say what!?</h4>
-        <p>Generativ AI är en typ av artificiell intelligens som kan skapa nytt innehåll – som texter, bilder, musik eller kod – istället för att bara analysera eller bearbeta redan existerande data. Den fungerar genom att lära sig av stora mängder data, som exempelvis miljontals bilder eller texter, för att sedan kunna producera något som liknar det den lärt sig. Många gånger kan generativ AI nästan upplevas som mänsklig intelligens.</p>
-        <ul>
-            <li>Generativ AI kan skapa text, bilder och musik istället för att bara analysera saker.</li>
-            <li>AI tränas med massor av exempel som texter och bilder för att förstå mönster.</li>
-            <li>När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.</li>
-        </ul>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# Utfällbara sektioner
+with st.expander("Generativ AI, say what!?"):
+    st.write("""
+        Generativ AI är en typ av artificiell intelligens som kan skapa nytt innehåll – som texter, bilder, musik eller kod – istället för att bara analysera eller bearbeta redan existerande data.
+        Den fungerar genom att lära sig av stora mängder data, som exempelvis miljontals bilder eller texter, för att sedan kunna producera något som liknar det den lärt sig.
+        """)
+    st.write("- Generativ AI kan skapa text, bilder och musik istället för att bara analysera saker.")
+    st.write("- AI tränas med massor av exempel som texter och bilder för att förstå mönster.")
+    st.write("- När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.")
 
+with st.expander("Vad är en LLM eller språkmodell?"):
+    st.write("""
+        En språkmodell eller LLM (Large Language Model) är en typ av AI som tränas på enorma mängder text för att förstå och generera mänskligt språk. 
+        Dessa modeller kan skapa text, svara på frågor och hjälpa med olika språkliga uppgifter genom att identifiera mönster i datan de har tränats på.
+        """)
+    st.write("- En LLM är en AI som tränas på stora mängder text för att förstå och skapa mänskligt språk.")
+    st.write("- En LLM används för att generera text, svara på frågor och utföra språkliga uppgifter.")
+    st.write("- Viktigt att tänka på: En LLM kan spegla snedvridningar i träningsdata, vilket kan leda till bias eller orättvisa resultat.")
 
-# Första underrubriken med ikon och ljusblå bakgrund
-st.markdown("""
-<div class="icon-section section-background">
-    <i class="material-icons">language</i>
-    <div>
-        <h4>Vad är en LLM eller språkmodell?</h4>
-        <p>En språkmodell eller LLM (Large Language Model) är en typ av AI som tränas på enorma mängder text för att förstå och generera mänskligt språk. Dessa modeller kan skapa text, svara på frågor och hjälpa med olika språkliga uppgifter genom att identifiera mönster i datan de har tränats på. LLM används ofta i chatbots, översättningstjänster och andra system som kräver förståelse och generering av text. De är kraftfulla, men kan också spegla och förstärka snedvridningar i den data de tränas på.</p>
-        <ul>
-            <li>En LLM är en AI som tränas på stora mängder text för att förstå och skapa mänskligt språk.</li>
-            <li>En LLM används för att generera text, svara på frågor och utföra språkliga uppgifter.</li>
-            <li>Viktigt att tänka på. En LLM kan spegla snedvridningar i träningsdata, vilket kan leda till bias eller orättvisa resultat.</li>
-        </ul>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+with st.expander("Vad är Prompt?"):
+    st.write("""
+        En prompt är en instruktion eller fråga som du ger till en AI för att få ett svar eller en åtgärd. 
+        Det är det du skriver in för att "be" AI göra något, som att generera text, svara på en fråga eller skapa en bild.
+        """)
+    st.write("- [Här kan du ladda ned promptguiden](https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link)")
+    st.write("- [Här kan du ladda ned promptbiblioteket](https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link)")
 
-# Andra underrubriken med ikon och ljusblå bakgrund
-st.markdown("""
-<div class="icon-section section-background">
-    <i class="material-icons">token</i>
-    <div>
-        <h4>Vad är Prompt?</h4>
-        <p>En prompt är en instruktion eller fråga som du ger till en AI för att få ett svar eller en åtgärd. Det är det du skriver in för att "be" AI göra något, som att generera text, svara på en fråga eller skapa en bild. Till exempel, om du skriver "Skriv en berättelse om en drake", så är det en prompt som AI svarar på genom att skapa en berättelse. Här nedför kan du ladda ned en promptguide och ett promptbibliotek framtaget av RISE som kan ge dig lite vägledning kring hur du kan prompta på ett effektivt sätt. </p>
-        <ul>
-            <li><a href="https://drive.google.com/file/d/1f-vytD_xPwdrKudjD4mlq9rx08GcGoN3/view?usp=drive_link" target="_blank">Här kan du ladda ned promptguiden</a></li>
-            <li><a href="https://drive.google.com/file/d/1VTRN4j6GxVWV9hHIeJM-kabzieTOHosq/view?usp=drive_link" target="_blank">Här kan du ladda ned promptbiblioteket</a></li>
-        </ul>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+with st.expander("Vad är BIAS?"):
+    st.write("""
+        I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. 
+        Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna.
+        """)
+    st.write("- AI kan bli snedvriden om träningsdata inte är rättvis eller representativ.")
+    st.write("- Om datan är ojämnt fördelad mellan olika grupper, kan AI fatta orättvisa beslut.")
+    st.write("- Detta kan leda till att vissa grupper gynnas, medan andra behandlas orättvist.")
 
-# Tredje underrubriken med ikon och ljusblå bakgrund
-st.markdown("""
-<div class="icon-section section-background">
-    <i class="material-icons">hub</i>
-    <div>
-        <h4>Vad är BIAS?</h4>
-        <p>I maskininlärning och AI kan bias uppstå om algoritmer tränas på data som inte är helt rättvisande eller representativa. Om träningsdata har en snedvridning (till exempel att det finns fler exempel från en viss grupp människor än från andra) kan AI lära sig att fatta beslut som också är snedvridna. Detta innebär att AI kan gynna en viss grupp eller behandla andra grupper orättvist, vilket kan leda till orättvisa resultat eller slutsatser.</p>
-        <ul>
-            <li>AI kan bli snedvriden om träningsdata inte är rättvis eller representativ.</li>
-            <li>Om datan är ojämnt fördelad mellan olika grupper, kan AI fatta orättvisa beslut.</li>
-            <li>Detta kan leda till att vissa grupper gynnas, medan andra behandlas orättvist.</li>
-        </ul>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Fjärde underrubriken med ikon och ljusblå bakgrund
-st.markdown("""
-<div class="icon-section section-background">
-    <i class="material-icons">payments</i>
-    <div>
-        <h4>Kostar det något att använda AI?</h4>
-        <p>Att använda AI kostar en slant men hur mycket kostar det egentligen? Det enkla, men långt ifrån bästa, svaret är. Det beror på. Du kan skaffa en pluslicens på ChatGPT där du kan chatta och generera bilder obegränsat för 250 kronor per månad. Tjänsten på den här sidan är istället skapad där betalning sker löpande baserat på nyttjande av <b>tokens</b>. I AI-sammanhang är en token en liten del av text, som kan vara ett ord, en del av ett ord eller till och med ett enstaka tecken. När en AI-modell, som exempelvis en språkmodell, bearbetar text, bryter den ner texten till dessa små enheter (tokens) för att bättre kunna förstå och generera språk. Att dela texten i tokens gör det lättare för AI att bearbeta språket. Istället för att behandla hela meningen på en gång analyserar modellen varje token separat och bedömer vilken token som ska komma härnäst. Det gör att modellen kan hantera både korta och längre textsträngar effektivt. Beroende på vilken språkmodell som används så är priset olika. Om vi tar ett exempel där vi använder GPT-4o som är den senaste språkmodellen så betalar vi 2.5 dollar för en miljon tokens. Som jämförelse innehåller kommunallagen med sina drygt 100 000 tecken typ 36 000 tokens. Om vi genererar bilder eller behandlar ljud blir kostnaden högre.</p>
-        <ul>
-            <li>Att använda AI kostar en slant men inga jättesummor.</li>
-            <li>Text är billigare än ljud och bild.</li>
-        </ul>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+with st.expander("Kostar det något att använda AI?"):
+    st.write("""
+        Att använda AI kostar en slant men hur mycket kostar det egentligen? Det enkla, men långt ifrån bästa, svaret är: det beror på.
+        """)
+    st.write("- Att använda AI kostar en slant men inga jättesummor.")
+    st.write("- Text är billigare än ljud och bild.")
