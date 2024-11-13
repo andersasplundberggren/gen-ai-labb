@@ -33,7 +33,7 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
         - Klistra in texten och be om en quiz med 10 frågor.
     """)
     
-    st.write("Tips. Skriv din prompt gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Klistra sedan in texten som du kopierat. Du kan även testa att kopiera länken till sidan på Wikipedia och skriv in i din prompt.")
+    st.write("Tips. Skriv din prompt gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Klistra sedan in texten som du kopierat. Du kan även testa att kopiera länken till sidan på Wikipedia och därefter skriva in din prompt.")
     
      # Lägg till en bild
     #st.image("images/me.png", caption="Lycka till!")
