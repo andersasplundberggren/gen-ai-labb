@@ -29,8 +29,8 @@ with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
         ### Sammanfatta text och skapa quiz:
         - Gå till Wikipedia och hitta en artikel.
         - Markera och kopiera texten från artikeln.
-        - Skriv en prompt för att be chatbotten summera artikeln.
-        - Klistra in texten och be om en quiz med 10 frågor.
+        - Klistra in texten och skriv en prompt för att be chatbotten summera artikeln.
+        - Skriv in prompt där du ber om en quiz med 10 frågor baserat på innehållet i texten.
     """)
     
     st.write("Tips. Skriv din prompt gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Klistra sedan in texten som du kopierat. Du kan även testa att kopiera länken till sidan på Wikipedia och därefter skriva in din prompt.")
