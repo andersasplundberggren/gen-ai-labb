@@ -67,7 +67,7 @@ sections = [
         - AI tränas med massor av exempel som texter och bilder för att förstå mönster.
         - När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.
     """),
-    ("ChatGPT, LLMA. Vad är vad?", """
+    ("OpenAI GPT & LLaMa. Vad är vad?", """
         Generativ AI är en typ av artificiell intelligens som kan skapa nytt innehåll – som texter, bilder, musik eller kod – istället för att bara analysera eller bearbeta redan existerande data.
         Den fungerar genom att lära sig av stora mängder data, som exempelvis miljontals bilder eller texter, för att sedan kunna producera något som liknar det den lärt sig.
         Många gånger kan generativ AI nästan upplevas som mänsklig intelligens.
