@@ -79,7 +79,7 @@ with st.expander("Generativ AI, say what!?"):
         Många gånger kan generativ AI nästan upplevas som mänsklig intelligens.
     """)
     st.markdown("""
-        - **Generativ AI kan skapa text, bilder och musik istället för att bara analysera saker.**
+        - *Generativ AI kan skapa text, bilder och musik istället för att bara analysera saker.*
         - **AI tränas med massor av exempel som texter och bilder för att förstå mönster.**
         - **När man ställer en fråga eller ger en instruktion, skapar AI nytt innehåll utifrån vad den har lärt sig.**
     """)
