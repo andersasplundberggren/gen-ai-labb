@@ -123,3 +123,5 @@ for title, content in sections:
         """, unsafe_allow_html=True)
 
 st.write("Här till vänster kan du testa olika tjänster inom AI. Inget av det du gör här sparas, så om du får fram en bra text eller snygg bild får du se till att spara den.")
+
+st.write(" ")
