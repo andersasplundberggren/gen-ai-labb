@@ -1,4 +1,3 @@
-
 # External imports
 import streamlit as st
 from openai import OpenAI
@@ -136,24 +135,17 @@ with col1:
         ]
 
 with col2:
-   with st.expander(f"{image_settings}"):
+    with st.expander(f"{image_settings}"):
 
-    # Lägg till valet mellan DALL-E 2 och DALL-E 3
-    image_model = st.selectbox(f"{image_choose_model}", ["Dall-E 2", "Dall-E 3"], index=0)
-    image_size = st.selectbox(f"{image_choose_size}", ["1792x1024", "1024x1024"])
+        image_model = st.selectbox(f"{image_choose_model}", ["Dall-E 3"])
+        image_size = st.selectbox(f"{image_choose_size}", ["1792x1024", "1024x1024"])
 
-    # Sätt rätt modell i sessionstillståndet baserat på användarens val
-    if image_model == "Dall-E 2":
-        st.session_state["image_model"] = "dall-e-2"
-    elif image_model == "Dall-E 3":
-        st.session_state["image_model"] = "dall-e-3"
-
-    # Sätt rätt bildstorlek i sessionstillståndet
-    if image_size == "1792x1024":
-        st.session_state["image_size"] = "1792x1024"
-    elif image_size == "1024x1024":
-        st.session_state["image_size"] = "1024x1024"
-
+        if image_model == "Dall-E 3":
+            st.session_state["image_model"] = "dall-e-3"
+        if image_size == "1792x1024":
+            st.session_state["image_size"] = "1792x1024"
+        elif image_size == "1024x1024":
+            st.session_state["image_size"] = "1024x1024"
 
 
 if "messages" not in st.session_state:
@@ -192,4 +184,3 @@ if prompt := st.chat_input(f"{image_describe}"):
 
         # Append the image URL to the messages
         st.session_state.messages.append({"role": "assistant", "content": image_url})
-
