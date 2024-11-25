@@ -135,6 +135,8 @@ for title, content in sections:
             </div>
         """, unsafe_allow_html=True)
 
-st.write("I menyn till vänster kan du testa olika tjänster inom AI. Inget av det du gör här sparas, så om du får fram en bra text eller snygg bild får du se till att spara den.")
+st.write("I menyn till vänster kan du testa olika tjänster inom AI. Inget av det du gör här sparas, så om du får fram en bra text eller snygg bild får du se till att spara den.
+
+         Det här är en prototyp där information du matar in bearbetas med en språkmodell. Prototypen är inte GDPR-säkrad, då den använder AI-modeller som körs på servrar i USA.")
 
 st.write(" ")
