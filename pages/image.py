@@ -142,9 +142,9 @@ with col2:
 
         if image_model == "Dall-E 3":
             st.session_state["image_model"] = "dall-e-3"
-        if image_size == "1792x1024":
+        if image_size == "1024x1024":
             st.session_state["image_size"] = "1792x1024"
-        elif image_size == "1024x1024":
+        elif image_size == "1792x1024":
             st.session_state["image_size"] = "1024x1024"
 
 
