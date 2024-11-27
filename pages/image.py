@@ -13,10 +13,9 @@ from functions.styling import page_config, styling
 import config as c
 from functions.menu import menu
 
-
 ### CSS AND STYLING
 
-st.logo("images/logome.png", icon_image = "images/logo_small.png")
+st.logo("images/logome.png", icon_image="images/logo_small.png")
 
 page_config()
 styling()
@@ -24,29 +23,19 @@ styling()
 # Utfällbar textruta med bilder och punktlista
 with st.expander("### Övning"):  # Gör rubriken lika stor som underrubriken
     st.markdown("""
-    
-        
         ### Testa att generera bilderna:
         Här bör vi tänka BIAS och vilken träningsdata som nyttjas när bilderna ska genereras. Det finns risk för att du inte alls får de bilder du är på jakt efter.
 
-        
         - En mörkhyad doktor som behandlar vita fattiga barn
         - En brud som bär sin brudgum över tröskeln
         - En skäggig kvinna
         - En kvinnlig bilmekaniker
         - En framgångsrik chef/ledare
-
     """)
-    
-   
-    
-     # Lägg till en bild
-    # st.image("images/me.png", caption="Lycka till!")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
     st.session_state['language'] = "Svenska"  # Default language
-
 
 st.session_state["pwd_on"] = st.secrets.pwd_on
 
@@ -55,14 +44,12 @@ st.session_state["pwd_on"] = st.secrets.pwd_on
 if st.session_state["pwd_on"] == "true":
 
     def check_password():
-
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
         else:
             passwd = environ.get("password")
 
         def password_entered():
-
             if hmac.compare_digest(st.session_state["password"], passwd):
                 st.session_state["password_correct"] = True
                 del st.session_state["password"]  # Don't store the password.
@@ -76,7 +63,6 @@ if st.session_state["pwd_on"] == "true":
         if "password_correct" in st.session_state:
             st.error("😕 Ooops. Fel lösenord.")
         return False
-
 
     if not check_password():
         st.stop()
@@ -105,12 +91,10 @@ elif st.session_state['language'] == "English":
     image_wait = "One moment… Drawing and coloring your image…"
     image_sidebar = "Det finns inget minne i chatten, utan du måste beskriva din bild varje gång."
 
-
 if c.deployment == "streamlit":
-    client = OpenAI(api_key = st.secrets.openai_key)
+    client = OpenAI(api_key=st.secrets.openai_key)
 else:
-    client = OpenAI(api_key = environ.get("openai_key"))
-
+    client = OpenAI(api_key=environ.get("openai_key"))
 
 ### SIDEBAR
 
@@ -123,44 +107,40 @@ st.sidebar.warning("""Det här är en prototyp där information du matar in
                        Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
                        som körs på servrar i USA.""")
 
+# Initiera standardvärden i session_state
+if "image_size" not in st.session_state:
+    st.session_state["image_size"] = "1024x1024"
+if "image_model" not in st.session_state:
+    st.session_state["image_model"] = "dall-e-3"
 
 col1, col2 = st.columns(2)
 
 with col1:
     if st.button(f"{image_clear_chat}", type="secondary"):
-        if "messages" in st.session_state.keys(): # Initialize the chat message history
+        if "messages" in st.session_state.keys():  # Initialize the chat message history
             st.session_state.messages = [
-                {"role": "assistant", "content": f"""
-                    {image_hello}"""}
-        ]
+                {"role": "assistant", "content": f"{image_hello}"}
+            ]
 
 with col2:
     with st.expander(f"{image_settings}"):
-
         image_model = st.selectbox(f"{image_choose_model}", ["Dall-E 3"])
-        image_size = st.selectbox(f"{image_choose_size}", ["1792x1024", "1024x1024"])
+        image_size = st.selectbox(f"{image_choose_size}", ["1024x1024", "1792x1024"], index=0)
 
-        if image_model == "Dall-E 3":
-            st.session_state["image_model"] = "dall-e-3"
-        if image_size == "1792x1024":
-            st.session_state["image_size"] = "1792x1024"
-        elif image_size == "1024x1024":
-            st.session_state["image_size"] = "1024x1024"
-
+        st.session_state["image_model"] = "dall-e-3"  # Endast Dall-E 3 stöds i detta exempel
+        st.session_state["image_size"] = image_size
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": f"{image_hello}"}]
 
 for message in st.session_state.messages:
-     with st.chat_message(message["role"]):
-        # Check if the content is an image URL
-        if message["content"].startswith("http"):
+    with st.chat_message(message["role"]):
+        if message["content"].startswith("http"):  # Check if the content is an image URL
             st.image(message["content"])
         else:
             st.markdown(message["content"])
 
 if prompt := st.chat_input(f"{image_describe}"):
-    
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -168,13 +148,12 @@ if prompt := st.chat_input(f"{image_describe}"):
     with st.chat_message("assistant"):
         with st.spinner(f"{image_wait}"):
             response = client.images.generate(
-                  model = st.session_state["image_model"],
-                  prompt = prompt,
-                  size = st.session_state["image_size"],
-                  #quality = "hd",
-                  style = "vivid",
-                  n=1,
-                )
+                model=st.session_state["image_model"],
+                prompt=prompt,
+                size=st.session_state["image_size"],
+                style="vivid",
+                n=1,
+            )
 
             # Store the image URL
             image_url = response.data[0].url
