@@ -80,7 +80,7 @@ sections = [
         - Viktigt att tänka på. En LLM kan spegla snedvridningar i träningsdata, vilket kan leda till bias eller orättvisa resultat.
     """),
     
-    ("OpenAI & LLaMa. Vad är vad?", """
+    # ("OpenAI & LLaMa. Vad är vad?", """
         OpenAI GPT och LLaMA är båda avancerade språkmodeller, skapade av olika företag, och är designade för att förstå och generera text på ett naturligt sätt. Båda modellerna är exempel på hur AI och maskininlärning används för att skapa kraftfulla verktyg som kan hjälpa inom många områden – från kundtjänst och automatisering till kreativt skrivande och forskning.
 
         - OpenAI - GPT-modeller (Generative Pre-trained Transformer) är en serie av stora språkmodeller. Dessa modeller är tränade på enorma mängder textdata och kan generera text, svara på frågor, översätta språk, och utföra många andra textbaserade uppgifter. OpenAI har släppt flera versioner, där de mest kända är GPT-3 och GPT-4. Modellen fungerar så att den förutspår nästa ord i en sekvens baserat på tidigare ord, vilket gör att den kan generera sammanhängande och realistiska svar på en rad olika frågor och instruktioner.
