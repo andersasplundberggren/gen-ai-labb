@@ -63,14 +63,6 @@ def generate_pdf(text, images):
 
     return pdf
 
-### SIDEBAR
-
-menu()
-
-st.sidebar.warning("""Det här är en prototyp där information du matar in 
-                       bearbetas med en språkmodell. 
-                       Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
-                       som körs på servrar i USA.""")
 
 # Ladda ned PDF
 if st.button("Ladda ned som PDF"):
