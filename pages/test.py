@@ -21,7 +21,7 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-# with st.expander("### Övning"):
+with st.expander("### Övning"):
     st.markdown("""
         ### Sammanfatta text och skapa quiz:
         - Gå till Wikipedia och hitta en artikel.
@@ -29,7 +29,7 @@ styling()
         - Klistra in texten och skriv en prompt för att be chatbotten summera artikeln.
         - Skriv in prompt där du ber om en quiz med 10 frågor baserat på innehållet i texten.
     """)
-    # st.write("Tips. Skriv din prompt gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Klistra sedan in texten som du kopierat.")
+    st.write("Tips. Skriv din prompt gör sedan radbryt med hjälp av shift + enter och skriv in tre --- och efter det ytterligare ett radbryt med shift + enter. Klistra sedan in texten som du kopierat.")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
