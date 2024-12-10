@@ -1,4 +1,3 @@
-
 # External imports
 import streamlit as st
 from llama_index.core.llms import ChatMessage
@@ -25,7 +24,15 @@ st.logo("images/logome.png", icon_image = "images/logo_small.png")
 page_config()
 styling()
 
-
+# Definiera texten för knappar och andra dynamiska element om de inte redan är definierade
+chat_clear_chat = "Rensa chatt"
+chat_hello = "Hej, hur kan jag hjälpa dig idag?"
+chat_settings = "Inställningar"
+chat_choose_llm = "Välj språkmodell"
+chat_choose_temp = "Välj temperatur"
+chat_system_prompt = "Systemprompt"
+chat_imput_q = "Skriv din fråga"
+chat_save = "Spara"
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
@@ -66,7 +73,6 @@ if st.session_state["pwd_on"] == "true":
         
 
 
-
 ### SIDEBAR
 
 menu()
@@ -83,12 +89,12 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button(f"{chat_clear_chat}", type="secondary"):
-        if "messages" in st.session_state.keys(): # Initialize the chat message history
+        if "messages" in st.session_state.keys():  # Initialize the chat message history
             st.session_state.messages = [
                 {"role": "assistant", "content": f"""
                     {chat_hello}
                  """}
-        ]
+            ]
 
 with col2:
     with st.expander(f"{chat_settings}"):
@@ -211,7 +217,7 @@ if prompt := st.chat_input(f"{chat_imput_q}"):
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-##Sida
+## Sida
 
 # External imports
 
@@ -269,32 +275,4 @@ def generate_pdf(text, images):
         image = Image.open(img)
         image_path = f"temp_{img.name}"
         image.save(image_path)
-        pdf.image(image_path, x=10, y=None, w=190)  # Anpassa bredden till PDF-sidans bredd
-        os.remove(image_path)  # Radera tillfällig bildfil
-
-    return pdf
-
-
-# Ladda ned PDF
-if st.button("Ladda ned som PDF"):
-    if not user_text and not uploaded_images:
-        st.warning("Ingen text eller bild att ladda ned.")
-    else:
-        # Generera PDF
-        pdf = generate_pdf(user_text, uploaded_images)
-
-        # Spara till en temporär fil
-        pdf_path = "content.pdf"
-        pdf.output(pdf_path)
-
-        # Gör filen tillgänglig för nedladdning
-        with open(pdf_path, "rb") as file:
-            st.download_button(
-                label="📥 Ladda ned PDF",
-                data=file,
-                file_name="innehåll.pdf",
-                mime="application/pdf"
-            )
-
-        # Ta bort temporär fil
-        os.remove(pdf_path)
+        pdf.image(image_path, x=10, y=None, w=190)  # Anpassa bredden till PDF-sid
