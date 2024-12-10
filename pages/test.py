@@ -1,99 +1,13 @@
 # External imports
 import streamlit as st
-from llama_index.core.llms import ChatMessage
-from openai import OpenAI
-from groq import Groq
-
-# Python imports
-import hmac
+from fpdf import FPDF
+from PIL import Image
 import os
-from os import environ
-
-# Local imports 
-from functions.styling import page_config, styling
-from functions.menu import menu
-import config as c
 
 # CSS AND STYLING
 st.logo("images/logome.png", icon_image="images/logo_small.png")
 
-page_config()
-styling()
-
-# Check if language is already in session_state, else initialize it with a default value
-if 'language' not in st.session_state:
-    st.session_state['language'] = "Svenska"  # Default language
-
-st.session_state["pwd_on"] = st.secrets.pwd_on
-
-### PASSWORD
-if st.session_state["pwd_on"] == "true":
-
-    def check_password():
-        if c.deployment == "streamlit":
-            passwd = st.secrets["password"]
-        else:
-            passwd = environ.get("password")
-
-        def password_entered():
-            if hmac.compare_digest(st.session_state["password"], passwd):
-                st.session_state["password_correct"] = True
-                del st.session_state["password"]  # Don't store the password.
-            else:
-                st.session_state["password_correct"] = False
-
-        if st.session_state.get("password_correct", False):
-            return True
-
-        st.text_input("Lösenord", type="password", on_change=password_entered, key="password")
-        if "password_correct" in st.session_state:
-            st.error("😕 Ooops. Fel lösenord.")
-        return False
-
-    if not check_password():
-        st.stop()
-
-# Translation
-if st.session_state['language'] == "Svenska":
-    chat_prompt = "Du är en hjälpsam AI-assistent. Svara på användarens frågor."
-    chat_imput_q = "Vad vill du prata om?"
-
-elif st.session_state['language'] == "English":
-    chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
-    chat_imput_q = "What do you want to talk about?"
-
-prompt = f"{chat_prompt}"
-
-if 'system_prompt' not in st.session_state:
-    st.session_state.system_prompt = prompt
-
-if "llm_temperature" not in st.session_state:
-    st.session_state["llm_temperature"] = 0.7
-if "llm_chat_model" not in st.session_state:
-    st.session_state["llm_chat_model"] = "OpenAI GPT-4o mini"
-
-# SIDEBAR
-menu()
-
-st.sidebar.warning("""Det här är en prototyp där information du matar in 
-                       bearbetas med en språkmodell. 
-                       Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
-                       som körs på servrar i USA.""")
-
-### MAIN PAGE
-
-# Inledande meddelanden
-if "messages" not in st.session_state:
-    st.session_state["messages"] = []
-
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        if message["content"].startswith("http"):
-            st.image(message["content"])
-        else:
-            st.markdown(message["content"])
-
-# Ny sektion: Lägga till text och bilder
+# Ny sektion: Skapa och dela innehåll
 st.markdown("### Skapa och dela innehåll")
 
 # Text area för textinmatning
@@ -125,3 +39,49 @@ if st.button("Visa innehåll"):
             st.image(image, caption=image.name)
     else:
         st.warning("Inga bilder uppladdade.")
+
+# Funktion för att skapa PDF
+def generate_pdf(text, images):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    # Lägg till text
+    if text:
+        pdf.multi_cell(0, 10, text)
+        pdf.ln(10)
+
+    # Lägg till bilder
+    for img in images:
+        image = Image.open(img)
+        image_path = f"temp_{img.name}"
+        image.save(image_path)
+        pdf.image(image_path, x=10, y=None, w=190)  # Anpassa bredden till PDF-sidans bredd
+        os.remove(image_path)  # Radera tillfällig bildfil
+
+    return pdf
+
+# Ladda ned PDF
+if st.button("Ladda ned som PDF"):
+    if not user_text and not uploaded_images:
+        st.warning("Ingen text eller bild att ladda ned.")
+    else:
+        # Generera PDF
+        pdf = generate_pdf(user_text, uploaded_images)
+
+        # Spara till en temporär fil
+        pdf_path = "content.pdf"
+        pdf.output(pdf_path)
+
+        # Gör filen tillgänglig för nedladdning
+        with open(pdf_path, "rb") as file:
+            st.download_button(
+                label="📥 Ladda ned PDF",
+                data=file,
+                file_name="innehåll.pdf",
+                mime="application/pdf"
+            )
+
+        # Ta bort temporär fil
+        os.remove(pdf_path)
