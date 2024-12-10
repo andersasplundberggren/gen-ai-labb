@@ -63,28 +63,14 @@ if st.session_state["pwd_on"] == "true":
 
     if not check_password():
         st.stop()
-        
+
 # Translation
 if st.session_state['language'] == "Svenska":
     chat_prompt = "Du är en hjälpsam AI-assistent. Svara på användarens frågor."
-    chat_clear_chat = "Rensa chat"
-    chat_hello = "Hej! Hur kan jag hjälpa dig?"
-    chat_settings = "Inställningar"
-    chat_choose_llm = "Välj språkmodell"
-    chat_choose_temp = "Temperatur"
-    chat_system_prompt = "Systemprompt"
-    chat_save = "Spara"
     chat_imput_q = "Vad vill du prata om?"
 
 elif st.session_state['language'] == "English":
     chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
-    chat_clear_chat = "Clear chat"
-    chat_hello = "Hi! How can I help you?"
-    chat_settings = "Settings"
-    chat_choose_llm = "Choose language model"
-    chat_choose_temp = "Temperature"
-    chat_system_prompt = "System prompt"
-    chat_save = "Save"
     chat_imput_q = "What do you want to talk about?"
 
 prompt = f"{chat_prompt}"
@@ -107,53 +93,9 @@ st.sidebar.warning("""Det här är en prototyp där information du matar in
 
 ### MAIN PAGE
 
-col1, col2 = st.columns(2)
-
-with col1:
-    if st.button(f"{chat_clear_chat}", type="secondary"):
-        if "messages" in st.session_state.keys():
-            st.session_state.messages = [
-                {"role": "assistant", "content": f"{chat_hello}"}
-            ]
-
-with col2:
-    with st.expander(f"{chat_settings}"):
-        llm_model = st.selectbox(
-            f"{chat_choose_llm}", 
-            ["OpenAI GPT-4o", "OpenAI GPT-4o mini", "OpenAI o1-preview", "OpenAI o1-mini"],
-            index=["OpenAI GPT-4o", "OpenAI GPT-4o mini", "OpenAI o1-preview", "OpenAI o1-mini"].index(st.session_state["llm_chat_model"]),
-        )
-
-        llm_temp = st.slider(
-            f"{chat_choose_temp}",
-            min_value=0.0,
-            max_value=1.0,
-            step=0.1,
-            value=st.session_state["llm_temperature"],
-        )
-
-        st.session_state["llm_chat_model"] = llm_model
-        st.session_state["llm_temperature"] = llm_temp
-        
-        model_map = {
-            "OpenAI GPT-4o": "gpt-4o",
-            "OpenAI GPT-4o mini": "gpt-4o-mini",
-            "OpenAI o1-preview": "o1-preview", 
-            "OpenAI o1-mini": "o1-mini"
-        }
-
-        with st.form("my_form"):
-            prompt_input = st.text_area(f"{chat_system_prompt}", prompt, height=200)
-            st.session_state.system_prompt = prompt_input   
-            st.form_submit_button(f"{chat_save}")
-
-if "OpenAI" in st.session_state["llm_chat_model"]:
-    st.sidebar.success("Språkmodell: " + llm_model)
-else:
-    st.sidebar.success("Språkmodell: " + llm_model)
-
+# Inledande meddelanden
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": f"{chat_hello}"}]
+    st.session_state["messages"] = []
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
