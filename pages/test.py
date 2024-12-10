@@ -17,7 +17,6 @@ user_text = st.text_area(
     height=200
 )
 
-menu()
 
 # Möjlighet att ladda upp bilder
 uploaded_images = st.file_uploader(
