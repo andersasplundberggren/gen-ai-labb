@@ -19,7 +19,7 @@ import config as c
 
 ### CSS AND STYLING
 
-st.logo("images/logome.png", icon_image = "images/logo_small.png")
+st.logo("images/logome.png", icon_image="images/logo_small.png")
 
 page_config()
 styling()
@@ -70,7 +70,6 @@ if st.session_state["pwd_on"] == "true":
 
     if not check_password():
         st.stop()
-        
 
 
 ### SIDEBAR
@@ -126,7 +125,7 @@ with col2:
         st.markdown("###### ")
 
         with st.form("my_form"):
-            prompt_input = st.text_area(f"{chat_system_prompt}", prompt, height=200)
+            prompt_input = st.text_area(f"{chat_system_prompt}", "", height=200)  # Ersätt prompt med en tom sträng
             st.session_state.system_prompt = prompt_input   
             st.form_submit_button(f"{chat_save}") 
 
@@ -275,4 +274,7 @@ def generate_pdf(text, images):
         image = Image.open(img)
         image_path = f"temp_{img.name}"
         image.save(image_path)
-        pdf.image(image_path, x=10, y=None, w=190)  # Anpassa bredden till PDF-sid
+        pdf.image(image_path, x=10, y=None, w=190)  # Anpassa bredden till PDF-sidan
+
+    # Spara PDF
+    pdf.output("generated_content.pdf")
