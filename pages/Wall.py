@@ -2,10 +2,26 @@ import streamlit as st
 from fpdf import FPDF
 from PIL import Image
 import os
+import json
 
-# Globala variabler för att lagra inlägg (för tillfällig lagring)
+# Fil för att lagra inlägg
+POSTS_FILE = "posts.json"
+
+# Funktion för att läsa inlägg från fil
+def load_posts():
+    if os.path.exists(POSTS_FILE):
+        with open(POSTS_FILE, "r") as file:
+            return json.load(file)
+    return []
+
+# Funktion för att spara inlägg till fil
+def save_posts(posts):
+    with open(POSTS_FILE, "w") as file:
+        json.dump(posts, file)
+
+# Ladda tidigare inlägg
 if "posts" not in st.session_state:
-    st.session_state["posts"] = []
+    st.session_state["posts"] = load_posts()
 
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
@@ -24,6 +40,7 @@ user_text = st.text_area(
 if st.button("Publicera"):
     if user_text.strip():
         st.session_state["posts"].append(user_text.strip())
+        save_posts(st.session_state["posts"])  # Spara inlägget till fil
         st.success("Ditt inlägg har publicerats!")
     else:
         st.warning("Inlägget kan inte vara tomt.")
