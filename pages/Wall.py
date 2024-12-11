@@ -24,7 +24,7 @@ if "posts" not in st.session_state:
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Automatisk uppdatering med JavaScript
+# Automatisk uppdatering med JavaScript (laddar om var 5:e sekund)
 st.markdown(
     """
     <script>
