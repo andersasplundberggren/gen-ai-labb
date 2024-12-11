@@ -76,12 +76,35 @@ def generate_pdf(posts):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
     c.setFont("Helvetica", 12)
+    width, height = letter
 
-    # Lägg till alla inlägg till PDF:n
-    text = "\n\n".join([f"Inlägg {idx}:\n{post}" for idx, post in enumerate(posts, 1)])
+    y_position = height - 40  # Startposition för första inlägget
+    padding = 10  # Marginal för text och ram
 
-    # Sätt texten i PDF:en
-    c.drawString(50, 750, text)
+    # Gå igenom alla inlägg och skapa en PDF för varje inlägg
+    for idx, post in enumerate(posts, 1):
+        border_color = (0.7, 0.7, 1) if idx % 2 != 0 else (0.7, 1, 0.7)  # RGB för ljusblått och ljusgrönt
+        background_color = (224/255, 247/255, 255/255) if idx % 2 != 0 else (232/255, 245/255, 233/255)  # Ljus bakgrund
+
+        # Rita rektangeln för ramen
+        c.setStrokeColorRGB(*border_color)  # Ställ in ramfärg
+        c.setFillColorRGB(*background_color)  # Ställ in bakgrundsfärg
+        c.rect(padding, y_position - 20, width - 2 * padding, 60, fill=1)
+
+        # Lägg till texten för inlägget
+        c.setFillColorRGB(0, 0, 0)  # Svart text
+        c.drawString(padding + 5, y_position, f"Inlägg {idx}:")
+        c.drawString(padding + 5, y_position - 15, post)
+
+        # Justera y-positionen för nästa inlägg
+        y_position -= 80  # Öka utrymmet mellan inläggen
+
+        # Om det inte finns tillräckligt med plats för nästa inlägg, skapa en ny sida
+        if y_position < 100:
+            c.showPage()
+            y_position = height - 40
+
+    # Spara PDF:en till byte-strömmen
     c.save()
 
     # Gå tillbaka till början av byte-strömmen
@@ -108,7 +131,7 @@ password = st.text_input("Ange lösenord för att radera alla inlägg:", type="p
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "radera":  # Byt ut detta lösenord mot det önskade
+    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
