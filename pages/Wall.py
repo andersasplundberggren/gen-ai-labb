@@ -49,19 +49,6 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Funktion för att radera alla inlägg
-st.markdown("### Radera alla inlägg")
-password = st.text_input("Ange lösenord för att radera alla inlägg:", type="password")
-
-# Kontrollera om rätt lösenord har angetts
-if st.button("Radera alla inlägg"):
-    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
-        delete_all_posts()
-        save_posts(st.session_state["posts"])  # Spara den tomma listan
-        st.success("Alla inlägg har raderats!")
-    else:
-        st.error("Fel lösenord. Försök igen.")
-
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
 if st.session_state["posts"]:
@@ -79,3 +66,16 @@ if st.session_state["posts"]:
         """, unsafe_allow_html=True)
 else:
     st.info("Inga inlägg har publicerats ännu.")
+
+# Flytta bort raderingsfunktionen längst ner
+st.markdown("### Radera alla inlägg")
+password = st.text_input("Ange lösenord för att radera alla inlägg:", type="password")
+
+# Kontrollera om rätt lösenord har angetts
+if st.button("Radera alla inlägg"):
+    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
+        delete_all_posts()
+        save_posts(st.session_state["posts"])  # Spara den tomma listan
+        st.success("Alla inlägg har raderats!")
+    else:
+        st.error("Fel lösenord. Försök igen.")
