@@ -6,7 +6,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -93,12 +93,11 @@ def generate_pdf(posts):
         post_text = f"Inlägg {idx}:\n{post}"
         paragraph = Paragraph(post_text, style_normal)
         
-        # Lägg till bakgrundsfärgen för inlägget genom att skapa en ram
-        paragraph._backgroundColor = background_color
+        # Skapa en rektangel bakom texten för att ge en bakgrund
         story.append(paragraph)
         story.append(Spacer(1, 12))  # Lägg till lite mellanrum mellan inlägg
 
-    # Skriv ut PDF:en
+    # Skapa PDF med en färgad bakgrund för varje inlägg
     doc.build(story)
 
     # Gå tillbaka till början av byte-strömmen
@@ -125,7 +124,7 @@ password = st.text_input("Ange lösenord för att radera alla inlägg:", type="p
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
+    if password == "radera":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
