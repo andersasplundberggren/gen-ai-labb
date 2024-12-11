@@ -24,18 +24,6 @@ if "posts" not in st.session_state:
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Automatisk uppdatering med JavaScript (laddar om var 5:e sekund)
-st.markdown(
-    """
-    <script>
-    setTimeout(function(){
-        window.location.reload();
-    }, 5000);
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
 
@@ -54,6 +42,11 @@ if st.button("Publicera"):
         st.success("Ditt inlägg har publicerats!")
     else:
         st.warning("Inlägget kan inte vara tomt.")
+
+# Uppdatera-knapp för att ladda om sidan och visa nya inlägg
+if st.button("Uppdatera Inlägg"):
+    st.session_state["posts"] = load_posts()  # Ladda om inlägg
+    st.experimental_rerun()  # Återställ och ladda om sidan
 
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
