@@ -15,3 +15,4 @@ tiktoken >= 0.8.0
 fpdf
 pillow
 firebase-admin
+reportlab
