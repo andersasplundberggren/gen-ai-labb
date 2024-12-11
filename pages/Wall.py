@@ -25,8 +25,9 @@ if "posts" not in st.session_state:
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Automatisk uppdatering genom att trigga omstart
-st.experimental_rerun() if time.time() % 5 < 1 else None
+# Automatisk uppdatering var 5:e sekund genom att tvinga en omstart
+if time.time() % 5 < 1:
+    st.experimental_rerun()
 
 # Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
@@ -41,6 +42,7 @@ user_text = st.text_area(
 # Publicera-knapp
 if st.button("Publicera"):
     if user_text.strip():
+        # Lägg till nytt inlägg
         st.session_state["posts"].append(user_text.strip())
         save_posts(st.session_state["posts"])  # Spara inlägget till fil
         st.success("Ditt inlägg har publicerats!")
