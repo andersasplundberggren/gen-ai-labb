@@ -66,7 +66,15 @@ if st.button("Radera alla inlägg"):
 st.markdown("### Publicerade Inlägg")
 if st.session_state["posts"]:
     for idx, post in enumerate(st.session_state["posts"], 1):
-        st.markdown(f"**Inlägg {idx}:**")
-        st.markdown(f"{post}")
+        # Växla färg beroende på index (varannat inlägg)
+        color = "lightblue" if idx % 2 != 0 else "lightgreen"
+        
+        # Lägg till CSS för att skapa en färgad ram
+        st.markdown(f"""
+        <div style="border: 2px solid {color}; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+            <strong>Inlägg {idx}:</strong>
+            <p>{post}</p>
+        </div>
+        """, unsafe_allow_html=True)
 else:
     st.info("Inga inlägg har publicerats ännu.")
