@@ -14,21 +14,21 @@ st.logo("images/logome.png", icon_image="images/logo_small.png")
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
 # Ny sektion: Skapa och dela innehåll
-st.markdown("### Skapa och dela innehåll")
+st.markdown("### Dokumentera")
 
 # Meny - Lägg till den från tidigare kod
 menu()
 
 # Text area för textinmatning
 user_text = st.text_area(
-    label="Skriv in din text här",
+    label="Här kan du lägga in text som du genererat fram eller en prompt som blev bra.",
     placeholder="Skriv något intressant...",
     height=200
 )
 
 # Möjlighet att ladda upp bilder
 uploaded_images = st.file_uploader(
-    label="Ladda upp bilder",
+    label="Här kan du ladda upp bilder som du genererat fram. Bilderna ihop med texten kan sedan laddas ned som en PDF.",
     type=["png", "jpg", "jpeg"],
     accept_multiple_files=True
 )
