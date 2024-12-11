@@ -56,3 +56,5 @@ if st.session_state["posts"]:
         st.markdown(f"{post}")
 else:
     st.info("Inga inlägg har publicerats ännu.")
+
+
