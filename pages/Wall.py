@@ -27,11 +27,10 @@ if "posts" not in st.session_state:
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Lägg till en knapp för att pausa automatisk uppdatering
+# Lägg till en checkbox för att pausa automatisk uppdatering
 if "auto_refresh" not in st.session_state:
     st.session_state["auto_refresh"] = True
 
-# Funktion för att toggla auto-refresh
 def toggle_auto_refresh():
     st.session_state["auto_refresh"] = not st.session_state["auto_refresh"]
 
@@ -40,6 +39,19 @@ st.checkbox(
     value=not st.session_state["auto_refresh"],
     on_change=toggle_auto_refresh,
 )
+
+# Automatisk uppdatering med JavaScript
+if st.session_state["auto_refresh"]:
+    st.markdown(
+        """
+        <script>
+        setTimeout(function(){
+            window.location.reload();
+        }, 5000);
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
@@ -128,8 +140,3 @@ if st.button("Ladda ned som PDF"):
 
         # Ta bort temporär fil
         os.remove(pdf_path)
-
-# Automatisk uppdatering
-if st.session_state["auto_refresh"]:
-    time.sleep(5)  # Uppdatera sidan var 5:e sekund
-    st.experimental_rerun()
