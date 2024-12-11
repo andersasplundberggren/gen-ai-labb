@@ -1,6 +1,9 @@
 import streamlit as st
 import os
 import json
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -67,13 +70,45 @@ if st.session_state["posts"]:
 else:
     st.info("Inga inlägg har publicerats ännu.")
 
+# Funktion för att generera PDF och låta användaren ladda ner den
+def generate_pdf(posts):
+    # Skapa en byte-ström för att hålla PDF:n i minnet
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    c.setFont("Helvetica", 12)
+
+    # Lägg till alla inlägg till PDF:n
+    text = "\n\n".join([f"Inlägg {idx}:\n{post}" for idx, post in enumerate(posts, 1)])
+
+    # Sätt texten i PDF:en
+    c.drawString(50, 750, text)
+    c.save()
+
+    # Gå tillbaka till början av byte-strömmen
+    buffer.seek(0)
+
+    return buffer
+
+# Ladda ner PDF-knapp
+if st.button("Ladda ner alla inlägg som PDF"):
+    if st.session_state["posts"]:
+        pdf_buffer = generate_pdf(st.session_state["posts"])
+        st.download_button(
+            label="Ladda ner PDF",
+            data=pdf_buffer,
+            file_name="inlägg.pdf",
+            mime="application/pdf"
+        )
+    else:
+        st.warning("Det finns inga inlägg att ladda ner.")
+
 # Flytta bort raderingsfunktionen längst ner
 st.markdown("### Radera alla inlägg")
 password = st.text_input("Ange lösenord för att radera alla inlägg:", type="password")
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "radera":  # Byt ut detta lösenord mot det önskade
+    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
