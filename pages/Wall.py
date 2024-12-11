@@ -66,15 +66,18 @@ else:
     st.info("Inga inlägg har publicerats ännu.")
 
 # Funktion för att skapa PDF
-def generate_pdf(text):
+def generate_pdf(posts):
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
     pdf.set_font("Arial", size=12)
 
-    # Lägg till text
-    if text:
-        pdf.multi_cell(0, 10, text)
+    # Lägg till alla inlägg
+    for idx, post in enumerate(posts, 1):
+        pdf.set_font("Arial", style="B", size=12)
+        pdf.cell(0, 10, f"Inlägg {idx}", ln=True)
+        pdf.set_font("Arial", size=12)
+        pdf.multi_cell(0, 10, post)
         pdf.ln(10)
 
     return pdf
@@ -85,8 +88,7 @@ if st.button("Ladda ned som PDF"):
         st.warning("Ingen text att ladda ned.")
     else:
         # Generera PDF
-        all_text = "\n\n".join(st.session_state["posts"])
-        pdf = generate_pdf(all_text)
+        pdf = generate_pdf(st.session_state["posts"])
 
         # Spara till en temporär fil
         pdf_path = "content.pdf"
