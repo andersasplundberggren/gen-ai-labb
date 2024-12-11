@@ -1,37 +1,45 @@
 import streamlit as st
-import firebase_admin
-from firebase_admin import credentials, db
+import os
 import json
 
-# Initiera Firebase
-cred = credentials.Certificate('path/to/your/firebase/credentials.json')
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://your-project-id.firebaseio.com/'
-})
+# Fil för att lagra inlägg
+POSTS_FILE = "posts.json"
 
-# Filreferens till Firebase Realtime Database
-posts_ref = db.reference('posts')
-
-# Funktion för att hämta alla inlägg från Firebase
+# Funktion för att läsa inlägg från fil
 def load_posts():
-    posts = posts_ref.get()
-    return posts if posts else []
+    if os.path.exists(POSTS_FILE):
+        with open(POSTS_FILE, "r") as file:
+            return json.load(file)
+    return []
 
-# Funktion för att spara ett nytt inlägg till Firebase
-def save_post(post):
-    posts_ref.push(post)
+# Funktion för att spara inlägg till fil
+def save_posts(posts):
+    with open(POSTS_FILE, "w") as file:
+        json.dump(posts, file)
 
-# Ladda tidigare inlägg från Firebase
+# Ladda tidigare inlägg
 if "posts" not in st.session_state:
     st.session_state["posts"] = load_posts()
 
-# Sidkonfiguration
+# Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
+
+# Automatisk uppdatering med JavaScript (laddar om var 5:e sekund)
+st.markdown(
+    """
+    <script>
+    setTimeout(function(){
+        window.location.reload();
+    }, 5000);
+    </script>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
 
-# Textområde för att skriva inlägg
+# Textområde för textinmatning
 user_text = st.text_area(
     label="Skriv ditt inlägg:",
     placeholder="Dela något intressant...",
@@ -41,9 +49,8 @@ user_text = st.text_area(
 # Publicera-knapp
 if st.button("Publicera"):
     if user_text.strip():
-        # Lägg till nytt inlägg till Firebase
-        save_post(user_text.strip())
-        st.session_state["posts"].append(user_text.strip())  # Lägg till det till sessionen också
+        st.session_state["posts"].append(user_text.strip())
+        save_posts(st.session_state["posts"])  # Spara inlägget till fil
         st.success("Ditt inlägg har publicerats!")
     else:
         st.warning("Inlägget kan inte vara tomt.")
@@ -56,10 +63,3 @@ if st.session_state["posts"]:
         st.markdown(f"{post}")
 else:
     st.info("Inga inlägg har publicerats ännu.")
-
-# Lyssna på förändringar i realtid (du kan använda Firebase’s realtidslyssnare här)
-def listen_for_changes():
-    posts_ref.listen(lambda event: st.experimental_rerun())
-
-# Starta lyssnaren för förändringar (kan köras i bakgrunden)
-listen_for_changes()
