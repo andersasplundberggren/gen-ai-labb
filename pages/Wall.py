@@ -67,11 +67,12 @@ st.markdown("### Publicerade Inlägg")
 if st.session_state["posts"]:
     for idx, post in enumerate(st.session_state["posts"], 1):
         # Växla färg beroende på index (varannat inlägg)
-        color = "lightblue" if idx % 2 != 0 else "lightgreen"
+        border_color = "lightblue" if idx % 2 != 0 else "lightgreen"
+        background_color = "#e0f7ff" if idx % 2 != 0 else "#e8f5e9"  # Ljusare bakgrundsfärger
         
-        # Lägg till CSS för att skapa en färgad ram
+        # Lägg till CSS för att skapa en färgad ram och bakgrund
         st.markdown(f"""
-        <div style="border: 2px solid {color}; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+        <div style="border: 2px solid {border_color}; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: {background_color};">
             <strong>Inlägg {idx}:</strong>
             <p>{post}</p>
         </div>
