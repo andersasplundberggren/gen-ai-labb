@@ -6,27 +6,16 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
-from PIL import Image
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
-IMAGE_FOLDER = "uploaded_images"  # Mapp för att lagra uppladdade bilder
-
-# Skapa mappen för bilder om den inte finns
-if not os.path.exists(IMAGE_FOLDER):
-    os.makedirs(IMAGE_FOLDER)
 
 # Funktion för att läsa inlägg från fil
 def load_posts():
     if os.path.exists(POSTS_FILE):
-        try:
-            with open(POSTS_FILE, "r") as file:
-                return json.load(file)
-        except json.JSONDecodeError:
-            # Om JSON-filen inte kan läsas (t.ex. tom eller felaktig), returnera en tom lista
-            st.warning("Fel vid läsning av JSON-fil, startar med en tom lista.")
-            return []
+        with open(POSTS_FILE, "r") as file:
+            return json.load(file)
     return []
 
 # Funktion för att spara inlägg till fil
@@ -57,25 +46,10 @@ user_text = st.text_area(
     height=150
 )
 
-# Bilduppladdning
-uploaded_image = st.file_uploader("Ladda upp en bild", type=["jpg", "jpeg", "png"])
-
 # Publicera-knapp
 if st.button("Publicera"):
-    if user_text.strip() or uploaded_image:
-        # Spara text och bild i listan
-        if uploaded_image:
-            # Skapa unikt filnamn för bilden
-            image_filename = os.path.join(IMAGE_FOLDER, uploaded_image.name)
-            
-            # Spara bilden i mappen
-            with open(image_filename, "wb") as f:
-                f.write(uploaded_image.getbuffer())
-            
-            st.session_state["posts"].append({"text": user_text.strip(), "image": image_filename})
-        else:
-            st.session_state["posts"].append({"text": user_text.strip(), "image": None})
-        
+    if user_text.strip():
+        st.session_state["posts"].append(user_text.strip())
         save_posts(st.session_state["posts"])  # Spara inlägget till fil
         st.success("Ditt inlägg har publicerats!")
     else:
@@ -93,14 +67,9 @@ if st.session_state["posts"]:
         st.markdown(f"""
         <div style="border: 2px solid {border_color}; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: {background_color};">
             <strong>Inlägg {idx}:</strong>
-            <p>{post['text']}</p>
+            <p>{post}</p>
         </div>
         """, unsafe_allow_html=True)
-
-        # Om det finns en bild, visa den också
-        if post["image"]:
-            st.image(post["image"], width=300)
-
 else:
     st.info("Inga inlägg har publicerats ännu.")
 
@@ -121,18 +90,11 @@ def generate_pdf(posts):
         background_color = (224/255, 247/255, 255/255) if idx % 2 != 0 else (232/255, 245/255, 233/255)
         
         # Skapa varje inlägg som ett stycke med radbrytning
-        post_text = f"Inlägg {idx}:\n{post['text']}"
+        post_text = f"Inlägg {idx}:\n{post}"
         paragraph = Paragraph(post_text, style_normal)
         
-        # Lägg till bakgrundsfärgen för inlägget genom att skapa en ram
+        # Skapa en rektangel bakom texten för att ge en bakgrund
         story.append(paragraph)
-        
-        # Lägg till bilden i PDF (om den finns)
-        if post["image"]:
-            img = Image.open(post["image"])
-            story.append(Spacer(1, 12))  # Lite mellanrum före bilden
-            story.append(img)
-        
         story.append(Spacer(1, 12))  # Lägg till lite mellanrum mellan inlägg
 
     # Skapa PDF med en färgad bakgrund för varje inlägg
