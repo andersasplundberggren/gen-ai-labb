@@ -14,4 +14,4 @@ streamlit-audiorecorder >= 0.0.5
 tiktoken >= 0.8.0
 fpdf
 pillow
-
+firebase-admin
