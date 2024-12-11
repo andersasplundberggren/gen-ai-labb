@@ -124,7 +124,7 @@ password = st.text_input("Ange lösenord för att radera alla inlägg:", type="p
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
+    if password == "radera":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
