@@ -1,53 +1,54 @@
-# External imports
 import streamlit as st
 from fpdf import FPDF
 from PIL import Image
 import os
-import hmac
-import config as c
-from functions.menu import menu  # Lägg till denna import för att inkludera menyn
 
-# CSS AND STYLING
-st.logo("images/logome.png", icon_image="images/logo_small.png")
+# Globala variabler för att lagra inlägg (för tillfällig lagring)
+if "posts" not in st.session_state:
+    st.session_state["posts"] = []
 
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Ny sektion: Skapa och dela innehåll
-st.markdown("### Dokumentera")
+# Sidrubrik
+st.markdown("## Skapa och Dela Innehåll")
 
-# Meny - Lägg till den från tidigare kod
-menu()
-
-# Text area för textinmatning
+# Textområde för textinmatning
 user_text = st.text_area(
-    label="Här kan du lägga in text som du genererat fram eller en prompt som blev bra.",
-    placeholder="Skriv något intressant...",
-    height=200
+    label="Skriv ditt inlägg:",
+    placeholder="Dela något intressant...",
+    height=150
 )
+
+# Publicera-knapp
+if st.button("Publicera"):
+    if user_text.strip():
+        st.session_state["posts"].append(user_text.strip())
+        st.success("Ditt inlägg har publicerats!")
+    else:
+        st.warning("Inlägget kan inte vara tomt.")
+
+# Visa alla publicerade inlägg
+st.markdown("### Publicerade Inlägg")
+if st.session_state["posts"]:
+    for idx, post in enumerate(st.session_state["posts"], 1):
+        st.markdown(f"**Inlägg {idx}:**")
+        st.markdown(f"{post}")
+else:
+    st.info("Inga inlägg har publicerats ännu.")
 
 # Möjlighet att ladda upp bilder
 uploaded_images = st.file_uploader(
-    label="Här kan du ladda upp bilder som du genererat fram. Bilderna ihop med texten kan sedan laddas ned som en PDF.",
+    label="Ladda upp bilder som du vill dela:",
     type=["png", "jpg", "jpeg"],
     accept_multiple_files=True
 )
 
-# Visa text och bilder när användaren klickar på "Visa innehåll"
-if st.button("Visa innehåll"):
-    st.markdown("### Innehåll")
-    if user_text:
-        st.markdown("#### Text")
-        st.markdown(user_text)
-    else:
-        st.warning("Ingen text inmatad.")
-
-    if uploaded_images:
-        st.markdown("#### Bilder")
-        for image in uploaded_images:
-            st.image(image, caption=image.name)
-    else:
-        st.warning("Inga bilder uppladdade.")
+# Visa bilder om de laddas upp
+if uploaded_images:
+    st.markdown("### Uppladdade Bilder")
+    for image in uploaded_images:
+        st.image(image, caption=image.name)
 
 # Funktion för att skapa PDF
 def generate_pdf(text, images):
@@ -71,14 +72,14 @@ def generate_pdf(text, images):
 
     return pdf
 
-
 # Ladda ned PDF
 if st.button("Ladda ned som PDF"):
-    if not user_text and not uploaded_images:
+    if not st.session_state["posts"] and not uploaded_images:
         st.warning("Ingen text eller bild att ladda ned.")
     else:
         # Generera PDF
-        pdf = generate_pdf(user_text, uploaded_images)
+        all_text = "\n\n".join(st.session_state["posts"])
+        pdf = generate_pdf(all_text, uploaded_images)
 
         # Spara till en temporär fil
         pdf_path = "content.pdf"
@@ -87,7 +88,7 @@ if st.button("Ladda ned som PDF"):
         # Gör filen tillgänglig för nedladdning
         with open(pdf_path, "rb") as file:
             st.download_button(
-                label="📥 Ladda ned PDF",
+                label="\ud83d\udcc5 Ladda ned PDF",
                 data=file,
                 file_name="innehåll.pdf",
                 mime="application/pdf"
