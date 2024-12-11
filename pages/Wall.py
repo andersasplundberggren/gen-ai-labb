@@ -20,8 +20,13 @@ if not os.path.exists(IMAGE_FOLDER):
 # Funktion för att läsa inlägg från fil
 def load_posts():
     if os.path.exists(POSTS_FILE):
-        with open(POSTS_FILE, "r") as file:
-            return json.load(file)
+        try:
+            with open(POSTS_FILE, "r") as file:
+                return json.load(file)
+        except json.JSONDecodeError:
+            # Om JSON-filen inte kan läsas (t.ex. tom eller felaktig), returnera en tom lista
+            st.warning("Fel vid läsning av JSON-fil, startar med en tom lista.")
+            return []
     return []
 
 # Funktion för att spara inlägg till fil
@@ -157,7 +162,7 @@ password = st.text_input("Ange lösenord för att radera alla inlägg:", type="p
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "radera":  # Byt ut detta lösenord mot det önskade
+    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
