@@ -43,10 +43,9 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Uppdatera-knapp för att ladda om sidan och visa nya inlägg
-if st.button("Uppdatera Inlägg"):
-    st.session_state["posts"] = load_posts()  # Ladda om inlägg
-    st.experimental_rerun()  # Återställ och ladda om sidan
+# Lägg till knapp för att ladda om sidan och få nya inlägg
+if st.button("Ladda om sidan"):
+    st.experimental_rerun()
 
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
