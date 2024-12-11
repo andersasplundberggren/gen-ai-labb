@@ -65,18 +65,17 @@ if st.session_state["posts"]:
 else:
     st.info("Inga inlägg har publicerats ännu.")
 
-# Funktion för att skapa PDF med Unicode-stöd
-class PDFWithUnicode(FPDF):
+# Funktion för att skapa PDF med standardteckensnitt
+class PDF(FPDF):
     def __init__(self):
         super().__init__()
         self.add_page()
-        self.add_font('DejaVu', '', 'DejaVuSans.ttf', uni=True)
-        self.set_font('DejaVu', size=12)
+        self.set_font("Arial", size=12)
 
     def add_post(self, idx, post):
-        self.set_font('DejaVu', style='B', size=12)
+        self.set_font("Arial", style="B", size=12)
         self.cell(0, 10, f"Inlägg {idx}", ln=True)
-        self.set_font('DejaVu', size=12)
+        self.set_font("Arial", size=12)
         self.multi_cell(0, 10, post)
         self.ln(10)
 
@@ -86,7 +85,7 @@ if st.button("Ladda ned som PDF"):
         st.warning("Ingen text att ladda ned.")
     else:
         # Generera PDF
-        pdf = PDFWithUnicode()
+        pdf = PDF()
         for idx, post in enumerate(st.session_state["posts"], 1):
             pdf.add_post(idx, post)
 
