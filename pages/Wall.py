@@ -6,7 +6,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
+from PIL import Image
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -46,10 +47,23 @@ user_text = st.text_area(
     height=150
 )
 
+# Bilduppladdning
+uploaded_image = st.file_uploader("Ladda upp en bild", type=["jpg", "jpeg", "png"])
+
 # Publicera-knapp
 if st.button("Publicera"):
-    if user_text.strip():
-        st.session_state["posts"].append(user_text.strip())
+    if user_text.strip() or uploaded_image:
+        # Spara text och bild i listan
+        if uploaded_image:
+            image = Image.open(uploaded_image)
+            # Konvertera bilden till byte-array för att kunna visa den i PDF
+            img_buffer = BytesIO()
+            image.save(img_buffer, format="PNG")
+            img_buffer.seek(0)
+            st.session_state["posts"].append({"text": user_text.strip(), "image": img_buffer})
+        else:
+            st.session_state["posts"].append({"text": user_text.strip(), "image": None})
+        
         save_posts(st.session_state["posts"])  # Spara inlägget till fil
         st.success("Ditt inlägg har publicerats!")
     else:
@@ -67,9 +81,14 @@ if st.session_state["posts"]:
         st.markdown(f"""
         <div style="border: 2px solid {border_color}; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: {background_color};">
             <strong>Inlägg {idx}:</strong>
-            <p>{post}</p>
+            <p>{post['text']}</p>
         </div>
         """, unsafe_allow_html=True)
+
+        # Om det finns en bild, visa den också
+        if post["image"]:
+            st.image(post["image"], width=300)
+
 else:
     st.info("Inga inlägg har publicerats ännu.")
 
@@ -90,11 +109,18 @@ def generate_pdf(posts):
         background_color = (224/255, 247/255, 255/255) if idx % 2 != 0 else (232/255, 245/255, 233/255)
         
         # Skapa varje inlägg som ett stycke med radbrytning
-        post_text = f"Inlägg {idx}:\n{post}"
+        post_text = f"Inlägg {idx}:\n{post['text']}"
         paragraph = Paragraph(post_text, style_normal)
         
-        # Skapa en rektangel bakom texten för att ge en bakgrund
+        # Lägg till bakgrundsfärgen för inlägget genom att skapa en ram
         story.append(paragraph)
+        
+        # Lägg till bilden i PDF (om den finns)
+        if post["image"]:
+            img = Image.open(post["image"])
+            story.append(Spacer(1, 12))  # Lite mellanrum före bilden
+            story.append(img)
+        
         story.append(Spacer(1, 12))  # Lägg till lite mellanrum mellan inlägg
 
     # Skapa PDF med en färgad bakgrund för varje inlägg
@@ -124,7 +150,7 @@ password = st.text_input("Ange lösenord för att radera alla inlägg:", type="p
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "radera":  # Byt ut detta lösenord mot det önskade
+    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
