@@ -1,5 +1,4 @@
 import streamlit as st
-from fpdf import FPDF
 import os
 import json
 
@@ -64,43 +63,3 @@ if st.session_state["posts"]:
         st.markdown(f"{post}")
 else:
     st.info("Inga inlägg har publicerats ännu.")
-
-# Funktion för att skapa PDF med standardteckensnitt
-class PDF(FPDF):
-    def __init__(self):
-        super().__init__()
-        self.add_page()
-        self.set_font("Arial", size=12)
-
-    def add_post(self, idx, post):
-        self.set_font("Arial", style="B", size=12)
-        self.cell(0, 10, f"Inlägg {idx}", ln=True)
-        self.set_font("Arial", size=12)
-        self.multi_cell(0, 10, post)
-        self.ln(10)
-
-# Ladda ned PDF
-if st.button("Ladda ned som PDF"):
-    if not st.session_state["posts"]:
-        st.warning("Ingen text att ladda ned.")
-    else:
-        # Generera PDF
-        pdf = PDF()
-        for idx, post in enumerate(st.session_state["posts"], 1):
-            pdf.add_post(idx, post)
-
-        # Spara till en temporär fil
-        pdf_path = "content.pdf"
-        pdf.output(pdf_path)
-
-        # Gör filen tillgänglig för nedladdning
-        with open(pdf_path, "rb") as file:
-            st.download_button(
-                label="\ud83d\udcc5 Ladda ned PDF",
-                data=file,
-                file_name="innehåll.pdf",
-                mime="application/pdf"
-            )
-
-        # Ta bort temporär fil
-        os.remove(pdf_path)
