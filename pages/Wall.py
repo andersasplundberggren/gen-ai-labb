@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import json
+import time
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -24,17 +25,8 @@ if "posts" not in st.session_state:
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Automatisk uppdatering med JavaScript (laddar om var 5:e sekund)
-st.markdown(
-    """
-    <script>
-    setTimeout(function(){
-        window.location.reload();
-    }, 5000);
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
+# Automatisk uppdatering genom att trigga omstart
+st.experimental_rerun() if time.time() % 5 < 1 else None
 
 # Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
