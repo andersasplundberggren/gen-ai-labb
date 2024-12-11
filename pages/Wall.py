@@ -11,6 +11,11 @@ from PIL import Image
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
+IMAGE_FOLDER = "uploaded_images"  # Mapp för att lagra uppladdade bilder
+
+# Skapa mappen för bilder om den inte finns
+if not os.path.exists(IMAGE_FOLDER):
+    os.makedirs(IMAGE_FOLDER)
 
 # Funktion för att läsa inlägg från fil
 def load_posts():
@@ -55,12 +60,14 @@ if st.button("Publicera"):
     if user_text.strip() or uploaded_image:
         # Spara text och bild i listan
         if uploaded_image:
-            image = Image.open(uploaded_image)
-            # Konvertera bilden till byte-array för att kunna visa den i PDF
-            img_buffer = BytesIO()
-            image.save(img_buffer, format="PNG")
-            img_buffer.seek(0)
-            st.session_state["posts"].append({"text": user_text.strip(), "image": img_buffer})
+            # Skapa unikt filnamn för bilden
+            image_filename = os.path.join(IMAGE_FOLDER, uploaded_image.name)
+            
+            # Spara bilden i mappen
+            with open(image_filename, "wb") as f:
+                f.write(uploaded_image.getbuffer())
+            
+            st.session_state["posts"].append({"text": user_text.strip(), "image": image_filename})
         else:
             st.session_state["posts"].append({"text": user_text.strip(), "image": None})
         
@@ -150,7 +157,7 @@ password = st.text_input("Ange lösenord för att radera alla inlägg:", type="p
 
 # Kontrollera om rätt lösenord har angetts
 if st.button("Radera alla inlägg"):
-    if password == "dittLösenord123":  # Byt ut detta lösenord mot det önskade
+    if password == "radera":  # Byt ut detta lösenord mot det önskade
         delete_all_posts()
         save_posts(st.session_state["posts"])  # Spara den tomma listan
         st.success("Alla inlägg har raderats!")
