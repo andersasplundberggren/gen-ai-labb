@@ -55,13 +55,13 @@ with col1:
             save_posts(st.session_state["posts"])  # Spara inlägget till fil
             st.success("Ditt inlägg har publicerats!")
             # Omdirigera för att simulera en sidladdning
-            st.experimental_set_query_params(reload="true")
+            st.set_query_params(reload="true")
         else:
             st.warning("Inlägget kan inte vara tomt.")
 with col2:
     if st.button("Ladda om sidan"):
         # Omdirigera för att simulera en sidladdning
-        st.experimental_set_query_params(reload="true")
+        st.set_query_params(reload="true")
 
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
