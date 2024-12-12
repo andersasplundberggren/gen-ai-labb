@@ -7,6 +7,7 @@ from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
+import time
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -46,22 +47,14 @@ user_text = st.text_area(
     height=150
 )
 
-# Publicera och ladda om-knappar
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("Publicera"):
-        if user_text.strip():
-            st.session_state["posts"].append(user_text.strip())
-            save_posts(st.session_state["posts"])  # Spara inlägget till fil
-            st.success("Ditt inlägg har publicerats!")
-            # Omdirigera för att simulera en sidladdning
-            st.set_query_params(reload="true")
-        else:
-            st.warning("Inlägget kan inte vara tomt.")
-with col2:
-    if st.button("Ladda om sidan"):
-        # Omdirigera för att simulera en sidladdning
-        st.set_query_params(reload="true")
+# Publicera-knapp
+if st.button("Publicera"):
+    if user_text.strip():
+        st.session_state["posts"].append(user_text.strip())
+        save_posts(st.session_state["posts"])  # Spara inlägget till fil
+        st.success("Ditt inlägg har publicerats!")
+    else:
+        st.warning("Inlägget kan inte vara tomt.")
 
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
