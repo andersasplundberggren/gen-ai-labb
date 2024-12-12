@@ -1,13 +1,8 @@
 import streamlit as st
 import os
 import json
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.lib import colors
 from io import BytesIO
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
-import time
+from PIL import Image
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -40,21 +35,27 @@ st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 # Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
 
-# Textområde för textinmatning
-user_text = st.text_area(
-    label="Skriv ditt inlägg:",
-    placeholder="Dela något intressant...",
-    height=150
-)
+# Filuppladdning för bild
+uploaded_file = st.file_uploader("Ladda upp en bild:", type=["jpg", "jpeg", "png"])
 
-# Publicera-knapp
-if st.button("Publicera"):
-    if user_text.strip():
-        st.session_state["posts"].append(user_text.strip())
-        save_posts(st.session_state["posts"])  # Spara inlägget till fil
-        st.success("Ditt inlägg har publicerats!")
-    else:
-        st.warning("Inlägget kan inte vara tomt.")
+# Publicera och ladda om-knappar
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("Publicera"):
+        if uploaded_file is not None:
+            # Lägg till bilden i inläggen
+            image_data = BytesIO(uploaded_file.read())
+            st.session_state["posts"].append(image_data.getvalue())
+            save_posts(st.session_state["posts"])  # Spara inlägget till fil
+            st.success("Din bild har publicerats!")
+            # Omdirigera för att simulera en sidladdning
+            st.set_query_params(reload="true")
+        else:
+            st.warning("Du måste ladda upp en bild för att publicera.")
+with col2:
+    if st.button("Ladda om sidan"):
+        # Omdirigera för att simulera en sidladdning
+        st.set_query_params(reload="true")
 
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
@@ -75,11 +76,11 @@ if st.session_state["posts"]:
             border_color = "yellow"
             background_color = "#ffffe0"
 
-        # Lägg till CSS för att skapa en färgad ram och bakgrund
+        # Visa bilden i en inläggsruta
         post_html = f"""
         <div style="border: 2px solid {border_color}; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: {background_color};">
-            <strong>Inlägg {idx}:</strong>
-            <p>{post}</p>
+            <strong>Inlägg {idx}:</strong><br>
+            <img src="data:image/png;base64,{post.decode('utf-8')}" alt="Inlägg {idx}" style="width:100%; max-width:300px; height:auto;">
         </div>
         """
         if idx % 2 != 0:
@@ -88,58 +89,6 @@ if st.session_state["posts"]:
             col2.markdown(post_html, unsafe_allow_html=True)
 else:
     st.info("Inga inlägg har publicerats ännu.")
-
-# Funktion för att generera PDF och låta användaren ladda ner den
-def generate_pdf(posts):
-    # Skapa en byte-ström för att hålla PDF:n i minnet
-    buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
-
-    # Skapa stil
-    styles = getSampleStyleSheet()
-    style_normal = styles["Normal"]
-
-    # Förbered texten
-    story = []
-    for idx, post in enumerate(posts, 1):
-        # Växla färg beroende på index (fyra olika färger)
-        if idx % 4 == 1:
-            background_color = (224/255, 247/255, 255/255)
-        elif idx % 4 == 2:
-            background_color = (232/255, 245/255, 233/255)
-        elif idx % 4 == 3:
-            background_color = (255/255, 224/255, 224/255)
-        else:
-            background_color = (255/255, 255/255, 224/255)
-
-        # Skapa varje inlägg som ett stycke med radbrytning
-        post_text = f"Inlägg {idx}:\n{post}"
-        paragraph = Paragraph(post_text, style_normal)
-
-        # Skapa en rektangel bakom texten för att ge en bakgrund
-        story.append(paragraph)
-        story.append(Spacer(1, 12))  # Lägg till lite mellanrum mellan inlägg
-
-    # Skapa PDF med en färgad bakgrund för varje inlägg
-    doc.build(story)
-
-    # Gå tillbaka till början av byte-strömmen
-    buffer.seek(0)
-
-    return buffer
-
-# Ladda ner PDF-knapp
-if st.button("Ladda ner alla inlägg som PDF"):
-    if st.session_state["posts"]:
-        pdf_buffer = generate_pdf(st.session_state["posts"])
-        st.download_button(
-            label="Ladda ner PDF",
-            data=pdf_buffer,
-            file_name="inlägg.pdf",
-            mime="application/pdf"
-        )
-    else:
-        st.warning("Det finns inga inlägg att ladda ner.")
 
 # Flytta bort raderingsfunktionen längst ner
 st.markdown("### Radera alla inlägg")
@@ -153,6 +102,3 @@ if st.button("Radera alla inlägg"):
         st.success("Alla inlägg har raderats!")
     else:
         st.error("Fel lösenord. Försök igen.")
-
-# Automatisk uppdatering av sidan var 5:e sekund
-st.markdown("<script>setTimeout(() => {window.location.reload()}, 5000);</script>", unsafe_allow_html=True)
