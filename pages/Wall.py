@@ -47,14 +47,20 @@ user_text = st.text_area(
     height=150
 )
 
-# Publicera-knapp
-if st.button("Publicera"):
-    if user_text.strip():
-        st.session_state["posts"].append(user_text.strip())
-        save_posts(st.session_state["posts"])  # Spara inlägget till fil
-        st.success("Ditt inlägg har publicerats!")
-    else:
-        st.warning("Inlägget kan inte vara tomt.")
+# Publicera och ladda om-knappar
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("Publicera"):
+        if user_text.strip():
+            st.session_state["posts"].append(user_text.strip())
+            save_posts(st.session_state["posts"])  # Spara inlägget till fil
+            st.success("Ditt inlägg har publicerats!")
+            st.experimental_rerun()
+        else:
+            st.warning("Inlägget kan inte vara tomt.")
+with col2:
+    if st.button("Ladda om sidan"):
+        st.experimental_rerun()
 
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
