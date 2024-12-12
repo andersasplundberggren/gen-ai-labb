@@ -7,7 +7,6 @@ from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
-import time
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
