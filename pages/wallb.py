@@ -7,6 +7,7 @@ from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Frame
+import time
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -62,7 +63,7 @@ if st.session_state["posts"]:
         # Växla färg beroende på index (varannat inlägg)
         border_color = "lightblue" if idx % 2 != 0 else "lightgreen"
         background_color = "#e0f7ff" if idx % 2 != 0 else "#e8f5e9"  # Ljusare bakgrundsfärger
-        
+
         # Lägg till CSS för att skapa en färgad ram och bakgrund
         st.markdown(f"""
         <div style="border: 2px solid {border_color}; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: {background_color};">
@@ -78,21 +79,21 @@ def generate_pdf(posts):
     # Skapa en byte-ström för att hålla PDF:n i minnet
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
-    
+
     # Skapa stil
     styles = getSampleStyleSheet()
     style_normal = styles["Normal"]
-    
+
     # Förbered texten
     story = []
     for idx, post in enumerate(posts, 1):
         # Växla färg beroende på index (varannat inlägg)
         background_color = (224/255, 247/255, 255/255) if idx % 2 != 0 else (232/255, 245/255, 233/255)
-        
+
         # Skapa varje inlägg som ett stycke med radbrytning
         post_text = f"Inlägg {idx}:\n{post}"
         paragraph = Paragraph(post_text, style_normal)
-        
+
         # Skapa en rektangel bakom texten för att ge en bakgrund
         story.append(paragraph)
         story.append(Spacer(1, 12))  # Lägg till lite mellanrum mellan inlägg
@@ -130,3 +131,6 @@ if st.button("Radera alla inlägg"):
         st.success("Alla inlägg har raderats!")
     else:
         st.error("Fel lösenord. Försök igen.")
+
+# Automatisk uppdatering av sidan var 5:e sekund
+st.markdown("<script>setTimeout(() => {window.location.reload()}, 5000);</script>", unsafe_allow_html=True)
