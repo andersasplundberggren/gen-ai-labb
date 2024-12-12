@@ -53,7 +53,6 @@ if st.button("Publicera"):
         st.session_state["posts"].append(user_text.strip())
         save_posts(st.session_state["posts"])  # Spara inlägget till fil
         st.success("Ditt inlägg har publicerats!")
-        st.experimental_rerun()
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
