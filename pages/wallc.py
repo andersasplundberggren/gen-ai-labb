@@ -97,8 +97,7 @@ def generate_pdf(posts):
 
     story = []
     for idx, post in enumerate(posts, 1):
-        paragraph = Paragraph(f"Inlägg {idx}:
-{post}", style_normal)
+        paragraph = Paragraph(f"Inlägg {idx}:\n{post}", style_normal)
         story.append(paragraph)
         story.append(Spacer(1, 12))
 
