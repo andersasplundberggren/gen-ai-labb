@@ -1,7 +1,12 @@
 import streamlit as st
 import os
 import json
-import random
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from io import BytesIO
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -23,35 +28,18 @@ def delete_all_posts():
     if os.path.exists(POSTS_FILE):
         os.remove(POSTS_FILE)
     st.session_state["posts"] = []
-
-# Funktion för att generera en slumpmässig ljus färg och dess mörkare variant
-def generate_color():
-    colors = {
-        "green": (180, 255, 180, 60),
-        "yellow": (255, 255, 180, 60),
-        "red": (255, 180, 180, 60),
-        "blue": (180, 180, 255, 60)
-    }
-    color_name = random.choice(list(colors.keys()))
-    r, g, b, dark_diff = colors[color_name]
-    light_color = f"rgb({r}, {g}, {b})"
-    dark_color = f"rgb({max(r - dark_diff, 0)}, {max(g - dark_diff, 0)}, {max(b - dark_diff, 0)})"
-    return light_color, dark_color
+    st.session_state["post_colors"] = {}
 
 # Ladda tidigare inlägg
 if "posts" not in st.session_state:
     st.session_state["posts"] = load_posts()
-
 if "post_colors" not in st.session_state:
-    st.session_state["post_colors"] = [generate_color() for _ in range(len(st.session_state["posts"]))]
-
-if "post_states" not in st.session_state:
-    st.session_state["post_states"] = ["default" for _ in range(len(st.session_state["posts"]))]
+    st.session_state["post_colors"] = {}
 
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
-# Sidrubrik för att skapa inlägg
+# Sidrubrik
 st.markdown("## Skapa och Dela Innehåll")
 
 # Textområde för textinmatning
@@ -65,44 +53,80 @@ user_text = st.text_area(
 if st.button("Publicera"):
     if user_text.strip():
         st.session_state["posts"].append(user_text.strip())
-        st.session_state["post_colors"].append(generate_color())
-        st.session_state["post_states"].append("default")
-        save_posts(st.session_state["posts"])  # Spara inlägget till fil
+        save_posts(st.session_state["posts"])
         st.success("Ditt inlägg har publicerats!")
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Funktion för att växla mellan färg och gråskala för ett inlägg
-def toggle_post(idx):
-    current_state = st.session_state["post_states"][idx]
-    if current_state == "default":
-        st.session_state["post_states"][idx] = "gray"
-    elif current_state == "gray":
-        st.session_state["post_states"][idx] = "default"
+# Visa alla publicerade inlägg
+st.markdown("### Publicerade Inlägg")
+if st.session_state["posts"]:
+    for idx, post in enumerate(st.session_state["posts"]):
+        if idx not in st.session_state["post_colors"]:
+            st.session_state["post_colors"][idx] = "white"
 
-# Visa inlägg endast om lösenord är korrekt
-password = st.text_input("Ange lösenord för att visa inlägg:", type="password")
+        # Klickbar funktionalitet för varje inlägg
+        if st.button(f"Inlägg {idx + 1}"):
+            if st.session_state["post_colors"][idx] == "white":
+                st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
+            else:
+                st.session_state["post_colors"][idx] = "white"  # Ursprunglig färg
 
-if password == "hemligt":  # Ändra detta till ditt valda lösenord
-    # Visa alla publicerade inlägg i tre kolumner
-    if st.session_state["posts"]:
-        columns = st.columns(3)  # Skapa tre kolumner
-        for idx, post in enumerate(st.session_state["posts"]):
-            col = columns[idx % 3]  # Välj kolumn baserat på index
-            with col:
-                light_color, dark_color = st.session_state["post_colors"][idx]
-                current_state = st.session_state["post_states"][idx]
-
-                if current_state == "gray":
-                    style = "background-color:lightgray; border: 4px solid gray; padding:20px;"
-                else:
-                    style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px;"
-
-                if st.button(f"Visa {idx+1}", key=f"btn_{idx}"):
-                    toggle_post(idx)
-
-                st.markdown(f"<div style='{style}'>{post}</div>", unsafe_allow_html=True)
-    else:
-        st.info("Inga inlägg har publicerats ännu.")
+        # Visa inlägg med aktuell bakgrundsfärg
+        st.markdown(
+            f"""
+            <div style="background-color: {st.session_state['post_colors'][idx]}; \
+                        padding: 10px; margin-bottom: 10px; border-radius: 5px; \
+                        border: 1px solid black;">
+                <strong>Inlägg {idx + 1}:</strong>
+                <p>{post}</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 else:
-    st.warning("Fel lösenord. Försök igen.")
+    st.info("Inga inlägg har publicerats ännu.")
+
+# Funktion för att generera PDF och låta användaren ladda ner den
+def generate_pdf(posts):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
+
+    styles = getSampleStyleSheet()
+    style_normal = styles["Normal"]
+
+    story = []
+    for idx, post in enumerate(posts, 1):
+        paragraph = Paragraph(f"Inlägg {idx}:
+{post}", style_normal)
+        story.append(paragraph)
+        story.append(Spacer(1, 12))
+
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+# Ladda ner PDF-knapp
+if st.button("Ladda ner alla inlägg som PDF"):
+    if st.session_state["posts"]:
+        pdf_buffer = generate_pdf(st.session_state["posts"])
+        st.download_button(
+            label="Ladda ner PDF",
+            data=pdf_buffer,
+            file_name="inlägg.pdf",
+            mime="application/pdf"
+        )
+    else:
+        st.warning("Det finns inga inlägg att ladda ner.")
+
+# Flytta bort raderingsfunktionen längst ner
+st.markdown("### Radera alla inlägg")
+password = st.text_input("Ange lösenord för att radera alla inlägg:", type="password")
+
+if st.button("Radera alla inlägg"):
+    if password == "radera":
+        delete_all_posts()
+        save_posts(st.session_state["posts"])
+        st.success("Alla inlägg har raderats!")
+    else:
+        st.error("Fel lösenord. Försök igen.")
