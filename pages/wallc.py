@@ -58,22 +58,27 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Visa alla publicerade inlägg
+# Visa alla publicerade inlägg i tre kolumner
 st.markdown("### Publicerade Inlägg")
 if st.session_state["posts"]:
+    # Dela upp layouten i tre kolumner
+    columns = st.columns(3)
     for idx, post in enumerate(st.session_state["posts"]):
+        # Bestäm vilken kolumn som inlägget ska vara i
+        col = columns[idx % 3]
+        
         if idx not in st.session_state["post_colors"]:
             st.session_state["post_colors"][idx] = "white"
 
         # Klickbar funktionalitet för varje inlägg
-        if st.button(f"Inlägg {idx + 1}"):
+        if col.button(f"Inlägg {idx + 1}", key=f"btn{idx}"):
             if st.session_state["post_colors"][idx] == "white":
                 st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
             else:
                 st.session_state["post_colors"][idx] = "white"  # Ursprunglig färg
 
-        # Visa inlägg med aktuell bakgrundsfärg
-        st.markdown(
+        # Visa inlägg med aktuell bakgrundsfärg i rätt kolumn
+        col.markdown(
             f"""
             <div style="background-color: {st.session_state['post_colors'][idx]}; \
                         padding: 10px; margin-bottom: 10px; border-radius: 5px; \
