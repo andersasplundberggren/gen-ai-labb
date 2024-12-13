@@ -61,20 +61,19 @@ if st.button("Publicera"):
 # Visa alla publicerade inlägg
 st.markdown("### Publicerade Inlägg")
 if st.session_state["posts"]:
-    cols = st.columns(3)  # Tre kolumner för att visa inlägg
     for idx, post in enumerate(st.session_state["posts"]):
         if idx not in st.session_state["post_colors"]:
             st.session_state["post_colors"][idx] = "white"
 
         # Klickbar funktionalitet för varje inlägg
-        if cols[idx % 3].button(f"Inlägg {idx + 1}", key=f"btn_{idx}"):
+        if st.button(f"Inlägg {idx + 1}"):
             if st.session_state["post_colors"][idx] == "white":
                 st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
             else:
                 st.session_state["post_colors"][idx] = "white"  # Ursprunglig färg
 
         # Visa inlägg med aktuell bakgrundsfärg
-        cols[idx % 3].markdown(
+        st.markdown(
             f"""
             <div style="background-color: {st.session_state['post_colors'][idx]}; \
                         padding: 10px; margin-bottom: 10px; border-radius: 5px; \
@@ -98,8 +97,7 @@ def generate_pdf(posts):
 
     story = []
     for idx, post in enumerate(posts, 1):
-        paragraph = Paragraph(f"Inlägg {idx}:
-{post}", style_normal)
+        paragraph = Paragraph(f"Inlägg {idx}:\n{post}", style_normal)
         story.append(paragraph)
         story.append(Spacer(1, 12))
 
