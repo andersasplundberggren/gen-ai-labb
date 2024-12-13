@@ -26,9 +26,16 @@ def delete_all_posts():
 
 # Funktion för att generera en slumpmässig ljus färg och dess mörkare variant
 def generate_color():
-    r, g, b = [random.randint(180, 255) for _ in range(3)]
+    colors = {
+        "green": (180, 255, 180, 60),
+        "yellow": (255, 255, 180, 60),
+        "red": (255, 180, 180, 60),
+        "blue": (180, 180, 255, 60)
+    }
+    color_name = random.choice(list(colors.keys()))
+    r, g, b, dark_diff = colors[color_name]
     light_color = f"rgb({r}, {g}, {b})"
-    dark_color = f"rgb({max(r - 60, 0)}, {max(g - 60, 0)}, {max(b - 60, 0)})"
+    dark_color = f"rgb({max(r - dark_diff, 0)}, {max(g - dark_diff, 0)}, {max(b - dark_diff, 0)})"
     return light_color, dark_color
 
 # Ladda tidigare inlägg
@@ -91,7 +98,7 @@ if st.session_state["posts"]:
             else:
                 style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px;"
 
-            if st.button(f"Inlägg {idx+1}", key=f"btn_{idx}"):
+            if st.button(f"Visa {idx+1}", key=f"btn_{idx}"):
                 toggle_post(idx)
 
             st.markdown(f"<div style='{style}'>{post}</div>", unsafe_allow_html=True)
