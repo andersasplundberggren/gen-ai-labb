@@ -2,10 +2,6 @@ import streamlit as st
 import os
 import json
 import random
-from reportlab.lib.pagesizes import letter
-from io import BytesIO
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
 # Fil för att lagra inlägg
 POSTS_FILE = "posts.json"
@@ -42,9 +38,6 @@ if "posts" not in st.session_state:
 if "post_colors" not in st.session_state:
     st.session_state["post_colors"] = [generate_color() for _ in range(len(st.session_state["posts"]))]
 
-if "enlarged_post" not in st.session_state:
-    st.session_state["enlarged_post"] = None
-
 if "post_states" not in st.session_state:
     st.session_state["post_states"] = ["default" for _ in range(len(st.session_state["posts"]))]
 
@@ -72,19 +65,20 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
+# Funktion för att växla tillstånd för ett inlägg
+def toggle_post(idx):
+    current_state = st.session_state["post_states"][idx]
+    if current_state == "default":
+        st.session_state["post_states"][idx] = "enlarged"
+    elif current_state == "enlarged":
+        st.session_state["post_states"][idx] = "gray"
+    elif current_state == "gray":
+        st.session_state["post_states"][idx] = "enlarged"
+    else:
+        st.session_state["post_states"][idx] = "default"
+
 # Visa alla publicerade inlägg i tre kolumner
 if st.session_state["posts"]:
-    def toggle_post(idx):
-        current_state = st.session_state["post_states"][idx]
-        if current_state == "default":
-            st.session_state["post_states"][idx] = "enlarged"
-        elif current_state == "enlarged":
-            st.session_state["post_states"][idx] = "gray"
-        elif current_state == "gray":
-            st.session_state["post_states"][idx] = "enlarged"
-        else:
-            st.session_state["post_states"][idx] = "default"
-
     columns = st.columns(3)  # Skapa tre kolumner
     for idx, post in enumerate(st.session_state["posts"]):
         col = columns[idx % 3]  # Välj kolumn baserat på index
@@ -99,7 +93,10 @@ if st.session_state["posts"]:
             else:
                 style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px; cursor:pointer;"
 
-            if st.button(f"{post}", key=f"post_{idx}", help=f"Klicka för att växla storlek och färg", args=(idx,)):
-                toggle_post(idx)
+            button_html = f"""
+            <div style="{style}" onclick="fetch('/?post_id={idx}', {{method: 'POST'}})">{post}</div>
+            """
+            st.markdown(button_html, unsafe_allow_html=True)
+
 else:
     st.info("Inga inlägg har publicerats ännu.")
