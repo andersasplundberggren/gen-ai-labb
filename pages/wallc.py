@@ -72,35 +72,37 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Funktion för att växla tillstånd för ett inlägg
+# Funktion för att växla mellan färg och gråskala för ett inlägg
 def toggle_post(idx):
     current_state = st.session_state["post_states"][idx]
     if current_state == "default":
-        st.session_state["post_states"][idx] = "enlarged"
-    elif current_state == "enlarged":
         st.session_state["post_states"][idx] = "gray"
     elif current_state == "gray":
         st.session_state["post_states"][idx] = "default"
 
-# Visa alla publicerade inlägg i tre kolumner
-if st.session_state["posts"]:
-    columns = st.columns(3)  # Skapa tre kolumner
-    for idx, post in enumerate(st.session_state["posts"]):
-        col = columns[idx % 3]  # Välj kolumn baserat på index
-        with col:
-            light_color, dark_color = st.session_state["post_colors"][idx]
-            current_state = st.session_state["post_states"][idx]
+# Visa inlägg endast om lösenord är korrekt
+password = st.text_input("Ange lösenord för att visa inlägg:", type="password")
 
-            if current_state == "enlarged":
-                style = f"background-color:{light_color}; border: 4px solid {dark_color}; padding:20px; font-size:20px;"
-            elif current_state == "gray":
-                style = "background-color:lightgray; border: 4px solid gray; padding:20px; font-size:20px;"
-            else:
-                style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px;"
+if password == "hemligt":  # Ändra detta till ditt valda lösenord
+    # Visa alla publicerade inlägg i tre kolumner
+    if st.session_state["posts"]:
+        columns = st.columns(3)  # Skapa tre kolumner
+        for idx, post in enumerate(st.session_state["posts"]):
+            col = columns[idx % 3]  # Välj kolumn baserat på index
+            with col:
+                light_color, dark_color = st.session_state["post_colors"][idx]
+                current_state = st.session_state["post_states"][idx]
 
-            if st.button(f"Visa {idx+1}", key=f"btn_{idx}"):
-                toggle_post(idx)
+                if current_state == "gray":
+                    style = "background-color:lightgray; border: 4px solid gray; padding:20px;"
+                else:
+                    style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px;"
 
-            st.markdown(f"<div style='{style}'>{post}</div>", unsafe_allow_html=True)
+                if st.button(f"Visa {idx+1}", key=f"btn_{idx}"):
+                    toggle_post(idx)
+
+                st.markdown(f"<div style='{style}'>{post}</div>", unsafe_allow_html=True)
+    else:
+        st.info("Inga inlägg har publicerats ännu.")
 else:
-    st.info("Inga inlägg har publicerats ännu.")
+    st.warning("Fel lösenord. Försök igen.")
