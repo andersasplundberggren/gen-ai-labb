@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import json
+import random
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
@@ -36,6 +37,20 @@ if "posts" not in st.session_state:
 if "post_colors" not in st.session_state:
     st.session_state["post_colors"] = {}
 
+# Färger som kan användas
+colors_list = ['yellow', 'green', 'red', 'blue']
+
+# Funktion för att generera en mörkare och ljusare nyans av en färg
+def get_shades_of_color(color):
+    if color == 'yellow':
+        return '#FFEB3B', '#FBC02D'  # Ljusgul och mörkgul
+    elif color == 'green':
+        return '#66BB6A', '#388E3C'  # Ljusgrön och mörkgrön
+    elif color == 'red':
+        return '#FF7043', '#D32F2F'  # Ljusröd och mörkröd
+    elif color == 'blue':
+        return '#64B5F6', '#1976D2'  # Ljusblå och mörkblå
+
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
@@ -64,25 +79,24 @@ if st.session_state["posts"]:
     # Dela upp layouten i tre kolumner
     columns = st.columns(3)
     for idx, post in enumerate(st.session_state["posts"]):
+        # Slumpa en färg för varje inlägg
+        random_color = random.choice(colors_list)
+        light_color, dark_color = get_shades_of_color(random_color)
+
         # Bestäm vilken kolumn som inlägget ska vara i
         col = columns[idx % 3]
-        
-        if idx not in st.session_state["post_colors"]:
-            st.session_state["post_colors"][idx] = "white"
 
         # Klickbar funktionalitet för varje inlägg
         if col.button(f"Inlägg {idx + 1}", key=f"btn{idx}"):
-            if st.session_state["post_colors"][idx] == "white":
-                st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
-            else:
-                st.session_state["post_colors"][idx] = "white"  # Ursprunglig färg
+            # Inget att ändra här eftersom färgen nu är fast
+            pass
 
         # Visa inlägg med aktuell bakgrundsfärg i rätt kolumn
         col.markdown(
             f"""
-            <div style="background-color: {st.session_state['post_colors'][idx]}; \
-                        padding: 10px; margin-bottom: 10px; border-radius: 5px; \
-                        border: 1px solid black;">
+            <div style="background-color: {light_color}; \
+                        border: 2px solid {dark_color}; \
+                        padding: 10px; margin-bottom: 10px; border-radius: 5px;">
                 <strong>Inlägg {idx + 1}:</strong>
                 <p>{post}</p>
             </div>
