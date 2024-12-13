@@ -43,13 +43,13 @@ colors_list = ['yellow', 'green', 'red', 'blue']
 # Funktion för att generera en mörkare och ljusare nyans av en färg
 def get_shades_of_color(color):
     if color == 'yellow':
-        return '#FFEB3B', '#FBC02D'  # Ljusgul och mörkgul
+        return '#FFF176', '#FFEB3B'  # Ljusgul och mörkgul
     elif color == 'green':
-        return '#66BB6A', '#388E3C'  # Ljusgrön och mörkgrön
+        return '#A5D6A7', '#66BB6A'  # Ljusgrön och mörkgrön
     elif color == 'red':
-        return '#FF7043', '#D32F2F'  # Ljusröd och mörkröd
+        return '#FFAB91', '#FF7043'  # Ljusröd och mörkröd
     elif color == 'blue':
-        return '#64B5F6', '#1976D2'  # Ljusblå och mörkblå
+        return '#81D4FA', '#64B5F6'  # Ljusblå och mörkblå
 
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
@@ -88,13 +88,18 @@ if st.session_state["posts"]:
 
         # Klickbar funktionalitet för varje inlägg
         if col.button(f"Inlägg {idx + 1}", key=f"btn{idx}"):
-            # Inget att ändra här eftersom färgen nu är fast
-            pass
+            if st.session_state["post_colors"].get(idx) == light_color:
+                st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
+            else:
+                st.session_state["post_colors"][idx] = light_color  # Ursprungsfärg
+
+        # Färg på inlägget baserat på om det har blivit klickat
+        current_color = st.session_state["post_colors"].get(idx, light_color)
 
         # Visa inlägg med aktuell bakgrundsfärg i rätt kolumn
         col.markdown(
             f"""
-            <div style="background-color: {light_color}; \
+            <div style="background-color: {current_color}; \
                         border: 2px solid {dark_color}; \
                         padding: 10px; margin-bottom: 10px; border-radius: 5px;">
                 <strong>Inlägg {idx + 1}:</strong>
