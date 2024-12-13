@@ -60,10 +60,13 @@ st.markdown("### Publicerade Inlägg och PDF Export")
 password = st.text_input("Ange lösenord för att visa alla inlägg och ladda ner PDF:", type="password")
 
 if password == "password":  # Byt ut detta mot ditt lösenord
-    # Visa alla publicerade inlägg
+    # Visa alla publicerade inlägg i tre kolumner
     if st.session_state["posts"]:
-        for idx, post in enumerate(st.session_state["posts"], 1):
-            st.markdown(f"**Inlägg {idx}:** {post}")
+        columns = st.columns(3)  # Skapa tre kolumner
+        for idx, post in enumerate(st.session_state["posts"]):
+            col = columns[idx % 3]  # Välj kolumn baserat på index
+            with col:
+                st.markdown(f"**Inlägg {idx + 1}:** {post}")
     else:
         st.info("Inga inlägg har publicerats ännu.")
 
@@ -84,9 +87,6 @@ if password == "password":  # Byt ut detta mot ditt lösenord
             paragraph = Paragraph(post_text, style_normal)
             story.append(paragraph)
             story.append(Spacer(1, 12))  # Lägg till lite mellanrum mellan inlägg
-
-            # Lägg till sidbrytning efter varje inlägg
-            doc.showPage()
 
         # Skapa PDF
         doc.build(story)
