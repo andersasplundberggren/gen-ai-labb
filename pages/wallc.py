@@ -73,8 +73,6 @@ def toggle_post(idx):
     elif current_state == "enlarged":
         st.session_state["post_states"][idx] = "gray"
     elif current_state == "gray":
-        st.session_state["post_states"][idx] = "enlarged"
-    else:
         st.session_state["post_states"][idx] = "default"
 
 # Visa alla publicerade inlägg i tre kolumner
@@ -87,16 +85,15 @@ if st.session_state["posts"]:
             current_state = st.session_state["post_states"][idx]
 
             if current_state == "enlarged":
-                style = f"background-color:{light_color}; border: 4px solid {dark_color}; padding:20px; font-size:20px; cursor:pointer;"
+                style = f"background-color:{light_color}; border: 4px solid {dark_color}; padding:20px; font-size:20px;"
             elif current_state == "gray":
-                style = "background-color:lightgray; border: 4px solid gray; padding:20px; font-size:20px; cursor:pointer;"
+                style = "background-color:lightgray; border: 4px solid gray; padding:20px; font-size:20px;"
             else:
-                style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px; cursor:pointer;"
+                style = f"background-color:{light_color}; border: 2px solid {dark_color}; padding:10px;"
 
-            button_html = f"""
-            <div style="{style}" onclick="fetch('/?post_id={idx}', {{method: 'POST'}})">{post}</div>
-            """
-            st.markdown(button_html, unsafe_allow_html=True)
+            if st.button(f"Inlägg {idx+1}", key=f"btn_{idx}"):
+                toggle_post(idx)
 
+            st.markdown(f"<div style='{style}'>{post}</div>", unsafe_allow_html=True)
 else:
     st.info("Inga inlägg har publicerats ännu.")
