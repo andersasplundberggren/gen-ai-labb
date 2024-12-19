@@ -27,7 +27,23 @@ if uploaded_file is not None:
         f.write(uploaded_file.getbuffer())
     st.success(f"Bilden '{uploaded_file.name}' har laddats upp och är nu delad!")
 
-# Visa alla uppladdade bilder med skugga
+# Funktion för att skapa en helskärmseffekt för bilden
+def open_fullscreen_image(img_base64, image_file):
+    return f"""
+    <div class="image-container">
+        <img src="data:image/png;base64,{img_base64}" alt="{image_file}" style="cursor: pointer; width: 100%; border-radius: 8px;" onclick="openImage(this)">
+    </div>
+
+    <script>
+        function openImage(imgElement) {{
+            const imgSrc = imgElement.src;
+            const imgWindow = window.open("", "_blank");
+            imgWindow.document.write('<img src="' + imgSrc + '" style="width: 100%; height: 100%; object-fit: contain;">');
+        }}
+    </script>
+    """
+
+# Visa alla uppladdade bilder med skugga och helskärmseffekt
 st.header("Delade bilder")
 image_files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
 
@@ -40,11 +56,11 @@ if image_files:
         img_base64 = img_to_base64(image_path)
         col = cols[idx % 3]  # Välj kolumn baserat på index
         with col:
-            # Lägg till skugga på bilden med hjälp av CSS
+            # Lägg till skugga och helskärmseffekt med hjälp av CSS och JavaScript
             st.markdown(
                 f"""
                 <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                    <img src="data:image/png;base64,{img_base64}" alt="{image_file}" style="width:100%; border-radius: 8px;">
+                    {open_fullscreen_image(img_base64, image_file)}
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -89,11 +105,11 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
             img_base64 = img_to_base64(image_path)
             col = cols[idx % 3]  # Välj kolumn baserat på index
             with col:
-                # Lägg till skugga på bilden med hjälp av CSS
+                # Lägg till skugga och helskärmseffekt med hjälp av CSS och JavaScript
                 st.markdown(
                     f"""
                     <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                        <img src="data:image/png;base64,{img_base64}" alt="{image_file}" style="width:100%; border-radius: 8px;">
+                        {open_fullscreen_image(img_base64, image_file)}
                     </div>
                     """,
                     unsafe_allow_html=True
