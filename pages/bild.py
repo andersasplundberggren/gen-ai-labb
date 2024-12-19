@@ -41,12 +41,13 @@ with st.sidebar:
     st.header("Administratörsinloggning")
     login_button = st.button("Logga in som administratör")
     
-    # Om knappen trycks, visa lösenordsfält
+    # Visa lösenordsfält om knappen trycks
+    admin_password = None  # Säkerställ att admin_password är definierat
     if login_button:
         admin_password = st.text_input("Ange administratörslösenord", type="password")
 
 # Kontrollera om användaren har loggat in med rätt lösenord
-if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenord
+if admin_password and admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenord
     st.success("Du är inloggad som administratör!")
 
     # Ladda ned alla bilder som PDF
@@ -82,4 +83,5 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
         else:
             st.warning("Det finns inga bilder att radera.")
 else:
-    st.warning("Fel lösenord eller ingen åtkomst till administratörsdel.")
+    if admin_password:
+        st.warning("Fel lösenord eller ingen åtkomst till administratörsdel.")
