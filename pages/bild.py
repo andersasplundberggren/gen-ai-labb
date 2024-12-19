@@ -25,12 +25,11 @@ st.header("Delade bilder")
 image_files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
 
 if image_files:
-    num_columns = len(image_files) if len(image_files) < 6 else 6  # Anpassa antalet kolumner efter skärmbredd
-    cols = st.columns(num_columns)  # Dynamiskt antal kolumner
+    cols = st.columns(3)  # Skapa tre kolumner
     for idx, image_file in enumerate(image_files):
         image_path = os.path.join(UPLOAD_DIR, image_file)
         image = Image.open(image_path)
-        col = cols[idx % num_columns]  # Välj kolumn baserat på index
+        col = cols[idx % 3]  # Välj kolumn baserat på index
         with col:
             st.image(image, caption=image_file, use_container_width=True)
 else:
