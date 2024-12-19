@@ -36,10 +36,16 @@ if image_files:
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
-# Administratörsdel
-st.header("Administratörsdel")
-admin_password = st.text_input("Ange administratörslösenord", type="password")
+# Sidopanel för administratörsinloggning
+with st.sidebar:
+    st.header("Administratörsinloggning")
+    login_button = st.button("Logga in som administratör")
+    
+    # Om knappen trycks, visa lösenordsfält
+    if login_button:
+        admin_password = st.text_input("Ange administratörslösenord", type="password")
 
+# Kontrollera om användaren har loggat in med rätt lösenord
 if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenord
     st.success("Du är inloggad som administratör!")
 
