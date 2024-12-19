@@ -36,29 +36,44 @@ if image_files:
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
-# Funktion för att ladda ned alla bilder som en PDF med lösenordsskydd
-st.header("Ladda ned alla bilder")
-password = st.text_input("Ange lösenord för att ladda ned bilder", type="password")
+# Administratörsdel
+st.header("Administratörsdel")
+admin_password = st.text_input("Ange administratörslösenord", type="password")
 
-if st.button("Skapa och ladda ned PDF"):
-    if password == "hemligt":  # Ersätt "hemligt" med ditt önskade lösenord
-        pdf = FPDF()
-        pdf.set_auto_page_break(auto=True, margin=15)
-        for image_file in image_files:
-            image_path = os.path.join(UPLOAD_DIR, image_file)
-            pdf.add_page()
-            pdf.image(image_path, x=10, y=10, w=190)
+if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenord
+    st.success("Du är inloggad som administratör!")
 
-        pdf_filename = "bilder.pdf"
-        pdf.output(pdf_filename)
+    # Ladda ned alla bilder som PDF
+    if st.button("Skapa och ladda ned PDF"):
+        if image_files:
+            pdf = FPDF()
+            pdf.set_auto_page_break(auto=True, margin=15)
+            for image_file in image_files:
+                image_path = os.path.join(UPLOAD_DIR, image_file)
+                pdf.add_page()
+                pdf.image(image_path, x=10, y=10, w=190)
 
-        with open(pdf_filename, "rb") as f:
-            st.download_button(
-                label="Ladda ned PDF",
-                data=f,
-                file_name=pdf_filename,
-                mime="application/pdf"
-            )
-        os.remove(pdf_filename)  # Ta bort PDF-filen efter nedladdning
-    else:
-        st.error("Fel lösenord! Försök igen.")
+            pdf_filename = "bilder.pdf"
+            pdf.output(pdf_filename)
+
+            with open(pdf_filename, "rb") as f:
+                st.download_button(
+                    label="Ladda ned PDF",
+                    data=f,
+                    file_name=pdf_filename,
+                    mime="application/pdf"
+                )
+            os.remove(pdf_filename)
+        else:
+            st.warning("Inga bilder att inkludera i PDF:en.")
+
+    # Radera alla bilder
+    if st.button("Radera alla bilder"):
+        if image_files:
+            for image_file in image_files:
+                os.remove(os.path.join(UPLOAD_DIR, image_file))
+            st.success("Alla bilder har raderats.")
+        else:
+            st.warning("Det finns inga bilder att radera.")
+else:
+    st.warning("Fel lösenord eller ingen åtkomst till administratörsdel.")
