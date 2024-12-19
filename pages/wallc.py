@@ -62,18 +62,20 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Lås upp publicerade inlägg
-st.markdown("### Lås upp inlägg")
-password = st.text_input("Ange lösenord för att visa publicerade inlägg:", type="password")
-if st.button("Lås upp"):
-    if password == "visa":
-        st.session_state["unlocked"] = True
-        st.success("Inläggen har låsts upp!")
-    else:
-        st.error("Fel lösenord. Försök igen.")
+# Visa lösenordsinmatning först
+if not st.session_state["unlocked"]:
+    st.markdown("### Lås upp funktioner")
+    password = st.text_input("Ange lösenord för att låsa upp funktioner:", type="password")
+    if st.button("Lås upp"):
+        if password == "visa":
+            st.session_state["unlocked"] = True
+            st.success("Funktionerna har låsts upp!")
+        else:
+            st.error("Fel lösenord. Försök igen.")
 
-# Visa alla publicerade inlägg i tre kolumner om de är upplåsta
+# Visa resten av funktionerna när upplåst
 if st.session_state["unlocked"]:
+    # Visa alla publicerade inlägg i tre kolumner
     st.markdown("### Publicerade Inlägg")
     if st.session_state["posts"]:
         # Dela upp layouten i tre kolumner
@@ -105,48 +107,28 @@ if st.session_state["unlocked"]:
             )
     else:
         st.info("Inga inlägg har publicerats ännu.")
-else:
-    st.warning("Inläggen är låsta. Ange lösenord för att låsa upp dem.")
 
-# Funktion för att generera PDF och låta användaren ladda ner den
-def generate_pdf(posts):
-    buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
+    # Funktion för att generera PDF och låta användaren ladda ner den
+    if st.button("Ladda ner alla inlägg som PDF"):
+        if st.session_state["posts"]:
+            pdf_buffer = generate_pdf(st.session_state["posts"])
+            st.download_button(
+                label="Ladda ner PDF",
+                data=pdf_buffer,
+                file_name="inlägg.pdf",
+                mime="application/pdf"
+            )
+        else:
+            st.warning("Det finns inga inlägg att ladda ner.")
 
-    styles = getSampleStyleSheet()
-    style_normal = styles["Normal"]
+    # Flytta bort raderingsfunktionen längst ner
+    st.markdown("### Radera alla inlägg")
+    password = st.text_input("Ange lösenord för att radera alla inlägg:", type="password")
 
-    story = []
-    for idx, post in enumerate(posts, 1):
-        paragraph = Paragraph(f"Inlägg {idx}:\n{post}", style_normal)
-        story.append(paragraph)
-        story.append(Spacer(1, 12))
-
-    doc.build(story)
-    buffer.seek(0)
-    return buffer
-
-# Ladda ner PDF-knapp
-if st.button("Ladda ner alla inlägg som PDF"):
-    if st.session_state["posts"]:
-        pdf_buffer = generate_pdf(st.session_state["posts"])
-        st.download_button(
-            label="Ladda ner PDF",
-            data=pdf_buffer,
-            file_name="inlägg.pdf",
-            mime="application/pdf"
-        )
-    else:
-        st.warning("Det finns inga inlägg att ladda ner.")
-
-# Flytta bort raderingsfunktionen längst ner
-st.markdown("### Radera alla inlägg")
-password = st.text_input("Ange lösenord för att radera alla inlägg:", type="password")
-
-if st.button("Radera alla inlägg"):
-    if password == "radera":
-        delete_all_posts()
-        save_posts(st.session_state["posts"])
-        st.success("Alla inlägg har raderats!")
-    else:
-        st.error("Fel lösenord. Försök igen.")
+    if st.button("Radera alla inlägg"):
+        if password == "radera":
+            delete_all_posts()
+            save_posts(st.session_state["posts"])
+            st.success("Alla inlägg har raderats!")
+        else:
+            st.error("Fel lösenord. Försök igen.")
