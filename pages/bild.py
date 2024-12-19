@@ -32,15 +32,17 @@ if image_files:
         image = Image.open(image_path)
         col = cols[idx % 3]  # Välj kolumn baserat på index
         with col:
-            # Lägg till skugga på bilden med hjälp av CSS
+            # Använd CSS för att lägga till skugga på bilderna
             st.markdown(
                 f"""
-                <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                    <img src="data:image/png;base64,{image_path}" alt="{image_file}" style="width:100%; border-radius: 8px;">
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+                <style>
+                .img-shadow {{
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }}
+                </style>
+                """, unsafe_allow_html=True)
+            st.image(image, caption=image_file, use_container_width=True, help="Bild med skugga", key=f"image_{idx}", style="class=img-shadow")
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
@@ -79,15 +81,17 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
             image = Image.open(image_path)
             col = cols[idx % 3]  # Välj kolumn baserat på index
             with col:
-                # Lägg till skugga på bilden med hjälp av CSS
+                # Använd CSS för att lägga till skugga på bilderna
                 st.markdown(
                     f"""
-                    <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                        <img src="data:image/png;base64,{image_path}" alt="{image_file}" style="width:100%; border-radius: 8px;">
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+                    <style>
+                    .img-shadow {{
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                        border-radius: 8px;
+                    }}
+                    </style>
+                    """, unsafe_allow_html=True)
+                st.image(image, caption=image_file, use_container_width=True, help="Bild med skugga", key=f"image_{idx}", style="class=img-shadow")
     else:
         st.write("Inga bilder har laddats upp ännu.")
 
