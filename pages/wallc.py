@@ -36,6 +36,10 @@ if "posts" not in st.session_state:
 if "post_colors" not in st.session_state:
     st.session_state["post_colors"] = {}
 
+# Lägg till status för upplåsning
+if "unlocked" not in st.session_state:
+    st.session_state["unlocked"] = False
+
 # Konfigurera sidan
 st.set_page_config(page_title="Skapa och Dela Innehåll", layout="wide")
 
@@ -58,39 +62,52 @@ if st.button("Publicera"):
     else:
         st.warning("Inlägget kan inte vara tomt.")
 
-# Visa alla publicerade inlägg i tre kolumner
-st.markdown("### Publicerade Inlägg")
-if st.session_state["posts"]:
-    # Dela upp layouten i tre kolumner
-    columns = st.columns(3)
-    for idx, post in enumerate(st.session_state["posts"]):
-        # Bestäm vilken kolumn som inlägget ska vara i
-        col = columns[idx % 3]
-        
-        if idx not in st.session_state["post_colors"]:
-            st.session_state["post_colors"][idx] = "white"
+# Lås upp publicerade inlägg
+st.markdown("### Lås upp inlägg")
+password = st.text_input("Ange lösenord för att visa publicerade inlägg:", type="password")
+if st.button("Lås upp"):
+    if password == "lösenord123":
+        st.session_state["unlocked"] = True
+        st.success("Inläggen har låsts upp!")
+    else:
+        st.error("Fel lösenord. Försök igen.")
 
-        # Klickbar funktionalitet för varje inlägg
-        if col.button(f"Inlägg {idx + 1}", key=f"btn{idx}"):
-            if st.session_state["post_colors"][idx] == "white":
-                st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
-            else:
-                st.session_state["post_colors"][idx] = "white"  # Ursprunglig färg
+# Visa alla publicerade inlägg i tre kolumner om de är upplåsta
+if st.session_state["unlocked"]:
+    st.markdown("### Publicerade Inlägg")
+    if st.session_state["posts"]:
+        # Dela upp layouten i tre kolumner
+        columns = st.columns(3)
+        for idx, post in enumerate(st.session_state["posts"]):
+            # Bestäm vilken kolumn som inlägget ska vara i
+            col = columns[idx % 3]
 
-        # Visa inlägg med aktuell bakgrundsfärg i rätt kolumn
-        col.markdown(
-            f"""
-            <div style="background-color: {st.session_state['post_colors'][idx]}; \
-                        padding: 10px; margin-bottom: 10px; border-radius: 5px; \
-                        border: 1px solid black;">
-                <strong>Inlägg {idx + 1}:</strong>
-                <p>{post}</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+            if idx not in st.session_state["post_colors"]:
+                st.session_state["post_colors"][idx] = "white"
+
+            # Klickbar funktionalitet för varje inlägg
+            if col.button(f"Inlägg {idx + 1}", key=f"btn{idx}"):
+                if st.session_state["post_colors"][idx] == "white":
+                    st.session_state["post_colors"][idx] = "#d3d3d3"  # Grå bakgrund
+                else:
+                    st.session_state["post_colors"][idx] = "white"  # Ursprunglig färg
+
+            # Visa inlägg med aktuell bakgrundsfärg i rätt kolumn
+            col.markdown(
+                f"""
+                <div style="background-color: {st.session_state['post_colors'][idx]}; \
+                            padding: 10px; margin-bottom: 10px; border-radius: 5px; \
+                            border: 1px solid black;">
+                    <strong>Inlägg {idx + 1}:</strong>
+                    <p>{post}</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+    else:
+        st.info("Inga inlägg har publicerats ännu.")
 else:
-    st.info("Inga inlägg har publicerats ännu.")
+    st.warning("Inläggen är låsta. Ange lösenord för att låsa upp dem.")
 
 # Funktion för att generera PDF och låta användaren ladda ner den
 def generate_pdf(posts):
