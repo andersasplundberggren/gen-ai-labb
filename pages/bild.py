@@ -8,8 +8,8 @@ UPLOAD_DIR = "uploaded_images"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Titel och instruktioner
-st.title("Bilddelning med Streamlit")
-st.write("Ladda upp en bild så delas den med alla besökare på sidan.")
+st.title("Bilddelning")
+st.write("Ladda upp en bild.")
 
 # Ladda upp bild
 uploaded_file = st.file_uploader("Ladda upp en bild", type=["png", "jpg", "jpeg"])
