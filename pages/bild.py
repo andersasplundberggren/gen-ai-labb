@@ -21,7 +21,7 @@ if uploaded_file is not None:
         f.write(uploaded_file.getbuffer())
     st.success(f"Bilden '{uploaded_file.name}' har laddats upp och är nu delad!")
 
-# Visa alla uppladdade bilder
+# Visa alla uppladdade bilder med skugga
 st.header("Delade bilder")
 image_files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
 
@@ -32,7 +32,15 @@ if image_files:
         image = Image.open(image_path)
         col = cols[idx % 3]  # Välj kolumn baserat på index
         with col:
-            st.image(image, caption=image_file, use_container_width=True)
+            # Lägg till skugga på bilden med hjälp av CSS
+            st.markdown(
+                f"""
+                <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
+                    <img src="data:image/png;base64,{image_path}" alt="{image_file}" style="width:100%; border-radius: 8px;">
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
@@ -71,7 +79,15 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
             image = Image.open(image_path)
             col = cols[idx % 3]  # Välj kolumn baserat på index
             with col:
-                st.image(image, caption=image_file, use_container_width=True)
+                # Lägg till skugga på bilden med hjälp av CSS
+                st.markdown(
+                    f"""
+                    <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
+                        <img src="data:image/png;base64,{image_path}" alt="{image_file}" style="width:100%; border-radius: 8px;">
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
     else:
         st.write("Inga bilder har laddats upp ännu.")
 
