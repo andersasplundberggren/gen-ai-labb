@@ -66,7 +66,7 @@ if st.button("Publicera"):
 st.markdown("### Lås upp inlägg")
 password = st.text_input("Ange lösenord för att visa publicerade inlägg:", type="password")
 if st.button("Lås upp"):
-    if password == "lösenord123":
+    if password == "visa":
         st.session_state["unlocked"] = True
         st.success("Inläggen har låsts upp!")
     else:
