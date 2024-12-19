@@ -25,9 +25,12 @@ st.header("Delade bilder")
 image_files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
 
 if image_files:
-    for image_file in image_files:
+    cols = st.columns(3)  # Skapa tre kolumner
+    for idx, image_file in enumerate(image_files):
         image_path = os.path.join(UPLOAD_DIR, image_file)
         image = Image.open(image_path)
-        st.image(image, caption=image_file, use_container_width=True)
+        col = cols[idx % 3]  # Välj kolumn baserat på index
+        with col:
+            st.image(image, caption=image_file, use_container_width=True)
 else:
     st.write("Inga bilder har laddats upp ännu.")
