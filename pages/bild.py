@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from PIL import Image
-from zipfile import ZipFile
+from fpdf import FPDF
 
 # Mapp för att spara bilder
 UPLOAD_DIR = "uploaded_images"
@@ -36,25 +36,29 @@ if image_files:
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
-# Funktion för att ladda ned alla bilder som ett dokument (ZIP-fil) med lösenordsskydd
+# Funktion för att ladda ned alla bilder som en PDF med lösenordsskydd
 st.header("Ladda ned alla bilder")
 password = st.text_input("Ange lösenord för att ladda ned bilder", type="password")
 
-if st.button("Skapa och ladda ned ZIP-fil"):
-    if password == "ladda":  # Ersätt "hemligt" med ditt önskade lösenord
-        zip_filename = "bilder.zip"
-        with ZipFile(zip_filename, "w") as zipf:
-            for image_file in image_files:
-                image_path = os.path.join(UPLOAD_DIR, image_file)
-                zipf.write(image_path, arcname=image_file)
+if st.button("Skapa och ladda ned PDF"):
+    if password == "hemligt":  # Ersätt "hemligt" med ditt önskade lösenord
+        pdf = FPDF()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        for image_file in image_files:
+            image_path = os.path.join(UPLOAD_DIR, image_file)
+            pdf.add_page()
+            pdf.image(image_path, x=10, y=10, w=190)
 
-        with open(zip_filename, "rb") as f:
+        pdf_filename = "bilder.pdf"
+        pdf.output(pdf_filename)
+
+        with open(pdf_filename, "rb") as f:
             st.download_button(
-                label="Ladda ned ZIP-fil",
+                label="Ladda ned PDF",
                 data=f,
-                file_name=zip_filename,
-                mime="application/zip"
+                file_name=pdf_filename,
+                mime="application/pdf"
             )
-        os.remove(zip_filename)  # Ta bort ZIP-filen efter nedladdning
+        os.remove(pdf_filename)  # Ta bort PDF-filen efter nedladdning
     else:
         st.error("Fel lösenord! Försök igen.")
