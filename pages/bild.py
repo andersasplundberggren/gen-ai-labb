@@ -2,10 +2,16 @@ import streamlit as st
 import os
 from PIL import Image
 from fpdf import FPDF
+import base64
 
 # Mapp för att spara bilder
 UPLOAD_DIR = "uploaded_images"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# Funktion för att konvertera bild till base64
+def img_to_base64(img_path):
+    with open(img_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode("utf-8")
 
 # Titel och instruktioner
 st.title("Bilddelning")
@@ -30,13 +36,15 @@ if image_files:
     for idx, image_file in enumerate(image_files):
         image_path = os.path.join(UPLOAD_DIR, image_file)
         image = Image.open(image_path)
+        # Konvertera bild till base64
+        img_base64 = img_to_base64(image_path)
         col = cols[idx % 3]  # Välj kolumn baserat på index
         with col:
             # Lägg till skugga på bilden med hjälp av CSS
             st.markdown(
                 f"""
                 <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                    <img src="data:image/png;base64,{image_path}" alt="{image_file}" style="width:100%; border-radius: 8px;">
+                    <img src="data:image/png;base64,{img_base64}" alt="{image_file}" style="width:100%; border-radius: 8px;">
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -77,13 +85,15 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
         for idx, image_file in enumerate(image_files):
             image_path = os.path.join(UPLOAD_DIR, image_file)
             image = Image.open(image_path)
+            # Konvertera bild till base64
+            img_base64 = img_to_base64(image_path)
             col = cols[idx % 3]  # Välj kolumn baserat på index
             with col:
                 # Lägg till skugga på bilden med hjälp av CSS
                 st.markdown(
                     f"""
                     <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                        <img src="data:image/png;base64,{image_path}" alt="{image_file}" style="width:100%; border-radius: 8px;">
+                        <img src="data:image/png;base64,{img_base64}" alt="{image_file}" style="width:100%; border-radius: 8px;">
                     </div>
                     """,
                     unsafe_allow_html=True
