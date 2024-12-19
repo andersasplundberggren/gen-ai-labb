@@ -12,7 +12,7 @@ st.title("Bilddelning")
 st.write("Ladda upp en bild.")
 
 # Ladda upp bild (tillåter alla användare utan inloggning)
-uploaded_file = st.file_uploader("Ladda upp en bild", type=["png", "jpg", "jpeg"])
+uploaded_file = st.file_uploader("Ladda upp en bild", type=["png", "jpg", "jpeg"], key="file_uploader_1")
 
 if uploaded_file is not None:
     # Spara bilden till servern
@@ -51,7 +51,7 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
     st.success("Du är inloggad som administratör!")
 
     # Ladda upp bild (tillåter alla användare)
-    uploaded_file = st.file_uploader("Ladda upp en bild", type=["png", "jpg", "jpeg"])
+    uploaded_file = st.file_uploader("Ladda upp en bild", type=["png", "jpg", "jpeg"], key="file_uploader_2")
 
     if uploaded_file is not None:
         # Spara bilden till servern
