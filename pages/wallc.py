@@ -66,7 +66,7 @@ if st.button("Publicera"):
 st.markdown("### Lås upp inlägg")
 password = st.text_input("Ange lösenord för att visa publicerade inlägg:", type="password")
 if st.button("Lås upp"):
-    if password == "visa":
+    if password == "lösenord123":
         st.session_state["unlocked"] = True
         st.success("Inläggen har låsts upp!")
     else:
@@ -98,7 +98,6 @@ if st.session_state["unlocked"]:
                 <div style="background-color: {st.session_state['post_colors'][idx]}; \
                             padding: 10px; margin-bottom: 10px; border-radius: 5px; \
                             border: 1px solid black;">
-                    <strong>Inlägg {idx + 1}:</strong>
                     <p>{post}</p>
                 </div>
                 """,
