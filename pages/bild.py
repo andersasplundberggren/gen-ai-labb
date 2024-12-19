@@ -28,6 +28,6 @@ if image_files:
     for image_file in image_files:
         image_path = os.path.join(UPLOAD_DIR, image_file)
         image = Image.open(image_path)
-        st.image(image, caption=image_file, use_column_width=True)
+        st.image(image, caption=image_file, use_container_width=True)
 else:
     st.write("Inga bilder har laddats upp ännu.")
