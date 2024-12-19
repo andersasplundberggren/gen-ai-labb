@@ -36,17 +36,44 @@ if image_files:
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
-# Administratörsinloggning (diskret högst upp på sidan)
+# Administratörsinloggning (diskret och smalare högst upp på sidan)
 admin_password = None
 login_expanded = st.empty()  # Behåll en tom plats för inloggning
 
-# Skapa ett diskret inloggningsfält för administratören
+# Skapa ett diskret och smalare inloggningsfält för administratören
 with login_expanded.container():
-    admin_password = st.text_input("Admin-lösenord", type="password", placeholder="Lösenord för administratör", key="admin")
+    col1, col2, col3 = st.columns([1, 6, 1])  # Skapa tre kolumner för att centrera inputfältet
+    with col2:
+        admin_password = st.text_input("Admin-lösenord", type="password", placeholder="Lösenord", key="admin")
 
 # Kontrollera om lösenordet är rätt
 if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenord
     st.success("Du är inloggad som administratör!")
+
+    # Ladda upp bild (tillåter alla användare)
+    uploaded_file = st.file_uploader("Ladda upp en bild", type=["png", "jpg", "jpeg"])
+
+    if uploaded_file is not None:
+        # Spara bilden till servern
+        file_path = os.path.join(UPLOAD_DIR, uploaded_file.name)
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        st.success(f"Bilden '{uploaded_file.name}' har laddats upp och är nu delad!")
+
+    # Visa alla uppladdade bilder
+    st.header("Delade bilder")
+    image_files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
+
+    if image_files:
+        cols = st.columns(3)  # Skapa tre kolumner
+        for idx, image_file in enumerate(image_files):
+            image_path = os.path.join(UPLOAD_DIR, image_file)
+            image = Image.open(image_path)
+            col = cols[idx % 3]  # Välj kolumn baserat på index
+            with col:
+                st.image(image, caption=image_file, use_container_width=True)
+    else:
+        st.write("Inga bilder har laddats upp ännu.")
 
     # Ladda ned alla bilder som PDF
     if st.button("Skapa och ladda ned PDF"):
