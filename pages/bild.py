@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from PIL import Image
+from zipfile import ZipFile
 
 # Mapp för att spara bilder
 UPLOAD_DIR = "uploaded_images"
@@ -34,3 +35,26 @@ if image_files:
             st.image(image, caption=image_file, use_container_width=True)
 else:
     st.write("Inga bilder har laddats upp ännu.")
+
+# Funktion för att ladda ned alla bilder som ett dokument (ZIP-fil) med lösenordsskydd
+st.header("Ladda ned alla bilder")
+password = st.text_input("Ange lösenord för att ladda ned bilder", type="password")
+
+if st.button("Skapa och ladda ned ZIP-fil"):
+    if password == "ladda":  # Ersätt "hemligt" med ditt önskade lösenord
+        zip_filename = "bilder.zip"
+        with ZipFile(zip_filename, "w") as zipf:
+            for image_file in image_files:
+                image_path = os.path.join(UPLOAD_DIR, image_file)
+                zipf.write(image_path, arcname=image_file)
+
+        with open(zip_filename, "rb") as f:
+            st.download_button(
+                label="Ladda ned ZIP-fil",
+                data=f,
+                file_name=zip_filename,
+                mime="application/zip"
+            )
+        os.remove(zip_filename)  # Ta bort ZIP-filen efter nedladdning
+    else:
+        st.error("Fel lösenord! Försök igen.")
