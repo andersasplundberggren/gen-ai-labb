@@ -2,16 +2,10 @@ import streamlit as st
 import os
 from PIL import Image
 from fpdf import FPDF
-import base64
 
 # Mapp för att spara bilder
 UPLOAD_DIR = "uploaded_images"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-# Funktion för att konvertera bild till base64
-def img_to_base64(img_path):
-    with open(img_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode("utf-8")
 
 # Titel och instruktioner
 st.title("Bilddelning")
@@ -27,23 +21,7 @@ if uploaded_file is not None:
         f.write(uploaded_file.getbuffer())
     st.success(f"Bilden '{uploaded_file.name}' har laddats upp och är nu delad!")
 
-# Funktion för att skapa en helskärmseffekt för bilden
-def open_fullscreen_image(img_base64, image_file):
-    return f"""
-    <div class="image-container">
-        <img src="data:image/png;base64,{img_base64}" alt="{image_file}" style="cursor: pointer; width: 100%; border-radius: 8px;" onclick="openImage(this)">
-    </div>
-
-    <script>
-        function openImage(imgElement) {{
-            const imgSrc = imgElement.src;
-            const imgWindow = window.open("", "_blank");
-            imgWindow.document.write('<img src="' + imgSrc + '" style="width: 100%; height: 100%; object-fit: contain;">');
-        }}
-    </script>
-    """
-
-# Visa alla uppladdade bilder med skugga och helskärmseffekt
+# Visa alla uppladdade bilder
 st.header("Delade bilder")
 image_files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
 
@@ -52,19 +30,9 @@ if image_files:
     for idx, image_file in enumerate(image_files):
         image_path = os.path.join(UPLOAD_DIR, image_file)
         image = Image.open(image_path)
-        # Konvertera bild till base64
-        img_base64 = img_to_base64(image_path)
         col = cols[idx % 3]  # Välj kolumn baserat på index
         with col:
-            # Lägg till skugga och helskärmseffekt med hjälp av CSS och JavaScript
-            st.markdown(
-                f"""
-                <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                    {open_fullscreen_image(img_base64, image_file)}
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            st.image(image, caption=image_file, use_container_width=True)
 else:
     st.write("Inga bilder har laddats upp ännu.")
 
@@ -101,19 +69,9 @@ if admin_password == "admin123":  # Byt ut "admin123" mot ditt önskade lösenor
         for idx, image_file in enumerate(image_files):
             image_path = os.path.join(UPLOAD_DIR, image_file)
             image = Image.open(image_path)
-            # Konvertera bild till base64
-            img_base64 = img_to_base64(image_path)
             col = cols[idx % 3]  # Välj kolumn baserat på index
             with col:
-                # Lägg till skugga och helskärmseffekt med hjälp av CSS och JavaScript
-                st.markdown(
-                    f"""
-                    <div style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px;">
-                        {open_fullscreen_image(img_base64, image_file)}
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+                st.image(image, caption=image_file, use_container_width=True)
     else:
         st.write("Inga bilder har laddats upp ännu.")
 
