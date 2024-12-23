@@ -16,3 +16,8 @@ fpdf
 pillow
 firebase-admin
 reportlab
+streamlit
+beautifulsoup4
+requests
+openai
+schedule
