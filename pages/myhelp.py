@@ -1,74 +1,44 @@
 import streamlit as st
 import requests
-from bs4 import BeautifulSoup
-from openai import OpenAI
-import smtplib
-from email.mime.text import MIMEText
-import schedule
-import time
+import openai
+import re
 
-# OpenAI API
-client = OpenAI(api_key="YOUR_API_KEY")
+# OpenAI API-nyckel
+openai.api_key = st.secrets["openai_api_key"]
 
-# Scraping-funktion
-def fetch_articles(url, keywords):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
+# Funktion för att söka efter artiklar
+
+def search_articles(urls, keywords):
+    results = {}
+    headers = {"User-Agent": "Mozilla/5.0"}
     
-    articles = soup.find_all('article')  # Anpassa efter sidan
-    filtered_articles = []
+    for url in urls:
+        try:
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                content = response.text
+                found = []
+                for keyword in keywords:
+                    if re.search(rf'\b{keyword}\b', content, re.IGNORECASE):
+                        found.append(keyword)
+                if found:
+                    results[url] = found
+        except Exception as e:
+            st.error(f"Error accessing {url}: {str(e)}")
+    return results
 
-    for article in articles:
-        text = article.get_text()
-        if any(keyword.lower() in text.lower() for keyword in keywords):
-            link = article.find('a')['href']
-            filtered_articles.append((text, link))
-    
-    return filtered_articles
+# Streamlit gränssnitt
+st.title("Automatisk Artikel-Sökning med OpenAI API")
 
-# Sammanfattningsfunktion
-def summarize_text(text):
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Summarize the following article."},
-            {"role": "user", "content": text}
-        ]
-    )
-    return response.choices[0].message.content
+urls = st.text_area("Ange webbadresser (en per rad)").split("\n")
+keywords = st.text_area("Ange nyckelord (kommaseparerade)").split(",")
 
-# E-postutskick
-def send_email(summary, link):
-    msg = MIMEText(f"{summary}\n\nLäs mer: {link}")
-    msg['Subject'] = 'Automatisk Artikelsammanfattning'
-    msg['From'] = "din.epost@exempel.com"
-    msg['To'] = "mottagare@exempel.com"
-
-    with smtplib.SMTP('smtp.gmail.com', 587) as server:
-        server.starttls()
-        server.login("din.epost@exempel.com", "LÖSENORD")
-        server.send_message(msg)
-
-# Streamlit-gränssnitt
-st.title("Artikelbevakning och Sammanfattning")
-
-url = st.text_input("Webbadress till sida att bevaka:")
-keywords = st.text_area("Ange sökord (kommaseparerade):").split(',')
-
-if st.button("Hämta Artiklar"):
-    articles = fetch_articles(url, keywords)
-    
-    if articles:
-        for text, link in articles:
-            summary = summarize_text(text)
-            st.write(summary)
-            st.markdown(f"[Läs hela artikeln]({link})")
-            send_email(summary, link)
-    else:
-        st.write("Inga artiklar hittades med de angivna sökorden.")
-
-# Automatiserad schemaläggning
-def job():
-    fetch_articles(url, keywords)
-
-schedule.every().day.at("09:00").do(job)
+if st.button("Sök efter artiklar"):
+    with st.spinner("Söker..."):
+        results = search_articles(urls, keywords)
+        if results:
+            st.success("Artiklar hittade!")
+            for url, words in results.items():
+                st.write(f"**{url}** innehåller nyckelord: {', '.join(words)}")
+        else:
+            st.warning("Inga artiklar med dessa nyckelord hittades.")
