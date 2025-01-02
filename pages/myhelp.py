@@ -1,20 +1,11 @@
 import streamlit as st
-from pytube import Search
 import yt_dlp
-import tempfile
 import os
+import time
 
-# Funktion som söker efter videor på YouTube utan API-nyckel
-def search_youtube(query, max_results=3):
-    search = Search(query)
-    videos = search.results[:max_results]
-    video_ids = [video.video_id for video in videos]
-    return video_ids
-
-# Funktion för att ladda ner video direkt
+# Funktion för att ladda ner video direkt från en länk
 @st.cache_data
-def download_video(video_id):
-    url = f"https://www.youtube.com/watch?v={video_id}"
+def download_video(url):
     ydl_opts = {
         'format': 'best',
         'outtmpl': '%(title)s.%(ext)s',
@@ -28,20 +19,24 @@ def download_video(video_id):
         return filepath
 
 # Streamlit-gränssnitt
-st.title("YouTube Video Sökare")
+st.title("YouTube Video Nedladdare")
 
-query = st.text_input("Skriv in sökord", "Streamlit tutorial")
+# Inputfält för YouTube-länk
+video_url = st.text_input("Klistra in YouTube-länk", "")
 
-if st.button("Sök"):
-    video_ids = search_youtube(query)
+if video_url:
+    st.write(f"Du har klistrat in länk: {video_url}")
     
-    if video_ids:
-        st.write(f"Hittade {len(video_ids)} videor")
-        for video_id in video_ids:
-            video_url = f"https://www.youtube.com/watch?v={video_id}"
-            st.video(video_url)
-            if st.button(f"Ladda ner {video_id}", key=f"download_{video_id}"):
-                filepath = download_video(video_id)
+    if st.button("Ladda ner video"):
+        with st.spinner("Laddar ner video..."):
+            try:
+                # Ladda ner videon från den inmatade länken
+                filepath = download_video(video_url)
+                
+                # Visa progressindikator
+                st.success("Videon har laddats ner!")
+                
+                # Ge användaren möjlighet att ladda ner videon
                 with open(filepath, "rb") as file:
                     st.download_button(
                         label="Ladda ner video",
@@ -49,6 +44,9 @@ if st.button("Sök"):
                         file_name=os.path.basename(filepath),
                         mime="video/mp4"
                     )
+                
+                # Rensa den nedladdade filen
                 os.remove(filepath)
-    else:
-        st.write("Inga videor hittades")
+                
+            except Exception as e:
+                st.error(f"Ett fel inträffade: {e}")
