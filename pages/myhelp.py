@@ -19,7 +19,7 @@ def download_video(url):
         return filepath
 
 # Streamlit-gränssnitt
-st.title("YouTube Video Nedladdare")
+st.title("YouTube videonedladdare")
 
 # Inputfält för YouTube-länk
 video_url = st.text_input("Klistra in YouTube-länk", "")
