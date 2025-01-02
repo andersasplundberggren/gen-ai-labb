@@ -21,3 +21,4 @@ beautifulsoup4
 requests
 openai
 schedule
+pytube
