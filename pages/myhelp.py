@@ -4,7 +4,7 @@ import openai
 import re
 
 # OpenAI API-nyckel
-openai.api_key = st.secrets["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"]
+openai.api_key = st.secrets[""]
 
 # Funktion för att söka efter artiklar och sammanfatta dem
 
