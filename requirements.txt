@@ -22,3 +22,4 @@ requests
 openai
 schedule
 pytube
+yt-dlp
