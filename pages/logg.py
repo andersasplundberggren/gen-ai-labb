@@ -63,6 +63,11 @@ def delete_user(username):
         c.execute('DELETE FROM users WHERE username = ?', (username,))
         conn.commit()
 
+# Hämta användares lösenord
+def get_password(username):
+    c.execute('SELECT password FROM users WHERE username = ?', (username,))
+    return c.fetchone()[0]
+
 # Huvudapplikation
 def main():
     st.title("Användarhantering med Streamlit")
@@ -113,8 +118,12 @@ def main():
                 st.subheader("Hantera användare")
                 c.execute('SELECT username, is_admin FROM users')
                 users = c.fetchall()
+
                 for user in users:
                     st.write(f"{user[0]} - {'Admin' if user[1] else 'Användare'}")
+
+                    # Visa lösenord (inte säkert, använd med försiktighet)
+                    st.text(f"Lösenord för {user[0]}: {get_password(user[0])}")
                     
                     # Återställ lösenord
                     if st.button(f"Återställ lösenord för {user[0]}"):
