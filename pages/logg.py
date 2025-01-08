@@ -13,6 +13,16 @@ c.execute('''CREATE TABLE IF NOT EXISTS users (
 )''')
 conn.commit()
 
+# Skapa standard admin om inte redan finns
+def create_admin():
+    admin_username = "admin"
+    admin_password = "admin123"
+    c.execute('SELECT * FROM users WHERE username = ?', (admin_username,))
+    if not c.fetchone():
+        c.execute('INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)', 
+                  (admin_username, hash_password(admin_password), True))
+        conn.commit()
+
 # Hashfunktion
 
 def hash_password(password):
@@ -42,6 +52,8 @@ def is_admin(username):
 
 def main():
     st.title("Användarhantering med Streamlit")
+
+    create_admin()  # Skapa admin vid uppstart
 
     menu = ["Logga in", "Registrera", "Admin"]
     choice = st.sidebar.selectbox("Meny", menu)
