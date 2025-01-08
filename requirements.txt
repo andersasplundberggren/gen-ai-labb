@@ -23,4 +23,5 @@ openai
 schedule
 pytube
 yt-dlp
-PyYAML bcrypt
+PyYAML
+bcrypt
