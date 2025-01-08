@@ -30,9 +30,9 @@ def hash_password(password):
 
 # Registrering av användare
 
-def register_user(username, password, is_admin=False):
+def register_user(username, password):
     c.execute('INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)', 
-              (username, hash_password(password), is_admin))
+              (username, hash_password(password), False))
     conn.commit()
 
 # Kontrollera användare
@@ -47,6 +47,28 @@ def authenticate_user(username, password):
 def is_admin(username):
     c.execute('SELECT is_admin FROM users WHERE username = ?', (username,))
     return c.fetchone()[0]
+
+# Uppdatera användarroll
+
+def update_user_role(username, make_admin):
+    if username != 'admin':
+        c.execute('UPDATE users SET is_admin = ? WHERE username = ?', 
+                  (make_admin, username))
+        conn.commit()
+
+# Återställ lösenord
+
+def reset_password(username, new_password):
+    c.execute('UPDATE users SET password = ? WHERE username = ?', 
+              (hash_password(new_password), username))
+    conn.commit()
+
+# Ta bort användare
+
+def delete_user(username):
+    if username != 'admin':
+        c.execute('DELETE FROM users WHERE username = ?', (username,))
+        conn.commit()
 
 # Huvudapplikation
 
@@ -76,12 +98,11 @@ def main():
         st.subheader("Registrera ny användare")
         new_user = st.text_input("Användarnamn")
         new_password = st.text_input("Lösenord", type="password")
-        admin_checkbox = st.checkbox("Är admin")
 
         if st.button("Registrera"):
             if new_user and new_password:
                 try:
-                    register_user(new_user, new_password, admin_checkbox)
+                    register_user(new_user, new_password)
                     st.success("Registrering lyckades")
                 except Exception as e:
                     st.warning("Användarnamnet är redan upptaget")
@@ -102,6 +123,19 @@ def main():
                 users = c.fetchall()
                 for user in users:
                     st.write(f"{user[0]} - {'Admin' if user[1] else 'Användare'}")
+                    if st.button(f"Återställ lösenord för {user[0]}"):
+                        new_password = st.text_input(f"Nytt lösenord för {user[0]}")
+                        if new_password:
+                            reset_password(user[0], new_password)
+                            st.success(f"Lösenordet för {user[0]} har återställts")
+                    if st.button(f"Ta bort {user[0]}"):
+                        delete_user(user[0])
+                        st.success(f"{user[0]} har tagits bort")
+                    if user[0] != 'admin':
+                        change_role = st.checkbox(f"Gör {user[0]} till admin" if not user[1] else f"Gör {user[0]} till användare")
+                        if st.button(f"Uppdatera roll för {user[0]}"):
+                            update_user_role(user[0], change_role)
+                            st.success(f"Roll för {user[0]} uppdaterad")
             else:
                 st.warning("Ej behörig eller fel lösenord")
 
