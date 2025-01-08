@@ -44,6 +44,11 @@ if st.session_state['authentication_status']:
     
     st.markdown("### Dokumentera")
 
+    if st.session_state['username'] == 'admin':
+        st.markdown("### Användarkonton")
+        for user, data in config['users'].items():
+            st.write(f"Användarnamn: {user}")
+
     user_text = st.text_area(
         label="Lägg till text",
         placeholder="Skriv något intressant...",
