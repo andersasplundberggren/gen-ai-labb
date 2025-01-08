@@ -1,102 +1,97 @@
 import streamlit as st
-import yaml
-from yaml.loader import SafeLoader
-import bcrypt
+import sqlite3
+import hashlib
 
-# Ladda eller skapa användarkonfiguration
-CONFIG_FILE = 'user_config.yaml'
+# Skapa databasanslutning och tabeller
+conn = sqlite3.connect('users.db', check_same_thread=False)
+c = conn.cursor()
 
-# Ladda användardata
-try:
-    with open(CONFIG_FILE, 'r') as file:
-        config = yaml.load(file, Loader=SafeLoader)
-except FileNotFoundError:
-    config = {'users': {}}
+c.execute('''CREATE TABLE IF NOT EXISTS users (
+    username TEXT PRIMARY KEY,
+    password TEXT,
+    is_admin BOOLEAN
+)''')
+conn.commit()
 
-# Spara användardata
-def save_config():
-    with open(CONFIG_FILE, 'w') as file:
-        yaml.dump(config, file)
+# Hashfunktion
 
-# Hasha lösenord
 def hash_password(password):
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    return hashlib.sha256(password.encode()).hexdigest()
 
-# Verifiera lösenord
-def verify_password(password, hashed):
-    return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+# Registrering av användare
 
-# Inloggningsstatus
-if 'authentication_status' not in st.session_state:
-    st.session_state['authentication_status'] = None
-if 'username' not in st.session_state:
-    st.session_state['username'] = ''
+def register_user(username, password, is_admin=False):
+    c.execute('INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)', 
+              (username, hash_password(password), is_admin))
+    conn.commit()
 
-# Inloggningsformulär
-st.title("Skapa och Dela Innehåll")
+# Kontrollera användare
 
-if st.session_state['authentication_status']:
-    st.sidebar.write(f"Inloggad som {st.session_state['username']}")
-    if st.sidebar.button('Logga ut'):
-        st.session_state['authentication_status'] = None
-        st.session_state['username'] = ''
-        st.experimental_rerun()
-    
-    st.markdown("### Dokumentera")
+def authenticate_user(username, password):
+    c.execute('SELECT * FROM users WHERE username = ? AND password = ?', 
+              (username, hash_password(password)))
+    return c.fetchone()
 
-    if st.session_state['username'] == 'admin':
-        st.markdown("### Användarkonton")
-        for user, data in config['users'].items():
-            st.write(f"Användarnamn: {user}")
+# Kontrollera om admin
 
-    user_text = st.text_area(
-        label="Lägg till text",
-        placeholder="Skriv något intressant...",
-        height=200
-    )
+def is_admin(username):
+    c.execute('SELECT is_admin FROM users WHERE username = ?', (username,))
+    return c.fetchone()[0]
 
-    uploaded_images = st.file_uploader(
-        label="Ladda upp bilder",
-        type=["png", "jpg", "jpeg"],
-        accept_multiple_files=True
-    )
+# Huvudapplikation
 
-    if st.button("Visa innehåll"):
-        st.markdown("### Innehåll")
-        if user_text:
-            st.markdown(user_text)
-        if uploaded_images:
-            for image in uploaded_images:
-                st.image(image, caption=image.name)
-else:
-    st.sidebar.write("Inte inloggad")
-    login_username = st.text_input("Användarnamn")
-    login_password = st.text_input("Lösenord", type="password")
-    
-    if st.button("Logga in"):
-        if login_username in config['users']:
-            if verify_password(login_password, config['users'][login_username]['password']):
-                st.session_state['authentication_status'] = True
-                st.session_state['username'] = login_username
-                st.experimental_rerun()
+def main():
+    st.title("Användarhantering med Streamlit")
+
+    menu = ["Logga in", "Registrera", "Admin"]
+    choice = st.sidebar.selectbox("Meny", menu)
+
+    if choice == "Logga in":
+        st.subheader("Logga in")
+        username = st.text_input("Användarnamn")
+        password = st.text_input("Lösenord", type="password")
+
+        if st.button("Logga in"):
+            result = authenticate_user(username, password)
+            if result:
+                st.success(f"Välkommen {username}!")
+                if is_admin(username):
+                    st.info("Du är inloggad som administratör.")
             else:
-                st.error("Fel lösenord.")
-        else:
-            st.error("Användarnamn hittades inte.")
-    
-    st.markdown("---")
-    st.markdown("### Skapa nytt konto")
-    new_username = st.text_input("Nytt användarnamn")
-    new_password = st.text_input("Nytt lösenord", type="password")
-    confirm_password = st.text_input("Bekräfta lösenord", type="password")
+                st.warning("Fel användarnamn eller lösenord")
 
-    if st.button("Registrera"):
-        if new_username in config['users']:
-            st.error("Användarnamnet är redan taget.")
-        elif new_password != confirm_password:
-            st.error("Lösenorden matchar inte.")
-        else:
-            hashed_password = hash_password(new_password)
-            config['users'][new_username] = {'password': hashed_password}
-            save_config()
-            st.success("Konto skapat. Logga in ovan.")
+    elif choice == "Registrera":
+        st.subheader("Registrera ny användare")
+        new_user = st.text_input("Användarnamn")
+        new_password = st.text_input("Lösenord", type="password")
+        admin_checkbox = st.checkbox("Är admin")
+
+        if st.button("Registrera"):
+            if new_user and new_password:
+                try:
+                    register_user(new_user, new_password, admin_checkbox)
+                    st.success("Registrering lyckades")
+                except Exception as e:
+                    st.warning("Användarnamnet är redan upptaget")
+            else:
+                st.warning("Fyll i alla fält")
+
+    elif choice == "Admin":
+        st.subheader("Adminpanel")
+        admin_user = st.text_input("Admin-användarnamn")
+        admin_pass = st.text_input("Admin-lösenord", type="password")
+
+        if st.button("Logga in som admin"):
+            result = authenticate_user(admin_user, admin_pass)
+            if result and is_admin(admin_user):
+                st.success("Inloggning som admin lyckades")
+                st.subheader("Hantera användare")
+                c.execute('SELECT username, is_admin FROM users')
+                users = c.fetchall()
+                for user in users:
+                    st.write(f"{user[0]} - {'Admin' if user[1] else 'Användare'}")
+            else:
+                st.warning("Ej behörig eller fel lösenord")
+
+if __name__ == '__main__':
+    main()
