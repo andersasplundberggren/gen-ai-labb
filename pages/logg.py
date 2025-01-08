@@ -116,11 +116,12 @@ def main():
             if result and is_admin(admin_user):
                 st.success("Inloggning som admin lyckades")
                 st.subheader("Hantera användare")
-                
-                # Hämta användare från databasen
-                users = get_users()
 
-                for user in users:
+                # Hämta användare från databasen och spara i session state
+                if 'users' not in st.session_state:
+                    st.session_state.users = get_users()
+
+                for user in st.session_state.users:
                     st.write(f"{user[0]} - {'Admin' if user[1] else 'Användare'}")
 
                     # Återställ lösenord
@@ -133,8 +134,8 @@ def main():
                     # Ta bort användare
                     if st.button(f"Ta bort {user[0]}"):
                         delete_user(user[0])
+                        st.session_state.users = get_users()  # Uppdatera listan direkt
                         st.success(f"{user[0]} har tagits bort")
-                        st.experimental_rerun()  # Uppdatera användarlistan direkt
                     
                     # Uppdatera användarroll
                     if user[0] != 'admin':
