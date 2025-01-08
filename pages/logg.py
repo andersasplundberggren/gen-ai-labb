@@ -63,6 +63,11 @@ def delete_user(username):
         c.execute('DELETE FROM users WHERE username = ?', (username,))
         conn.commit()
 
+# Hämta alla användare
+def get_users():
+    c.execute('SELECT username, is_admin FROM users')
+    return c.fetchall()
+
 # Huvudapplikation
 def main():
     st.title("Användarhantering med Streamlit")
@@ -111,8 +116,9 @@ def main():
             if result and is_admin(admin_user):
                 st.success("Inloggning som admin lyckades")
                 st.subheader("Hantera användare")
-                c.execute('SELECT username, is_admin FROM users')
-                users = c.fetchall()
+                
+                # Hämta användare från databasen
+                users = get_users()
 
                 for user in users:
                     st.write(f"{user[0]} - {'Admin' if user[1] else 'Användare'}")
@@ -128,7 +134,7 @@ def main():
                     if st.button(f"Ta bort {user[0]}"):
                         delete_user(user[0])
                         st.success(f"{user[0]} har tagits bort")
-                        st.experimental_rerun()  # Uppdatera användarlistan efter borttagning
+                        st.experimental_rerun()  # Uppdatera användarlistan direkt
                     
                     # Uppdatera användarroll
                     if user[0] != 'admin':
