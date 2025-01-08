@@ -88,6 +88,13 @@ def main():
                 st.success(f"Välkommen {username}!")
                 if is_admin(username):
                     st.info("Du är inloggad som administratör.")
+                else:
+                    st.subheader("Hantera ditt konto")
+                    if st.button("Ta bort mitt konto"):
+                        if st.confirm("Är du säker på att du vill ta bort ditt konto? Detta kan inte ångras."):
+                            delete_user(username)
+                            st.success(f"Ditt konto, {username}, har tagits bort.")
+                            st.stop()  # Stoppar vidare körning efter borttagning
             else:
                 st.warning("Fel användarnamn eller lösenord")
 
@@ -143,15 +150,6 @@ def main():
                         if st.button(f"Uppdatera roll för {user[0]}"):
                             update_user_role(user[0], change_role)
                             st.success(f"Roll för {user[0]} uppdaterad")
-                    
-                    # Lägg till sektionen för att skriva in ett nytt lösenord
-                    new_password_input = st.text_input(f"Sätt nytt lösenord för {user[0]}")
-                    if new_password_input:
-                        if st.button(f"Aktivera lösenord för {user[0]}"):
-                            reset_password(user[0], new_password_input)
-                            st.success(f"Lösenordet för {user[0]} har uppdaterats")
-            else:
-                st.warning("Ej behörig eller fel lösenord")
 
 if __name__ == '__main__':
     main()
