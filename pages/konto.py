@@ -1,46 +1,37 @@
 import streamlit as st
-import json
+import io
+import contextlib
+import traceback
 
-# Ursprunglig JSON-struktur
-default_json = {
-    "query": [
-        {
-            "code": "Region",
-            "selection": {
-                "filter": "vs:RegionKommun07EjAggr",
-                "values": ["1883"]
-            }
-        },
-        {
-            "code": "Kon",
-            "selection": {
-                "filter": "item",
-                "values": ["1", "2", "1+2"]
-            }
-        }
-    ]
-}
+# Titel för appen
+st.set_page_config(page_title="Python Code Runner", layout="wide")
+st.title("Python Code Runner")
 
-# Huvudapplikation
-def main():
-    st.title("Hantera JSON-struktur i Streamlit")
+# Layout med två kolumner
+col1, col2 = st.columns(2)
 
-    # Visa JSON-strukturen
-    st.subheader("Ursprunglig JSON-struktur")
-    st.json(default_json)
+with col1:
+    st.subheader("Skriv din Python-kod här")
+    code = st.text_area("", height=400, placeholder="# Skriv din kod här\nprint('Hello, World!')")
 
-    # Låter användaren redigera JSON-strukturen
-    st.subheader("Redigera JSON-strukturen")
-    json_input = st.text_area("Redigera JSON här:", value=json.dumps(default_json, indent=4))
-    
-    # Försök att tolka användarens inmatning som JSON
-    try:
-        edited_json = json.loads(json_input)
-        st.success("JSON-strukturen är giltig!")
-        st.subheader("Redigerad JSON-struktur")
-        st.json(edited_json)
-    except json.JSONDecodeError:
-        st.error("Ogiltig JSON! Kontrollera formatet och försök igen.")
+with col2:
+    st.subheader("Output")
+    output_area = st.empty()
 
-if __name__ == "__main__":
-    main()
+# Kör koden när användaren trycker på en knapp
+if st.button("Kör kod"):
+    if code.strip():
+        output_buffer = io.StringIO()
+        
+        try:
+            with contextlib.redirect_stdout(output_buffer):
+                exec(code, {})
+            output = output_buffer.getvalue()
+        except Exception as e:
+            output = traceback.format_exc()
+        finally:
+            output_buffer.close()
+
+        output_area.code(output, language="plaintext")
+    else:
+        output_area.write("Ingen kod att köra. Skriv något i textrutan!")
