@@ -12,7 +12,22 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("Skriv din Python-kod här")
-    code = st.text_area("", height=400, placeholder="# Skriv din kod här\nprint('Hello, World!')")
+    example_code = """# Exempel på kod att testa:
+# 1. Skriva ut text:
+print('Hej, världen!')
+
+# 2. Loopar:
+for i in range(5):
+    print(f'Räknar: {i}')
+
+# 3. Funktioner:
+def add(a, b):
+    return a + b
+
+result = add(3, 5)
+print(f'Summan är: {result}')
+"""
+    code = st.text_area("", value=example_code, height=400, placeholder="# Skriv din kod här\nprint('Hello, World!')")
 
 with col2:
     st.subheader("Output")
