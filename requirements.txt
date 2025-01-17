@@ -25,3 +25,4 @@ pytube
 yt-dlp
 PyYAML
 bcrypt
+matplotlib numpy
