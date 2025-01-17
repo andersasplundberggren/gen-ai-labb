@@ -15,20 +15,33 @@ with col1:
     code = st.text_area("", height=400, placeholder="# Skriv din kod här\nprint('Hello, World!')")
 
     st.subheader("Exempel på kod att testa:")
-    st.code("""# 1. Skriva ut text:
-print('Hej, världen!')
-
-# 2. Loopar:
+    examples = {
+        "Skriva ut text": """# Exempel: Skriva ut text
+print('Hej, världen!')""",
+        "Loopar": """# Exempel: Loopar
 for i in range(5):
-    print(f'Räknar: {i}')
-
-# 3. Funktioner:
+    print(f'Räknar: {i}')""",
+        "Funktioner": """# Exempel: Funktioner
 def add(a, b):
     return a + b
 
 result = add(3, 5)
-print(f'Summan är: {result}')
-""", language="python")
+print(f'Summan är: {result}')""",
+        "Villkor": """# Exempel: Villkor
+x = 10
+y = 20
+if x < y:
+    print(f'{x} är mindre än {y}')
+else:
+    print(f'{x} är inte mindre än {y}')""",
+        "Listor och iteration": """# Exempel: Listor och iteration
+my_list = [1, 2, 3, 4, 5]
+for num in my_list:
+    print(f'Talet är: {num}')"""
+    }
+
+    selected_example = st.selectbox("Välj ett exempel", options=examples.keys())
+    st.code(examples[selected_example], language="python")
 
 with col2:
     st.subheader("Output")
