@@ -117,18 +117,12 @@ with col4:
 # Kör mönsterkoden när användaren trycker på en knapp
 if st.button("Rita mönster"):
     if pattern_code.strip():
-        pattern_buffer = io.StringIO()
-        
         try:
-            with contextlib.redirect_stdout(pattern_buffer):
-                exec(pattern_code, globals())
-            output = pattern_buffer.getvalue()
-            st.pyplot()
+            fig, ax = plt.subplots()
+            exec(pattern_code, {"plt": plt, "np": np, "fig": fig, "ax": ax})
+            pattern_output.pyplot(fig)
         except Exception as e:
             output = traceback.format_exc()
-        finally:
-            pattern_buffer.close()
-
-        pattern_output.code(output, language="plaintext")
+            pattern_output.code(output, language="plaintext")
     else:
         pattern_output.write("Ingen kod att köra. Skriv något i textrutan!")
