@@ -64,3 +64,69 @@ if st.button("Kör kod"):
         output_area.code(output, language="plaintext")
     else:
         output_area.write("Ingen kod att köra. Skriv något i textrutan!")
+
+# Sektion för att rita mönster
+st.subheader("Rita mönster med Python")
+col3, col4 = st.columns(2)
+
+with col3:
+    st.subheader("Skriv din kod för att rita")
+    pattern_code = st.text_area("", height=400, placeholder="# Skriv kod för att rita mönster\nimport matplotlib.pyplot as plt\n\nplt.plot([0, 1, 2, 3], [0, 1, 4, 9])\nplt.show()")
+
+    st.subheader("Exempel på mönster:")
+    pattern_examples = {
+        "Rita en linje": """# Exempel: Rita en linje
+import matplotlib.pyplot as plt
+
+plt.plot([0, 1, 2, 3], [0, 1, 4, 9])
+plt.title('Enkel linje')
+plt.show()""",
+        "Rita en cirkel": """# Exempel: Rita en cirkel
+import matplotlib.pyplot as plt
+import numpy as np
+
+angles = np.linspace(0, 2 * np.pi, 100)
+x = np.cos(angles)
+y = np.sin(angles)
+
+plt.plot(x, y)
+plt.title('Enkel cirkel')
+plt.axis('equal')
+plt.show()""",
+        "Rita flera linjer": """# Exempel: Rita flera linjer
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+plt.plot(x, np.sin(x), label='sin(x)')
+plt.plot(x, np.cos(x), label='cos(x)')
+plt.title('Sinus och cosinus')
+plt.legend()
+plt.show()"""
+    }
+
+    selected_pattern = st.selectbox("Välj ett mönsterexempel", options=pattern_examples.keys())
+    st.code(pattern_examples[selected_pattern], language="python")
+
+with col4:
+    st.subheader("Output för mönster")
+    pattern_output = st.empty()
+
+# Kör mönsterkoden när användaren trycker på en knapp
+if st.button("Rita mönster"):
+    if pattern_code.strip():
+        pattern_buffer = io.StringIO()
+        
+        try:
+            with contextlib.redirect_stdout(pattern_buffer):
+                exec(pattern_code, {"plt": __import__("matplotlib.pyplot"), "np": __import__("numpy")})
+            output = pattern_buffer.getvalue()
+            st.pyplot()
+        except Exception as e:
+            output = traceback.format_exc()
+        finally:
+            pattern_buffer.close()
+
+        pattern_output.code(output, language="plaintext")
+    else:
+        pattern_output.write("Ingen kod att köra. Skriv något i textrutan!")
