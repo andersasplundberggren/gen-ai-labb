@@ -2,6 +2,8 @@ import streamlit as st
 import io
 import contextlib
 import traceback
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Titel för appen
 st.set_page_config(page_title="Python Code Runner", layout="wide")
@@ -119,7 +121,7 @@ if st.button("Rita mönster"):
         
         try:
             with contextlib.redirect_stdout(pattern_buffer):
-                exec(pattern_code, {"plt": __import__("matplotlib.pyplot"), "np": __import__("numpy")})
+                exec(pattern_code, globals())
             output = pattern_buffer.getvalue()
             st.pyplot()
         except Exception as e:
