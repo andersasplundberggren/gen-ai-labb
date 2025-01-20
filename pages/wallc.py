@@ -46,30 +46,34 @@ if st.sidebar.button("Hämta data"):
     response = requests.post(url, json=payload)
     
     if response.status_code == 200:
-        # Konvertera data till DataFrame
-        data = response.json()
-        df = pd.DataFrame(data['data'])  # Anpassa efter hur svaret ser ut
-        st.success("Data hämtades framgångsrikt!")
-        
-        # Visa data som tabell
-        st.write("### Tabell över resultat")
-        st.dataframe(df)
-        
-        # Generera graf
-        st.write("### Visualisering av data")
-        fig, ax = plt.subplots()
-        df['value'] = pd.to_numeric(df['value'], errors='coerce')  # Konvertera till numeriskt
-        df.groupby('region')['value'].sum().plot(kind='bar', ax=ax)
-        ax.set_title("Fördelning av värden för Karlskoga kommun")
-        st.pyplot(fig)
-        
-        # Ladda ner data som CSV
-        st.download_button("Ladda ner som CSV", df.to_csv(index=False), file_name="rapport.csv")
-        
-        # Ladda ner data som PDF (enkel lösning med HTML)
-        import pdfkit
-        html = df.to_html(index=False)
-        pdf = pdfkit.from_string(html, False)
-        st.download_button("Ladda ner som PDF", data=pdf, file_name="rapport.pdf", mime="application/pdf")
+        try:
+            data = response.json()
+            df = pd.DataFrame(data['data'])  # Anpassa efter hur svaret ser ut
+            st.success("Data hämtades framgångsrikt!")
+            
+            # Visa data som tabell
+            st.write("### Tabell över resultat")
+            st.dataframe(df)
+            
+            # Generera graf
+            st.write("### Visualisering av data")
+            fig, ax = plt.subplots()
+            df['value'] = pd.to_numeric(df['value'], errors='coerce')  # Konvertera till numeriskt
+            df.groupby('region')['value'].sum().plot(kind='bar', ax=ax)
+            ax.set_title("Fördelning av värden för Karlskoga kommun")
+            st.pyplot(fig)
+            
+            # Ladda ner data som CSV
+            st.download_button("Ladda ner som CSV", df.to_csv(index=False), file_name="rapport.csv")
+            
+            # Ladda ner data som PDF (enkel lösning med HTML)
+            import pdfkit
+            html = df.to_html(index=False)
+            pdf = pdfkit.from_string(html, False)
+            st.download_button("Ladda ner som PDF", data=pdf, file_name="rapport.pdf", mime="application/pdf")
+        except Exception as e:
+            st.error(f"Kunde inte tolka API-svaret som JSON. Fel: {str(e)}")
+            st.write("Svar från API:", response.text)  # Visa raw text från API-svaret
     else:
         st.error(f"Misslyckades med att hämta data. Felkod: {response.status_code}")
+        st.write("Svar från API:", response.text)  # Visa raw text från API-svaret
