@@ -1,13 +1,39 @@
 import streamlit as st
 import pandas as pd
 import requests
-import json
 
-# Titel och introduktion
-st.title("PxWeb API: Statistikdata")
-st.write("Den här appen hämtar data från PxWeb API och visar den i tabellformat.")
+# Funktion för att hämta data från PxWeb API
+def fetch_data(api_url, query):
+    response = requests.post(api_url, json=query)
+    response.raise_for_status()
+    return response.json()
 
-# JSON-frågan
+# Funktion för att omvandla API-svaret till en DataFrame
+def process_data(data):
+    variables = data['variables']
+    col_names = [var['text'] for var in variables]
+    values = data['data']
+    records = [val['values'] for val in values]
+    df = pd.DataFrame(records, columns=col_names)
+    return df
+
+# Streamlit-appens layout
+st.title("Interaktiv Statistikvisning med PxWeb API")
+
+# Ange API URL
+api_url = st.text_input("Ange API URL", "http://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0401/BE0401B/BefProgFoddaMedel11")
+
+# Välj år
+start_year, end_year = st.select_slider(
+    'Välj tidsperiod:',
+    options=[str(year) for year in range(2014, 2024)],
+    value=('2014', '2023')
+)
+
+# Visa valda år
+st.write(f"Vald period: {start_year} till {end_year}")
+
+# Definiera JSON-frågan baserat på användarens val
 json_query = {
     "query": [
         {
@@ -28,34 +54,21 @@ json_query = {
             "code": "Tid",
             "selection": {
                 "filter": "item",
-                "values": ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"]
+                "values": [str(year) for year in range(int(start_year), int(end_year) + 1)]
             }
         }
     ],
     "response": {"format": "json"}
 }
 
-# Ange API URL
-api_url = st.text_input("Ange API URL", "http://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0401/BE0401B/BefProgFoddaMedel11")
-
-# Visa JSON-frågan
-st.subheader("JSON-fråga")
-st.json(json_query)
-
-# Hämta data och visa tabell
+# Hämta och visa data när användaren klickar på knappen
 if st.button("Hämta data"):
     try:
-        response = requests.post(api_url, json=json_query)
-        response.raise_for_status()  # Kontrollera om förfrågan lyckades
-        data = response.json()
-
-        # Extrahera data och visa som tabell
-        columns = [col["text"] for col in data["columns"]]
-        rows = [row["key"] + row["values"] for row in data["data"]]
-        df = pd.DataFrame(rows, columns=columns + ["Value"])
-
-        st.subheader("Statistikdata")
-        st.dataframe(df)  # Interaktiv tabell
-
+        data = fetch_data(api_url, json_query)
+        df = process_data(data)
+        st.subheader("Resultat")
+        st.dataframe(df)
     except requests.exceptions.RequestException as e:
-        st.error(f"Ett fel inträffade: {e}")
+        st.error(f"Ett fel inträffade vid hämtning av data: {e}")
+    except Exception as e:
+        st.error(f"Ett oväntat fel inträffade: {e}")
