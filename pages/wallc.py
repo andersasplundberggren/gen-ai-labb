@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
+from io import StringIO
 
 # Titel
 st.title("SCB Dataurval och Rapport - Karlskoga Kommun")
@@ -39,7 +40,7 @@ if st.sidebar.button("Hämta data"):
             {"code": "Kon", "selection": {"filter": "item", "values": kon}},
             {"code": "Alder", "selection": {"filter": "agg:Ålder10årJ", "values": alder}}
         ],
-        "response": {"format": "px"}
+        "response": {"format": "csv"}
     }
     
     url = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0401/BE0401A/BefProgRegFakN"
@@ -47,10 +48,15 @@ if st.sidebar.button("Hämta data"):
     
     if response.status_code == 200:
         try:
-            data = response.json()
-            df = pd.DataFrame(data['data'])  # Anpassa efter hur svaret ser ut
+            # Läs in CSV-data
+            data_text = response.text
+            data = StringIO(data_text)
+            df = pd.read_csv(data, sep=";")  # Anpassa separator om nödvändigt
             st.success("Data hämtades framgångsrikt!")
             
+            # Avrunda värden till heltal
+            df['value'] = df['value'].round(0).astype(int)
+
             # Visa data som tabell
             st.write("### Tabell över resultat")
             st.dataframe(df)
@@ -58,9 +64,9 @@ if st.sidebar.button("Hämta data"):
             # Generera graf
             st.write("### Visualisering av data")
             fig, ax = plt.subplots()
-            df['value'] = pd.to_numeric(df['value'], errors='coerce')  # Konvertera till numeriskt
             df.groupby('region')['value'].sum().plot(kind='bar', ax=ax)
             ax.set_title("Fördelning av värden för Karlskoga kommun")
+            ax.set_ylabel("Antal")
             st.pyplot(fig)
             
             # Ladda ner data som CSV
@@ -72,7 +78,7 @@ if st.sidebar.button("Hämta data"):
             pdf = pdfkit.from_string(html, False)
             st.download_button("Ladda ner som PDF", data=pdf, file_name="rapport.pdf", mime="application/pdf")
         except Exception as e:
-            st.error(f"Kunde inte tolka API-svaret som JSON. Fel: {str(e)}")
+            st.error(f"Kunde inte läsa och bearbeta API-svaret. Fel: {str(e)}")
             st.write("Svar från API:", response.text)  # Visa raw text från API-svaret
     else:
         st.error(f"Misslyckades med att hämta data. Felkod: {response.status_code}")
