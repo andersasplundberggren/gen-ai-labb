@@ -27,3 +27,4 @@ PyYAML
 bcrypt
 matplotlib 
 numpy
+streamlit requests
