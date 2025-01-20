@@ -44,9 +44,13 @@ def fetch_data(år, kön, ålder):
 
     response = requests.post(url, json=query)
     if response.status_code == 200:
-        return response.json()
+        try:
+            return response.json()  # Försök att läsa JSON
+        except requests.exceptions.JSONDecodeError:
+            st.error(f"Kunde inte tolka svaret som JSON. Här är råsvaret: {response.text}")
+            return None
     else:
-        st.error("Kunde inte hämta data från SCB.")
+        st.error(f"Kunde inte hämta data från SCB. Statuskod: {response.status_code}")
         return None
 
 # Funktion för att bearbeta och formatera data
