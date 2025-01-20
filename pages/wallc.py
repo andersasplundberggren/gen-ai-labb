@@ -57,18 +57,44 @@ if st.sidebar.button("Hämta data"):
             # Avrunda värden till heltal
             df['value'] = df['value'].round(0).astype(int)
 
-            # Visa data som tabell
+            # Bearbeta och visualisera datan
             st.write("### Tabell över resultat")
             st.dataframe(df)
-            
-            # Generera graf
+
+            # Här kan vi gruppera efter olika variabler (ex. kön eller ålder)
             st.write("### Visualisering av data")
-            fig, ax = plt.subplots()
-            df.groupby('region')['value'].sum().plot(kind='bar', ax=ax)
-            ax.set_title("Fördelning av värden för Karlskoga kommun")
-            ax.set_ylabel("Antal")
-            st.pyplot(fig)
             
+            # Gruppera och summera per år och kön (kan även göras för ålder eller inrikes/utrikes)
+            if 'Kon' in df.columns:
+                df_grouped = df.groupby(['Tid', 'Kon'])['value'].sum().reset_index()
+                df_grouped['Kon'] = df_grouped['Kon'].map(kon_val)  # Gör kön mer läsbart
+
+                # Skapa grafen
+                fig, ax = plt.subplots()
+                for key, grp in df_grouped.groupby('Kon'):
+                    ax.plot(grp['Tid'], grp['value'], label=key)
+
+                ax.set_title("Befolkningsutveckling i Karlskoga kommun efter kön")
+                ax.set_xlabel("År")
+                ax.set_ylabel("Befolkningsantal")
+                ax.legend(title='Kön')
+                st.pyplot(fig)
+
+            # Om du vill kan du även lägga till en graf för ålder
+            elif 'Alder' in df.columns:
+                df_grouped = df.groupby(['Tid', 'Alder'])['value'].sum().reset_index()
+                
+                # Skapa grafen
+                fig, ax = plt.subplots()
+                for key, grp in df_grouped.groupby('Alder'):
+                    ax.plot(grp['Tid'], grp['value'], label=key)
+
+                ax.set_title("Befolkningsutveckling i Karlskoga kommun efter ålder")
+                ax.set_xlabel("År")
+                ax.set_ylabel("Befolkningsantal")
+                ax.legend(title='Ålder')
+                st.pyplot(fig)
+
             # Ladda ner data som CSV
             st.download_button("Ladda ner som CSV", df.to_csv(index=False), file_name="rapport.csv")
             
