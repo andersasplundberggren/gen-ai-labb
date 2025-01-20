@@ -1,8 +1,13 @@
 import streamlit as st
+import requests
 import json
 
-# JSON-data
-json_data = {
+# Titel och introduktion
+st.title("PxWeb API: Hämta statistikdata")
+st.write("Den här appen använder PxWeb API för att skicka en JSON-fråga och visa resultatet.")
+
+# JSON-data att skicka
+json_query = {
     "query": [
         {
             "code": "Region",
@@ -26,21 +31,25 @@ json_data = {
             }
         }
     ],
-    "response": {
-        "format": "px"
-    }
+    "response": {"format": "json"}
 }
 
-# Webbappens layout
-st.title("JSON-kod för publicering")
-st.write("Här är JSON-koden som du angav:")
+# Användarens API-URL
+api_url = st.text_input("Ange API URL", "http://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0401/BE0401B/BefProgFoddaMedel11")
 
-# Visa JSON-koden snyggt formaterad
-st.json(json_data)
+# Visa JSON-frågan
+st.subheader("JSON-fråga")
+st.json(json_query)
 
-# Möjlighet att visa rå JSON-kod
-st.subheader("Rå JSON-kod")
-st.code(json.dumps(json_data, indent=4), language='json')
+# Hämta data
+if st.button("Hämta data"):
+    try:
+        response = requests.post(api_url, json=json_query)
+        response.raise_for_status()  # Kontrollera om förfrågan lyckades
+        data = response.json()
 
-# Slut på appen
-st.write("Du kan kopiera eller använda denna JSON-kod som referens!")
+        st.subheader("Svar från API")
+        st.json(data)
+
+    except requests.exceptions.RequestException as e:
+        st.error(f"Ett fel inträffade: {e}")
