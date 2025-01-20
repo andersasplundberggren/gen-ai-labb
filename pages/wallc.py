@@ -1,12 +1,13 @@
 import streamlit as st
+import pandas as pd
 import requests
 import json
 
 # Titel och introduktion
-st.title("PxWeb API: Hämta statistikdata")
-st.write("Den här appen använder PxWeb API för att skicka en JSON-fråga och visa resultatet.")
+st.title("PxWeb API: Statistikdata")
+st.write("Den här appen hämtar data från PxWeb API och visar den i tabellformat.")
 
-# JSON-data att skicka
+# JSON-frågan
 json_query = {
     "query": [
         {
@@ -34,22 +35,27 @@ json_query = {
     "response": {"format": "json"}
 }
 
-# Användarens API-URL
+# Ange API URL
 api_url = st.text_input("Ange API URL", "http://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0401/BE0401B/BefProgFoddaMedel11")
 
 # Visa JSON-frågan
 st.subheader("JSON-fråga")
 st.json(json_query)
 
-# Hämta data
+# Hämta data och visa tabell
 if st.button("Hämta data"):
     try:
         response = requests.post(api_url, json=json_query)
         response.raise_for_status()  # Kontrollera om förfrågan lyckades
         data = response.json()
 
-        st.subheader("Svar från API")
-        st.json(data)
+        # Extrahera data och visa som tabell
+        columns = [col["text"] for col in data["columns"]]
+        rows = [row["key"] + row["values"] for row in data["data"]]
+        df = pd.DataFrame(rows, columns=columns + ["Value"])
+
+        st.subheader("Statistikdata")
+        st.dataframe(df)  # Interaktiv tabell
 
     except requests.exceptions.RequestException as e:
         st.error(f"Ett fel inträffade: {e}")
