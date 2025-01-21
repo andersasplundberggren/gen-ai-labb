@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Funktion för att hämta data från SCB API
-def fetch_data(år, kön, ålder):
+def fetch_data(years, gender, age_group):
     url = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0401/BE0401A/BefProgRegFakN"
     query = {
         "query": [
@@ -16,38 +16,36 @@ def fetch_data(år, kön, ålder):
                 }
             },
             {
-                "code": "InrikesUtrikes",
+                "code": "Tid",
                 "selection": {
                     "filter": "item",
-                    "values": ["13", "23", "83"]
+                    "values": years
                 }
             },
             {
                 "code": "Kon",
                 "selection": {
                     "filter": "item",
-                    "values": [kön]
+                    "values": [gender]
                 }
             },
             {
                 "code": "Alder",
                 "selection": {
-                    "filter": "agg:Ålder10årJ",
-                    "values": [ålder]
+                    "filter": "item",
+                    "values": [age_group]
                 }
             }
         ],
-        "response": {
-            "format": "px"
-        }
+        "response": {"format": "json"}
     }
 
     response = requests.post(url, json=query)
     if response.status_code == 200:
         try:
-            return response.json()  # Försök att läsa JSON
+            return response.json()
         except requests.exceptions.JSONDecodeError:
-            st.error(f"Kunde inte tolka svaret som JSON. Här är råsvaret: {response.text}")
+            st.error("Kunde inte tolka svaret som JSON. Här är råsvaret: {}".format(response.text))
             return None
     else:
         st.error(f"Kunde inte hämta data från SCB. Statuskod: {response.status_code}")
@@ -55,31 +53,24 @@ def fetch_data(år, kön, ålder):
 
 # Funktion för att bearbeta och formatera data
 def process_data(response_data):
-    if not response_data:
-        return None
-    
-    # Här antar vi att data kommer i ett format med tabellvärden i "Data"
-    data_values = response_data.get("data", [])
-
-    # Extrahera relevant information från svaret
-    years = [int(year) for year in response_data.get("header", {}).get("values", [])]
-    population_values = [float(value) for value in data_values]
-
-    # Skapa en DataFrame för att underlätta hantering
-    df = pd.DataFrame({
-        'År': years,
-        'Befolkning': population_values
-    })
-    
-    # Avrunda till heltal
-    df['Befolkning'] = df['Befolkning'].round().astype(int)
-    return df
+    try:
+        data = response_data['data']
+        df = pd.DataFrame(data)
+        # Antagande är att relevant data finns i columns 'key' och 'values'
+        df['key'] = df['key'].apply(lambda x: x[2])  # år
+        df['values'] = df['values'].astype(float)
+        df.columns = ['År', 'Befolkning']
+        df.set_index('År', inplace=True)
+        return df
+    except Exception as e:
+        st.error(f"Ett fel uppstod när datan skulle bearbetas: {e}")
+        return pd.DataFrame()
 
 # Funktion för att visa diagram
-def plot_data(df):
+def plot_data(df, gender, age_group):
     fig, ax = plt.subplots()
-    ax.plot(df['År'], df['Befolkning'], marker='o')
-    ax.set_title('Befolkningsutveckling i Karlskoga')
+    ax.plot(df.index, df['Befolkning'], marker='o')
+    ax.set_title(f'Befolkningsutveckling i Karlskoga för {gender}, åldersgrupp {age_group}')
     ax.set_xlabel('År')
     ax.set_ylabel('Befolkning')
     st.pyplot(fig)
@@ -88,14 +79,14 @@ def plot_data(df):
 st.title("Befolkningsframskrivning för Karlskoga kommun")
 
 # Användarens urval
-kön_val = st.selectbox("Välj kön", ["1", "2"], format_func=lambda x: "Män" if x == "1" else "Kvinnor")
-ålder_val = st.selectbox("Välj åldersgrupp", ["10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-99", "100+"])
-år_val = st.multiselect("Välj år", [str(year) for year in range(2024, 2071)], default=[str(year) for year in range(2024, 2031)])
+gender_val = st.selectbox("Välj kön", ["1", "2"], format_func=lambda x: "Män" if x == "1" else "Kvinnor")
+age_group_val = st.selectbox("Välj åldersgrupp", ["0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+"])
+year_val = st.multiselect("Välj år", [str(year) for year in range(2024, 2071)], default=[str(year) for year in range(2024, 2031)])
 
 # När användaren har gjort sitt urval, hämta och visa data
 if st.button("Visa befolkningsutveckling"):
-    response_data = fetch_data(år_val, kön_val, ålder_val)
+    response_data = fetch_data(year_val, gender_val, age_group_val)
     df = process_data(response_data)
-    if df is not None:
-        st.write(f"Visar data för {ålder_val} år, {kön_val} under åren {', '.join(år_val)}.")
-        plot_data(df)
+    if not df.empty:
+        st.write(f"Visar data för åldersgrupp {age_group_val}, kön {gender_val}, under åren {', '.join(year_val)}.")
+        plot_data(df, gender_val, age_group_val)
