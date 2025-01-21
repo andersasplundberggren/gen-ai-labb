@@ -3,18 +3,17 @@ import requests
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Funktion för att hämta data från SCB API
 def fetch_data(years, gender, age_group):
     url = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0401/BE0401A/BefProgRegFakN"
     gender_text = "kvinnor" if gender == "2" else "män"
-    age_text = f"{age_group} år"
+    age_text = f"{age_group}"
     query = {
         "query": [
             {
                 "code": "Region",
                 "selection": {
                     "filter": "vs:RegionKommun07EjAggrB",
-                    "values": ["1883"]  # Karlskoga kommunkod
+                    "values": ["1883"]
                 }
             },
             {
@@ -38,7 +37,9 @@ def fetch_data(years, gender, age_group):
     response = requests.post(url, json=query)
     if response.status_code == 200:
         try:
-            return response.json()
+            data = response.json()
+            st.write("DEBUG: ", data)  # Lägger till en debug-utskrift för att se datan
+            return data
         except requests.exceptions.JSONDecodeError:
             st.error("Kunde inte tolka svaret som JSON. Här är råsvaret: {}".format(response.text))
             return None
@@ -46,36 +47,27 @@ def fetch_data(years, gender, age_group):
         st.error(f"Kunde inte hämta data från SCB. Statuskod: {response.status_code}")
         return None
 
-# Funktion för att bearbeta och formatera data
-def process_data(response_data, years):
-    data = response_data.get('data', [])
-    population_dict = {}
-    for entry in data:
-        if entry["key"][3] == "män" and entry["key"][2] == age_group:
-            for i, year in enumerate(years):
-                population_dict[year] = entry['values'][i]
-    df = pd.DataFrame(list(population_dict.items()), columns=['År', 'Befolkning'])
-    return df
+def process_data(response_data):
+    # Tänkt att fyllas i när vi sett strukturen på JSON-svaret
+    pass
 
-# Funktion för att visa diagram
-def plot_data(df, gender, age_group):
+def plot_data(df):
     fig, ax = plt.subplots()
-    ax.plot(df['År'], df['Befolkning'], marker='o')
-    ax.set_title(f'Befolkningsutveckling: {gender}, Åldersgrupp {age_group}')
+    ax.plot(df['År'], df['Befolkning'])
+    ax.set_title('Befolkningsutveckling')
     ax.set_xlabel('År')
     ax.set_ylabel('Befolkning')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     st.pyplot(fig)
 
-# Streamlit-gränssnitt
-st.title("Befolkningsframskrivning för Karlskoga kommun")
-
-# Användarens urval
+# Användargränssnitt
+st.title("Befolkningsdata för Karlskoga")
 gender_val = st.selectbox("Välj kön", ["1", "2"], format_func=lambda x: "Män" if x == "1" else "Kvinnor")
 age_group_val = st.selectbox("Välj åldersgrupp", ["10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-99", "100+"])
 year_val = st.multiselect("Välj år", [str(year) for year in range(2024, 2071)], default=[str(year) for year in range(2024, 2031)])
 
 if st.button("Visa befolkningsutveckling"):
     response_data = fetch_data(year_val, gender_val, age_group_val)
-    df = process_data(response_data, year_val)
-    if not df.empty:
-        plot_data(df, "Kvinnor" if gender_val == "2" else "Män", age_group_val)
+
+# Efter att ha sett JSON-strukturen, kommer vi att kunna skriva process_data korrekt
