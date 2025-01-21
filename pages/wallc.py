@@ -14,12 +14,17 @@ def fetch_data(region, gender, age_group, years):
         ],
         "response": {"format": "json"}
     }
+
     response = requests.post(url, json=query)
-    try:
-        return response.json()
-    except requests.JSONDecodeError:
-        st.error(f"Failed to decode JSON. Status Code: {response.status_code}")
-        st.text(response.text)  # Visa råsvaret för vidare diagnos
+    
+    if response.status_code == 200:
+        try:
+            return response.json()
+        except requests.JSONDecodeError:
+            st.error(f"Failed to decode JSON. Response body: {response.text}")
+            return None
+    else:
+        st.error(f"Bad request ({response.status_code}): {response.text}")
         return None
 
 def process_data(response_data):
@@ -34,10 +39,10 @@ def process_data(response_data):
         return pd.DataFrame()
 
 st.title("Befolkningsframskrivning för vald kommun och åldersgrupp")
-region_val = st.text_input("Ange kommunkod", "1883")  # Exempel: Karlskoga Kommun
+region_val = st.text_input("Ange kommunkod", "1883")
 gender_val = st.selectbox("Välj kön", ["1", "2"], format_func=lambda x: "Män" if x == "1" else "Kvinnor")
-age_group_val = st.selectbox("Välj åldersgrupp", ["10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-99", "100+"])
-year_val = [str(year) for year in range(2024, 2031)]
+age_group_val = "20-24"  # Använda ett fixt värde tillfälligt 
+year_val = ["2024", "2025"]  # Använda ett begränsat antal år tillfälligt
 
 if st.button("Hämta data"):
     response_data = fetch_data(region_val, gender_val, age_group_val, year_val)
@@ -52,6 +57,6 @@ if st.button("Hämta data"):
             ax.set_ylabel('Befolkning')
             st.pyplot(fig)
         else:
-            st.error("Ingen behandlingsbar data returnerades.")
+            st.error("Ingen processbar data returnerades.")
     else:
-        st.error("Ingen data returnerades från API.")
+        st.error("Misslyckades med att hämta data från SCB.")
