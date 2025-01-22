@@ -1,11 +1,11 @@
 import streamlit as st
 
 # HTML och JavaScript för spelet
-def generate_game_code(reset):
-    score = 0 if reset else st.session_state.get('score', 0)
-    current_level = 1 if reset else st.session_state.get('current_level', 1)
-    mario_x = 50 if reset else st.session_state.get('mario_x', 50)
-    mario_y = 300 if reset else st.session_state.get('mario_y', 300)
+def generate_game_code():
+    score = st.session_state.get('score', 0)
+    current_level = st.session_state.get('current_level', 1)
+    mario_x = st.session_state.get('mario_x', 50)
+    mario_y = st.session_state.get('mario_y', 300)
 
     return f"""
 <!DOCTYPE html>
@@ -36,7 +36,6 @@ def generate_game_code(reset):
         const groundHeight = 50;
         const groundY = canvas.height - groundHeight;
         const camera = {{ x: 0 }};
-        let keys = {{}};
         let score = {score}; // Poäng
         let currentLevel = {current_level};
 
@@ -167,8 +166,6 @@ def generate_game_code(reset):
             // Rita Mario
             ctx.fillStyle = mario.color;
             ctx.fillRect(mario.x - camera.x, mario.y, mario.width, mario.height);
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(levelWidth - 50 - camera.x, groundY - 50, 50, 50);
             
             // Poäng
             ctx.fillStyle = 'black';
@@ -210,15 +207,6 @@ def generate_game_code(reset):
 st.set_page_config(page_title="Mario med bakgrund", layout="centered")
 st.title("Mario med bakgrund, träd och berg")
 
-# Starta om-knappen
-reset_game = st.button("Starta om spelet")
-
-if reset_game:
-    st.session_state["score"] = 0
-    st.session_state["current_level"] = 1
-    st.session_state["mario_x"] = 50
-    st.session_state["mario_y"] = 300
-
 # Visa spelet
-game_code = generate_game_code(reset_game)
+game_code = generate_game_code()
 st.components.v1.html(game_code, height=500)
