@@ -71,14 +71,40 @@ def generate_game_code(reset):
         let coins = levels[currentLevel - 1].coins;
         levelWidth = levels[currentLevel - 1].length;
 
+        // Bakgrundselement (träd och berg)
+        const trees = [
+            {{ x: 200, y: groundY - 100, width: 20, height: 40 }},
+            {{ x: 600, y: groundY - 120, width: 20, height: 40 }},
+            {{ x: 1000, y: groundY - 150, width: 20, height: 40 }},
+        ];
+        const mountains = [
+            {{ x: 0, y: groundY - 200, width: 500, height: 200 }},
+            {{ x: 1500, y: groundY - 220, width: 600, height: 220 }},
+        ];
+
         document.addEventListener('keydown', (e) => {{ keys[e.key] = true; }});
         document.addEventListener('keyup', (e) => {{ keys[e.key] = false; }});
 
         function gameLoop() {{
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Bakgrund: Berg
+            ctx.fillStyle = '#8B4513';  // Bergfärg
+            for (const mountain of mountains) {{
+                ctx.fillRect(mountain.x - camera.x, mountain.y, mountain.width, mountain.height);
+            }}
+            
+            // Bakgrund: Träd
+            ctx.fillStyle = '#228B22';  // Trädens färg
+            for (const tree of trees) {{
+                ctx.fillRect(tree.x - camera.x, tree.y, tree.width, tree.height);
+            }}
+            
             const section = Math.floor(camera.x / 800) % 2;
-            ctx.fillStyle = section === 0 ? '#87CEEB' : '#ADD8E6';
+            ctx.fillStyle = section === 0 ? '#87CEEB' : '#ADD8E6';  // Himmel
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Mark och hinder
             ctx.fillStyle = 'green';
             ctx.fillRect(-camera.x, groundY, levelWidth, groundHeight);
             ctx.fillStyle = 'brown';
@@ -89,6 +115,7 @@ def generate_game_code(reset):
             for (const coin of coins) {{
                 ctx.fillRect(coin.x - camera.x, coin.y, coin.width, coin.height);
             }}
+            
             if (keys[' '] && mario.onGround) {{
                 mario.dy = jumpPower;
                 mario.onGround = false;
@@ -103,6 +130,8 @@ def generate_game_code(reset):
                 mario.onGround = true;
             }}
             mario.x = Math.max(0, Math.min(levelWidth - mario.width, mario.x));
+            
+            // Kollidera med hinder
             for (const obstacle of obstacles) {{
                 if (
                     mario.x < obstacle.x + obstacle.width &&
@@ -117,6 +146,8 @@ def generate_game_code(reset):
                     return;
                 }}
             }}
+            
+            // Samla mynt
             for (let i = coins.length - 1; i >= 0; i--) {{
                 const coin = coins[i];
                 if (
@@ -129,14 +160,22 @@ def generate_game_code(reset):
                     score += 10;
                 }}
             }}
+            
+            // Kamera följ Mario
             camera.x = Math.max(0, Math.min(mario.x - canvas.width / 2, levelWidth - canvas.width));
+            
+            // Rita Mario
             ctx.fillStyle = mario.color;
             ctx.fillRect(mario.x - camera.x, mario.y, mario.width, mario.height);
             ctx.fillStyle = 'blue';
             ctx.fillRect(levelWidth - 50 - camera.x, groundY - 50, 50, 50);
+            
+            // Poäng
             ctx.fillStyle = 'black';
             ctx.font = '20px Arial';
             ctx.fillText('Poäng: ' + score, 10, 30);
+            
+            // Klara nivå
             if (mario.x + mario.width >= levelWidth - 50) {{
                 if (currentLevel < levels.length) {{
                     alert('Grattis! Du klarade nivå ' + currentLevel + '. Nästa nivå börjar!');
@@ -168,8 +207,8 @@ def generate_game_code(reset):
 """
 
 # Streamlit-konfiguration
-st.set_page_config(page_title="Mario med starta om-knapp", layout="centered")
-st.title("Mario med flera nivåer och starta om-knapp")
+st.set_page_config(page_title="Mario med bakgrund", layout="centered")
+st.title("Mario med bakgrund, träd och berg")
 
 # Starta om-knappen
 reset_game = st.button("Starta om spelet")
