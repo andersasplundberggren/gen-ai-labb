@@ -32,6 +32,14 @@ game_code = """
         const groundY = canvas.height - groundHeight;
         const camera = { x: 0 }; // Kamerans position
 
+        // Lista över hinder
+        const obstacles = [
+            { x: 400, y: groundY - 20, width: 20, height: 20 },
+            { x: 800, y: groundY - 40, width: 40, height: 40 },
+            { x: 1200, y: groundY - 30, width: 30, height: 30 },
+            { x: 1800, y: groundY - 50, width: 50, height: 50 }
+        ];
+
         // Kontrollvariabler
         let keys = {};
 
@@ -43,9 +51,20 @@ game_code = """
             // Rensa canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Rita mark (scrollande)
+            // Rita bakgrund (varierande färg baserat på kamerans position)
+            const section = Math.floor(camera.x / 800) % 2;
+            ctx.fillStyle = section === 0 ? '#87CEEB' : '#ADD8E6';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Rita mark
             ctx.fillStyle = 'green';
             ctx.fillRect(-camera.x, groundY, levelWidth, groundHeight);
+
+            // Rita hinder
+            ctx.fillStyle = 'brown';
+            for (const obstacle of obstacles) {
+                ctx.fillRect(obstacle.x - camera.x, obstacle.y, obstacle.width, obstacle.height);
+            }
 
             // Hoppa
             if (keys[' '] && mario.onGround) {
@@ -70,6 +89,22 @@ game_code = """
 
             // Begränsa Mario till banans gränser
             mario.x = Math.max(0, Math.min(levelWidth - mario.width, mario.x));
+
+            // Kontrollera kollisioner med hinder
+            for (const obstacle of obstacles) {
+                if (
+                    mario.x < obstacle.x + obstacle.width &&
+                    mario.x + mario.width > obstacle.x &&
+                    mario.y < obstacle.y + obstacle.height &&
+                    mario.y + mario.height > obstacle.y
+                ) {
+                    alert('Oh no! Du träffade ett hinder. Försök igen!');
+                    mario.x = 50; // Starta om
+                    mario.y = 300;
+                    camera.x = 0;
+                    return;
+                }
+            }
 
             // Uppdatera kamerans position så att den följer Mario
             camera.x = Math.max(0, Math.min(mario.x - canvas.width / 2, levelWidth - canvas.width));
@@ -102,10 +137,10 @@ game_code = """
 """
 
 # Streamlit-konfiguration
-st.set_page_config(page_title="Mario med start och slut", layout="centered")
+st.set_page_config(page_title="Mario med hinder och bakgrund", layout="centered")
 
-st.title("Mario med start och slut")
-st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Målet är att nå den blå rutan.")
+st.title("Mario med hinder och varierad bakgrund")
+st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Undvik hindren och nå mållinjen!")
 
 # Visa spelet med hjälp av Streamlit Components
 st.components.v1.html(game_code, height=500)
