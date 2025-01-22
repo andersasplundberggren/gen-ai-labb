@@ -24,11 +24,13 @@ game_code = """
         const ctx = canvas.getContext('2d');
 
         // Spelvariabler
+        const levelWidth = 3000; // Total bredd på banan
         let mario = { x: 50, y: 300, width: 30, height: 30, color: 'red', dy: 0, onGround: true };
         const gravity = 0.5;
         const jumpPower = -10;
         const groundHeight = 50;
         const groundY = canvas.height - groundHeight;
+        const camera = { x: 0 }; // Kamerans position
 
         // Kontrollvariabler
         let keys = {};
@@ -41,9 +43,9 @@ game_code = """
             // Rensa canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Rita mark
+            // Rita mark (scrollande)
             ctx.fillStyle = 'green';
-            ctx.fillRect(0, groundY, canvas.width, groundHeight);
+            ctx.fillRect(-camera.x, groundY, levelWidth, groundHeight);
 
             // Hoppa
             if (keys[' '] && mario.onGround) {
@@ -66,12 +68,27 @@ game_code = """
                 mario.onGround = true;
             }
 
-            // Begränsa Mario till canvasens gränser
-            mario.x = Math.max(0, Math.min(canvas.width - mario.width, mario.x));
+            // Begränsa Mario till banans gränser
+            mario.x = Math.max(0, Math.min(levelWidth - mario.width, mario.x));
 
-            // Rita Mario
+            // Uppdatera kamerans position så att den följer Mario
+            camera.x = Math.max(0, Math.min(mario.x - canvas.width / 2, levelWidth - canvas.width));
+
+            // Rita Mario i relation till kameran
             ctx.fillStyle = mario.color;
-            ctx.fillRect(mario.x, mario.y, mario.width, mario.height);
+            ctx.fillRect(mario.x - camera.x, mario.y, mario.width, mario.height);
+
+            // Rita mållinjen
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(levelWidth - 50 - camera.x, groundY - 50, 50, 50);
+
+            // Kontrollera om Mario når mållinjen
+            if (mario.x + mario.width >= levelWidth - 50) {
+                alert('Grattis! Du klarade banan!');
+                mario.x = 50; // Starta om
+                mario.y = 300;
+                camera.x = 0;
+            }
 
             // Loopa spelet
             requestAnimationFrame(gameLoop);
@@ -85,10 +102,10 @@ game_code = """
 """
 
 # Streamlit-konfiguration
-st.set_page_config(page_title="Förenklad Mario-upplevelse", layout="centered")
+st.set_page_config(page_title="Mario med start och slut", layout="centered")
 
-st.title("Förenklad Mario-upplevelse")
-st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa!")
+st.title("Mario med start och slut")
+st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Målet är att nå den blå rutan.")
 
 # Visa spelet med hjälp av Streamlit Components
 st.components.v1.html(game_code, height=500)
