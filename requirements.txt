@@ -32,4 +32,4 @@ requests
 pyscbwrapper
 pandas
 pdfkit
-
+streamlit-drag-and-drop
