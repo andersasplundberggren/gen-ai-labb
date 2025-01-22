@@ -4,6 +4,8 @@ import streamlit as st
 def generate_game_code(reset):
     score = 0 if reset else st.session_state.get('score', 0)
     current_level = 1 if reset else st.session_state.get('current_level', 1)
+    mario_x = 50 if reset else st.session_state.get('mario_x', 50)
+    mario_y = 300 if reset else st.session_state.get('mario_y', 300)
 
     return f"""
 <!DOCTYPE html>
@@ -28,7 +30,7 @@ def generate_game_code(reset):
         const ctx = canvas.getContext('2d');
 
         let levelWidth = 3000; // Total bredd på banan
-        let mario = {{ x: 50, y: 300, width: 30, height: 30, color: 'red', dy: 0, onGround: true }};
+        let mario = {{ x: {mario_x}, y: {mario_y}, width: 30, height: 30, color: 'red', dy: 0, onGround: true }};
         const gravity = 0.5;
         const jumpPower = -10;
         const groundHeight = 50;
@@ -175,6 +177,8 @@ reset_game = st.button("Starta om spelet")
 if reset_game:
     st.session_state["score"] = 0
     st.session_state["current_level"] = 1
+    st.session_state["mario_x"] = 50
+    st.session_state["mario_y"] = 300
 
 # Visa spelet
 game_code = generate_game_code(reset_game)
