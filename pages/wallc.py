@@ -40,6 +40,18 @@ game_code = """
             { x: 1800, y: groundY - 50, width: 50, height: 50 }
         ];
 
+        // Lista över mynt
+        const coins = [
+            { x: 300, y: groundY - 60, width: 15, height: 15 },
+            { x: 700, y: groundY - 90, width: 15, height: 15 },
+            { x: 1100, y: groundY - 70, width: 15, height: 15 },
+            { x: 1500, y: groundY - 100, width: 15, height: 15 }
+        ];
+
+        // Poäng och timer
+        let score = 0;
+        let startTime = Date.now();
+
         // Kontrollvariabler
         let keys = {};
 
@@ -64,6 +76,12 @@ game_code = """
             ctx.fillStyle = 'brown';
             for (const obstacle of obstacles) {
                 ctx.fillRect(obstacle.x - camera.x, obstacle.y, obstacle.width, obstacle.height);
+            }
+
+            // Rita mynt
+            ctx.fillStyle = 'gold';
+            for (const coin of coins) {
+                ctx.fillRect(coin.x - camera.x, coin.y, coin.width, coin.height);
             }
 
             // Hoppa
@@ -102,7 +120,22 @@ game_code = """
                     mario.x = 50; // Starta om
                     mario.y = 300;
                     camera.x = 0;
+                    score = 0; // Återställ poäng
                     return;
+                }
+            }
+
+            // Samla mynt
+            for (let i = coins.length - 1; i >= 0; i--) {
+                const coin = coins[i];
+                if (
+                    mario.x < coin.x + coin.width &&
+                    mario.x + mario.width > coin.x &&
+                    mario.y < coin.y + coin.height &&
+                    mario.y + mario.height > coin.y
+                ) {
+                    coins.splice(i, 1); // Ta bort myntet från listan
+                    score += 10; // Öka poäng
                 }
             }
 
@@ -117,12 +150,24 @@ game_code = """
             ctx.fillStyle = 'blue';
             ctx.fillRect(levelWidth - 50 - camera.x, groundY - 50, 50, 50);
 
+            // Uppdatera poäng baserat på tid
+            const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
+            const timeScore = timeElapsed * 5; // Poäng baserat på tid
+            const totalScore = score + timeScore;
+
+            // Rita poäng
+            ctx.fillStyle = 'black';
+            ctx.font = '20px Arial';
+            ctx.fillText(`Poäng: ${totalScore}`, 10, 30);
+
             // Kontrollera om Mario når mållinjen
             if (mario.x + mario.width >= levelWidth - 50) {
-                alert('Grattis! Du klarade banan!');
+                alert(`Grattis! Du klarade banan med ${totalScore} poäng!`);
                 mario.x = 50; // Starta om
                 mario.y = 300;
                 camera.x = 0;
+                score = 0; // Återställ poäng
+                startTime = Date.now();
             }
 
             // Loopa spelet
@@ -137,10 +182,10 @@ game_code = """
 """
 
 # Streamlit-konfiguration
-st.set_page_config(page_title="Mario med hinder och bakgrund", layout="centered")
+st.set_page_config(page_title="Mario med poängsystem", layout="centered")
 
-st.title("Mario med hinder och varierad bakgrund")
-st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Undvik hindren och nå mållinjen!")
+st.title("Mario med poängsystem")
+st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Samla mynt och undvik hinder för att få högsta poäng!")
 
 # Visa spelet med hjälp av Streamlit Components
 st.components.v1.html(game_code, height=500)
