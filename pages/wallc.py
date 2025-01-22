@@ -134,10 +134,10 @@ def generate_game_code(reset):
             ctx.fillRect(levelWidth - 50 - camera.x, groundY - 50, 50, 50);
             ctx.fillStyle = 'black';
             ctx.font = '20px Arial';
-            ctx.fillText(`Poäng: ${score}`, 10, 30);
+            ctx.fillText('Poäng: ' + score, 10, 30);
             if (mario.x + mario.width >= levelWidth - 50) {{
                 if (currentLevel < levels.length) {{
-                    alert(`Grattis! Du klarade nivå ${currentLevel}. Nästa nivå börjar!`);
+                    alert('Grattis! Du klarade nivå ' + currentLevel + '. Nästa nivå börjar!');
                     currentLevel++;
                     mario.x = 50;
                     mario.y = 300;
@@ -146,7 +146,7 @@ def generate_game_code(reset):
                     coins = levels[currentLevel - 1].coins;
                     levelWidth = levels[currentLevel - 1].length;
                 }} else {{
-                    alert(`Grattis! Du har klarat alla nivåer med ${score} poäng!`);
+                    alert('Grattis! Du har klarat alla nivåer med ' + score + ' poäng!');
                     mario.x = 50;
                     mario.y = 300;
                     camera.x = 0;
