@@ -24,7 +24,7 @@ game_code = """
         const ctx = canvas.getContext('2d');
 
         // Spelvariabler
-        const levelWidth = 3000; // Total bredd på banan
+        let levelWidth = 3000; // Total bredd på banan
         let mario = { x: 50, y: 300, width: 30, height: 30, color: 'red', dy: 0, onGround: true };
         const gravity = 0.5;
         const jumpPower = -10;
@@ -32,28 +32,43 @@ game_code = """
         const groundY = canvas.height - groundHeight;
         const camera = { x: 0 }; // Kamerans position
 
-        // Lista över hinder
-        const obstacles = [
-            { x: 400, y: groundY - 20, width: 20, height: 20 },
-            { x: 800, y: groundY - 40, width: 40, height: 40 },
-            { x: 1200, y: groundY - 30, width: 30, height: 30 },
-            { x: 1800, y: groundY - 50, width: 50, height: 50 }
-        ];
-
-        // Lista över mynt
-        const coins = [
-            { x: 300, y: groundY - 60, width: 15, height: 15 },
-            { x: 700, y: groundY - 90, width: 15, height: 15 },
-            { x: 1100, y: groundY - 70, width: 15, height: 15 },
-            { x: 1500, y: groundY - 100, width: 15, height: 15 }
-        ];
-
-        // Poäng och timer
-        let score = 0;
-        let startTime = Date.now();
-
         // Kontrollvariabler
         let keys = {};
+        let score = 0; // Poäng ackumuleras över nivåer
+        let currentLevel = 1; // Nuvarande nivå
+
+        // Nivådata
+        const levels = [
+            {
+                obstacles: [
+                    { x: 400, y: groundY - 20, width: 20, height: 20 },
+                    { x: 800, y: groundY - 40, width: 40, height: 40 },
+                ],
+                coins: [
+                    { x: 300, y: groundY - 60, width: 15, height: 15 },
+                    { x: 700, y: groundY - 90, width: 15, height: 15 },
+                ],
+                length: 3000,
+            },
+            {
+                obstacles: [
+                    { x: 500, y: groundY - 50, width: 50, height: 50 },
+                    { x: 1000, y: groundY - 30, width: 30, height: 30 },
+                    { x: 2000, y: groundY - 40, width: 40, height: 40 },
+                ],
+                coins: [
+                    { x: 400, y: groundY - 60, width: 15, height: 15 },
+                    { x: 900, y: groundY - 80, width: 15, height: 15 },
+                    { x: 1500, y: groundY - 70, width: 15, height: 15 },
+                ],
+                length: 4000,
+            },
+        ];
+
+        // Aktuell nivådata
+        let obstacles = levels[0].obstacles;
+        let coins = levels[0].coins;
+        levelWidth = levels[0].length;
 
         // Lyssna efter tangenttryck
         document.addEventListener('keydown', (e) => { keys[e.key] = true; });
@@ -120,7 +135,6 @@ game_code = """
                     mario.x = 50; // Starta om
                     mario.y = 300;
                     camera.x = 0;
-                    score = 0; // Återställ poäng
                     return;
                 }
             }
@@ -150,24 +164,33 @@ game_code = """
             ctx.fillStyle = 'blue';
             ctx.fillRect(levelWidth - 50 - camera.x, groundY - 50, 50, 50);
 
-            // Uppdatera poäng baserat på tid
-            const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
-            const timeScore = timeElapsed * 5; // Poäng baserat på tid
-            const totalScore = score + timeScore;
-
             // Rita poäng
             ctx.fillStyle = 'black';
             ctx.font = '20px Arial';
-            ctx.fillText(`Poäng: ${totalScore}`, 10, 30);
+            ctx.fillText(`Poäng: ${score}`, 10, 30);
 
             // Kontrollera om Mario når mållinjen
             if (mario.x + mario.width >= levelWidth - 50) {
-                alert(`Grattis! Du klarade banan med ${totalScore} poäng!`);
-                mario.x = 50; // Starta om
-                mario.y = 300;
-                camera.x = 0;
-                score = 0; // Återställ poäng
-                startTime = Date.now();
+                if (currentLevel < levels.length) {
+                    alert(`Grattis! Du klarade nivå ${currentLevel}. Nästa nivå börjar!`);
+                    currentLevel++;
+                    mario.x = 50; // Starta om
+                    mario.y = 300;
+                    camera.x = 0;
+                    obstacles = levels[currentLevel - 1].obstacles;
+                    coins = levels[currentLevel - 1].coins;
+                    levelWidth = levels[currentLevel - 1].length;
+                } else {
+                    alert(`Grattis! Du har klarat alla nivåer med ${score} poäng!`);
+                    mario.x = 50; // Starta om
+                    mario.y = 300;
+                    camera.x = 0;
+                    currentLevel = 1;
+                    obstacles = levels[0].obstacles;
+                    coins = levels[0].coins;
+                    levelWidth = levels[0].length;
+                    score = 0; // Återställ poäng
+                }
             }
 
             // Loopa spelet
@@ -182,10 +205,10 @@ game_code = """
 """
 
 # Streamlit-konfiguration
-st.set_page_config(page_title="Mario med poängsystem", layout="centered")
+st.set_page_config(page_title="Mario med nivåer", layout="centered")
 
-st.title("Mario med poängsystem")
-st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Samla mynt och undvik hinder för att få högsta poäng!")
+st.title("Mario med flera nivåer och ackumulerad poäng")
+st.write("Använd piltangenterna för att röra dig och mellanslag för att hoppa! Samla mynt och undvik hinder för att avancera till nästa nivå!")
 
 # Visa spelet med hjälp av Streamlit Components
 st.components.v1.html(game_code, height=500)
