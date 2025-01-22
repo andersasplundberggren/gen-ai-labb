@@ -1,212 +1,65 @@
 import streamlit as st
+import random
 
-# HTML och JavaScript för spelet
-def generate_game_code():
-    score = st.session_state.get('score', 0)
-    current_level = st.session_state.get('current_level', 1)
-    mario_x = st.session_state.get('mario_x', 50)
-    mario_y = st.session_state.get('mario_y', 300)
+# Spel 1: Gissa numret
+def guess_number_game():
+    st.title("Gissa numret!")
+    number = random.randint(1, 100)
+    guess = None
+    attempts = 0
 
-    return f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        canvas {{
-            background: #87CEEB;
-            display: block;
-            margin: 0 auto;
-            border: 2px solid #000;
-        }}
-        body {{
-            font-family: Arial, sans-serif;
-        }}
-    </style>
-</head>
-<body>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+    while guess != number:
+        guess = st.number_input("Gissa ett tal mellan 1 och 100", min_value=1, max_value=100, key=f"guess_{attempts}")
+        if guess < number:
+            st.write("För lågt!")
+        elif guess > number:
+            st.write("För högt!")
+        attempts += 1
 
-        let levelWidth = 3000; // Total bredd på banan
-        let mario = {{ x: {mario_x}, y: {mario_y}, width: 30, height: 30, color: 'red', dy: 0, onGround: true }};
-        const gravity = 0.5;
-        const jumpPower = -10;
-        const groundHeight = 50;
-        const groundY = canvas.height - groundHeight;
-        const camera = {{ x: 0 }};
-        let score = {score}; // Poäng
-        let currentLevel = {current_level};
+    st.write(f"Grattis! Du gissade rätt på {attempts} försök.")
 
-        const levels = [
-            {{
-                obstacles: [
-                    {{ x: 400, y: groundY - 20, width: 20, height: 20 }},
-                    {{ x: 800, y: groundY - 40, width: 40, height: 40 }},
-                ],
-                coins: [
-                    {{ x: 300, y: groundY - 60, width: 15, height: 15 }},
-                    {{ x: 700, y: groundY - 90, width: 15, height: 15 }},
-                ],
-                length: 3000,
-            }},
-            {{
-                obstacles: [
-                    {{ x: 500, y: groundY - 50, width: 50, height: 50 }},
-                    {{ x: 1000, y: groundY - 30, width: 30, height: 30 }},
-                    {{ x: 2000, y: groundY - 40, width: 40, height: 40 }},
-                ],
-                coins: [
-                    {{ x: 400, y: groundY - 60, width: 15, height: 15 }},
-                    {{ x: 900, y: groundY - 80, width: 15, height: 15 }},
-                    {{ x: 1500, y: groundY - 70, width: 15, height: 15 }},
-                ],
-                length: 4000,
-            }},
-        ];
+# Spel 2: Hänga gubbe
+def hangman_game():
+    st.title("Hänga gubbe!")
+    word = random.choice(["python", "streamlit", "programming", "hangman"])
+    guessed_letters = set()
+    attempts = 6
 
-        let obstacles = levels[currentLevel - 1].obstacles;
-        let coins = levels[currentLevel - 1].coins;
-        levelWidth = levels[currentLevel - 1].length;
+    while attempts > 0:
+        word_display = "".join([letter if letter in guessed_letters else "_" for letter in word])
+        guess = st.text_input(f"Ord: {word_display} - Gissa en bokstav", max_chars=1)
+        
+        if guess:
+            if guess in word:
+                guessed_letters.add(guess)
+                st.write(f"Bra jobbat! {guess} är i ordet.")
+            else:
+                attempts -= 1
+                st.write(f"Fel! Du har {attempts} försök kvar.")
+        
+        if all(letter in guessed_letters for letter in word):
+            st.write(f"Grattis! Du gissade ordet: {word}")
+            break
+    else:
+        st.write(f"Du förlorade! Ordet var: {word}")
 
-        // Bakgrundselement (träd och berg)
-        const trees = [
-            {{ x: 200, y: groundY - 100, width: 20, height: 40 }},
-            {{ x: 600, y: groundY - 120, width: 20, height: 40 }},
-            {{ x: 1000, y: groundY - 150, width: 20, height: 40 }},
-        ];
-        const mountains = [
-            {{ x: 0, y: groundY - 200, width: 500, height: 200 }},
-            {{ x: 1500, y: groundY - 220, width: 600, height: 220 }},
-        ];
+# Spel 3: Tic-Tac-Toe
+def tic_tac_toe_game():
+    st.title("Tic-Tac-Toe")
+    # Här kan du lägga till en enkel logik för Tic-Tac-Toe-spelet
+    # T.ex. skapa ett rutnät och hantera användarens drag.
 
-        document.addEventListener('keydown', (e) => {{ keys[e.key] = true; }});
-        document.addEventListener('keyup', (e) => {{ keys[e.key] = false; }});
+# Spelmeny
+def main():
+    st.sidebar.title("Välj ett spel")
+    game_choice = st.sidebar.selectbox("Välj ett spel", ["Gissa numret", "Hänga gubbe", "Tic-Tac-Toe"])
 
-        function gameLoop() {{
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Bakgrund: Berg
-            ctx.fillStyle = '#8B4513';  // Bergfärg
-            for (const mountain of mountains) {{
-                ctx.fillRect(mountain.x - camera.x, mountain.y, mountain.width, mountain.height);
-            }}
-            
-            // Bakgrund: Träd
-            ctx.fillStyle = '#228B22';  // Trädens färg
-            for (const tree of trees) {{
-                ctx.fillRect(tree.x - camera.x, tree.y, tree.width, tree.height);
-            }}
-            
-            const section = Math.floor(camera.x / 800) % 2;
-            ctx.fillStyle = section === 0 ? '#87CEEB' : '#ADD8E6';  // Himmel
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Mark och hinder
-            ctx.fillStyle = 'green';
-            ctx.fillRect(-camera.x, groundY, levelWidth, groundHeight);
-            ctx.fillStyle = 'brown';
-            for (const obstacle of obstacles) {{
-                ctx.fillRect(obstacle.x - camera.x, obstacle.y, obstacle.width, obstacle.height);
-            }}
-            ctx.fillStyle = 'gold';
-            for (const coin of coins) {{
-                ctx.fillRect(coin.x - camera.x, coin.y, coin.width, coin.height);
-            }}
-            
-            if (keys[' '] && mario.onGround) {{
-                mario.dy = jumpPower;
-                mario.onGround = false;
-            }}
-            if (keys['ArrowRight']) mario.x += 5;
-            if (keys['ArrowLeft']) mario.x -= 5;
-            mario.dy += gravity;
-            mario.y += mario.dy;
-            if (mario.y + mario.height > groundY) {{
-                mario.y = groundY - mario.height;
-                mario.dy = 0;
-                mario.onGround = true;
-            }}
-            mario.x = Math.max(0, Math.min(levelWidth - mario.width, mario.x));
-            
-            // Kollidera med hinder
-            for (const obstacle of obstacles) {{
-                if (
-                    mario.x < obstacle.x + obstacle.width &&
-                    mario.x + mario.width > obstacle.x &&
-                    mario.y < obstacle.y + obstacle.height &&
-                    mario.y + mario.height > obstacle.y
-                ) {{
-                    alert('Oh no! Du träffade ett hinder. Försök igen!');
-                    mario.x = 50;
-                    mario.y = 300;
-                    camera.x = 0;
-                    return;
-                }}
-            }}
-            
-            // Samla mynt
-            for (let i = coins.length - 1; i >= 0; i--) {{
-                const coin = coins[i];
-                if (
-                    mario.x < coin.x + coin.width &&
-                    mario.x + mario.width > coin.x &&
-                    mario.y < coin.y + coin.height &&
-                    mario.y + mario.height > coin.y
-                ) {{
-                    coins.splice(i, 1);
-                    score += 10;
-                }}
-            }}
-            
-            // Kamera följ Mario
-            camera.x = Math.max(0, Math.min(mario.x - canvas.width / 2, levelWidth - canvas.width));
-            
-            // Rita Mario
-            ctx.fillStyle = mario.color;
-            ctx.fillRect(mario.x - camera.x, mario.y, mario.width, mario.height);
-            
-            // Poäng
-            ctx.fillStyle = 'black';
-            ctx.font = '20px Arial';
-            ctx.fillText('Poäng: ' + score, 10, 30);
-            
-            // Klara nivå
-            if (mario.x + mario.width >= levelWidth - 50) {{
-                if (currentLevel < levels.length) {{
-                    alert('Grattis! Du klarade nivå ' + currentLevel + '. Nästa nivå börjar!');
-                    currentLevel++;
-                    mario.x = 50;
-                    mario.y = 300;
-                    camera.x = 0;
-                    obstacles = levels[currentLevel - 1].obstacles;
-                    coins = levels[currentLevel - 1].coins;
-                    levelWidth = levels[currentLevel - 1].length;
-                }} else {{
-                    alert('Grattis! Du har klarat alla nivåer med ' + score + ' poäng!');
-                    mario.x = 50;
-                    mario.y = 300;
-                    camera.x = 0;
-                    currentLevel = 1;
-                    obstacles = levels[0].obstacles;
-                    coins = levels[0].coins;
-                    levelWidth = levels[0].length;
-                    score = 0;
-                }}
-            }}
-            requestAnimationFrame(gameLoop);
-        }}
-        gameLoop();
-    </script>
-</body>
-</html>
-"""
+    if game_choice == "Gissa numret":
+        guess_number_game()
+    elif game_choice == "Hänga gubbe":
+        hangman_game()
+    elif game_choice == "Tic-Tac-Toe":
+        tic_tac_toe_game()
 
-# Streamlit-konfiguration
-st.set_page_config(page_title="Mario med bakgrund", layout="centered")
-st.title("Mario med bakgrund, träd och berg")
-
-# Visa spelet
-game_code = generate_game_code()
-st.components.v1.html(game_code, height=500)
+if __name__ == "__main__":
+    main()
