@@ -47,11 +47,11 @@ def menu():
         # st.sidebar.page_link("pages/test.py", label="Test", icon=":material/labs:")
 
 
-        st.sidebar.markdown("# ")
-        with st.sidebar.container(border = True):
-            st.markdown(f"""__Version:__ {st.session_state["app_version"]}  
-            __Uppdaterad:__ {st.session_state["update_date"]}
-            """)
+        #st.sidebar.markdown("# ")
+        #with st.sidebar.container(border = True):
+            #st.markdown(f"""__Version:__ {st.session_state["app_version"]}  
+            #__Uppdaterad:__ {st.session_state["update_date"]}
+            #""")
 
     if st.session_state['language'] == "English":
 
