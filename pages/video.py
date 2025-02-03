@@ -28,7 +28,7 @@ document_folder = './data/preloaded_documents'
 os.makedirs(document_folder, exist_ok=True)
 
 # Admin settings for uploading new documents
-ADMIN_PASSWORD = "hemligt_losenord"  # Ändra detta till ett säkert lösenord
+ADMIN_PASSWORD = "admin123"  # Ändra detta till ett säkert lösenord
 
 if "admin_authenticated" not in st.session_state:
     st.session_state["admin_authenticated"] = False
