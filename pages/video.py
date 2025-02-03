@@ -7,6 +7,7 @@ from llama_index.llms.openai import OpenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core.node_parser import SentenceSplitter
 import os
+import gdown
 from uuid import uuid4
 from functions.styling import page_config, styling
 from functions.menu import menu
@@ -23,40 +24,25 @@ st.title("Chatta med ett förinläst dokument")
 if 'session_id' not in st.session_state:
     st.session_state['session_id'] = str(uuid4())
 
-# Path to preloaded documents
-document_folder = './data/preloaded_documents'
-os.makedirs(document_folder, exist_ok=True)
+# Google Drive settings
+GOOGLE_DRIVE_FOLDER_ID = https://drive.google.com/drive/folders/1OKSqwyk9JaaYx_MrcZLk-et_KtcMZLd_?usp=drive_link
+DOCUMENT_FOLDER = "./data/preloaded_documents"
+os.makedirs(DOCUMENT_FOLDER, exist_ok=True)
 
-# Admin settings for uploading new documents
-ADMIN_PASSWORD = "admin123"  # Ändra detta till ett säkert lösenord
+def download_files_from_drive():
+    drive_url = f"https://drive.google.com/drive/folders/{GOOGLE_DRIVE_FOLDER_ID}"
+    st.info(f"Hämtar filer från {drive_url}")
+    # Här kan du implementera en funktion för att ladda ner filer via Google Drive API
+    # För enkelhet kan du manuellt spara dokumenten i en offentlig Drive-mapp och ange länkar här.
 
-if "admin_authenticated" not in st.session_state:
-    st.session_state["admin_authenticated"] = False
-
-with st.sidebar:
-    st.subheader("Admin")
-    if not st.session_state["admin_authenticated"]:
-        admin_password = st.text_input("Ange admin-lösenord", type="password")
-        if st.button("Logga in"):
-            if admin_password == ADMIN_PASSWORD:
-                st.session_state["admin_authenticated"] = True
-                st.success("Inloggad som admin!")
-            else:
-                st.error("Fel lösenord")
-
-    if st.session_state["admin_authenticated"]:
-        uploaded_file = st.file_uploader("Ladda upp ett nytt dokument", type=("pdf", "docx", "txt"))
-        if uploaded_file:
-            file_path = os.path.join(document_folder, uploaded_file.name)
-            with open(file_path, "wb") as f:
-                f.write(uploaded_file.getvalue())
-            st.success(f"Filen {uploaded_file.name} har laddats upp!")
+# Ladda ner dokument vid start
+download_files_from_drive()
 
 # Load preloaded documents
 @st.cache_resource(show_spinner=True)
 def load_preloaded_data():
     with st.spinner("Laddar det förinlästa dokumentet..."):
-        data = SimpleDirectoryReader(input_dir=document_folder, recursive=True).load_data()
+        data = SimpleDirectoryReader(input_dir=DOCUMENT_FOLDER, recursive=True).load_data()
         index = VectorStoreIndex.from_documents(
             data,
             llm=Settings.llm,
