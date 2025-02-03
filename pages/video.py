@@ -27,6 +27,31 @@ if 'session_id' not in st.session_state:
 document_folder = './data/preloaded_documents'
 os.makedirs(document_folder, exist_ok=True)
 
+# Admin settings for uploading new documents
+ADMIN_PASSWORD = "hemligt_losenord"  # Ändra detta till ett säkert lösenord
+
+if "admin_authenticated" not in st.session_state:
+    st.session_state["admin_authenticated"] = False
+
+with st.sidebar:
+    st.subheader("Admin")
+    if not st.session_state["admin_authenticated"]:
+        admin_password = st.text_input("Ange admin-lösenord", type="password")
+        if st.button("Logga in"):
+            if admin_password == ADMIN_PASSWORD:
+                st.session_state["admin_authenticated"] = True
+                st.success("Inloggad som admin!")
+            else:
+                st.error("Fel lösenord")
+
+    if st.session_state["admin_authenticated"]:
+        uploaded_file = st.file_uploader("Ladda upp ett nytt dokument", type=("pdf", "docx", "txt"))
+        if uploaded_file:
+            file_path = os.path.join(document_folder, uploaded_file.name)
+            with open(file_path, "wb") as f:
+                f.write(uploaded_file.getvalue())
+            st.success(f"Filen {uploaded_file.name} har laddats upp!")
+
 # Load preloaded documents
 @st.cache_resource(show_spinner=True)
 def load_preloaded_data():
