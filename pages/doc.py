@@ -1,5 +1,4 @@
 import streamlit as st
-from uuid import uuid4
 import openai
 from supabase import create_client, Client
 
@@ -20,14 +19,31 @@ def save_text_document(doc_name, text):
     data = {"content": text, "embedding": embedding}
     supabase.table("documents").insert(data).execute()
 
-# Funktion för att söka i dokument med embeddings
+# Funktion för att hämta alla dokument från Supabase och matcha med användarens fråga
 def search_documents(query):
+    # Hämta alla dokument från Supabase
+    documents = supabase.table("documents").select("content", "embedding").execute().data
+
+    # Skapa en embedding för frågan
     query_response = openai.Embedding.create(
         model="text-embedding-003", input=query
     )
     query_embedding = query_response['data'][0]['embedding']
-    response = supabase.rpc("match_documents", {"query_embedding": query_embedding}).execute()
-    return response.data
+    
+    # Funktion för att beräkna likheten mellan två embeddings (kan använda cosine similarity)
+    def calculate_similarity(embedding1, embedding2):
+        # Beräkna cosine similarity (det här är ett enkelt exempel, men du kan använda en dedikerad metod för det)
+        import numpy as np
+        return np.dot(np.array(embedding1), np.array(embedding2)) / (np.linalg.norm(np.array(embedding1)) * np.linalg.norm(np.array(embedding2)))
+    
+    # Hitta matchande dokument baserat på högsta likhet
+    results = []
+    for doc in documents:
+        similarity = calculate_similarity(query_embedding, doc['embedding'])
+        if similarity > 0.7:  # Tröskel för att definiera om ett dokument matchar
+            results.append(doc)
+    
+    return results
 
 # Streamlit UI
 st.title("AI Chat med dokument")
