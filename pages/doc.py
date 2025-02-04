@@ -2,7 +2,10 @@ import streamlit as st
 from uuid import uuid4
 import chromadb
 from openai.embeddings_utils import get_embedding
-from llama_index.llms.openai import OpenAI
+import openai
+
+# Sätt upp OpenAI API-nyckel
+openai.api_key = "din-openai-api-nyckel"
 
 # Skapa en ChromaDB-klient
 client = chromadb.Client()
@@ -26,7 +29,7 @@ texts_to_index = [
 ]
 index_texts(texts_to_index, collection)
 
-# Sök funktion
+# Sökfunktion
 def search_documents(query, collection):
     query_embedding = get_embedding(query, model="text-embedding-003")
     results = collection.query(
@@ -42,5 +45,8 @@ query = st.text_input("Ställ din fråga:")
 
 if query:
     results = search_documents(query, collection)
-    for result in results:
-        st.write(f"**Resultat:** {result}")
+    if results:
+        for result in results:
+            st.write(f"**Resultat:** {result}")
+    else:
+        st.write("Inga resultat funna.")
