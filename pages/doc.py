@@ -1,6 +1,5 @@
 import streamlit as st
 from uuid import uuid4
-from openai.embeddings_utils import get_embedding
 import openai
 from supabase import create_client, Client
 
@@ -14,13 +13,19 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Funktion för att spara text + embedding i Supabase
 def save_text_document(doc_name, text):
-    embedding = get_embedding(text, model="text-embedding-003")
+    response = openai.Embedding.create(
+        model="text-embedding-003", input=text
+    )
+    embedding = response['data'][0]['embedding']
     data = {"content": text, "embedding": embedding}
     supabase.table("documents").insert(data).execute()
 
 # Funktion för att söka i dokument med embeddings
 def search_documents(query):
-    query_embedding = get_embedding(query, model="text-embedding-003")
+    query_response = openai.Embedding.create(
+        model="text-embedding-003", input=query
+    )
+    query_embedding = query_response['data'][0]['embedding']
     response = supabase.rpc("match_documents", {"query_embedding": query_embedding}).execute()
     return response.data
 
