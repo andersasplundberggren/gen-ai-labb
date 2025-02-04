@@ -36,3 +36,4 @@ pdfkit
 plotly
 #pdfplumber
 chromadb
+supabase
