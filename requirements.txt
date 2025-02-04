@@ -35,5 +35,5 @@ pdfkit
 #streamlit-drag-and-drop
 plotly
 #pdfplumber
-chromadb
+#chromadb
 supabase
