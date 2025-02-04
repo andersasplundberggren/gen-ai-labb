@@ -34,3 +34,4 @@ pandas
 pdfkit
 #streamlit-drag-and-drop
 plotly
+pdfplumber
