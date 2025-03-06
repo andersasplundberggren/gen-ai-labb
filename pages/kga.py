@@ -30,58 +30,7 @@ st.markdown("""
 if 'language' not in st.session_state:
     st.session_state['language'] = "Svenska"  # Default language
 
-# Disable password requirement by default
-if "pwd_on" not in st.session_state:
-    st.session_state["pwd_on"] = "false"  # Set to "false" to disable password check
-else:
-    # Override password setting from secrets if needed
-    # st.session_state["pwd_on"] = "false"  # Uncomment this line to force disable password
 
-#st.session_state["is_admin"] = False  # Default to non-admin user
-
-### PASSWORD FOR ADMIN ACCESS (only if enabled)
-if st.session_state["pwd_on"] == "true":
-    def check_password():
-        if c.deployment == "streamlit":
-            passwd = st.secrets["password"]
-            admin_passwd = st.secrets.get("admin_password", passwd)  # Use the same password if admin_password not set
-        else:
-            passwd = environ.get("password")
-            admin_passwd = environ.get("admin_password", passwd)
-            
-        def password_entered():
-            # Check for regular password
-            if hmac.compare_digest(st.session_state["password"], passwd):
-                st.session_state["password_correct"] = True
-                del st.session_state["password"]  # Clear the password
-                return
-            
-            # Check for admin password
-            if hmac.compare_digest(st.session_state["password"], admin_passwd):
-                st.session_state["password_correct"] = True
-                st.session_state["is_admin"] = True  # Set admin flag
-                del st.session_state["password"]  # Clear the password
-                return
-                
-            st.session_state["password_correct"] = False
-            
-        if st.session_state.get("password_correct", False):
-            return True
-            
-        st.text_input("Lösenord", type="password", on_change=password_entered, key="password")
-        if "password_correct" in st.session_state and not st.session_state["password_correct"]:
-            st.error("😕 Ooops. Fel lösenord.")
-        return False
-        
-    if not check_password():
-        st.stop()
-else:
-    # When password is disabled, set up a way for admins to access settings
-    # This could be a hidden button, query parameter, or other mechanism
-    # For example, you could check for a specific query parameter in the URL
-    query_params = st.experimental_get_query_params()
-    if query_params.get("admin") == ["true"]:
-        st.session_state["is_admin"] = True
 
 ### TRANSLATION OCH SYSTEMPROMPT
 
