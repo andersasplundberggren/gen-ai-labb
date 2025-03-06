@@ -21,7 +21,7 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-with st.expander("### Chatta med rapporten"):
+#with st.expander("### Chatta med rapporten"):
     st.markdown("""
         ### Hur kan Karlskoga kommun öka digitaliseringstakten?:
         - Fråga efter resultat.
