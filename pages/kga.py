@@ -23,13 +23,12 @@ styling()
 # Utfällbar textruta med bilder och punktlista
 with st.expander("### Chatta med rapporten Hur kan Karlskoga kommun öka digitaliseringstakten?"):
     st.markdown("""
-        ### Sammanfatta text och skapa quiz:
-        - Gå till Wikipedia och hitta en artikel.
-        - Markera och kopiera texten från artikeln.
-        - Klistra in texten och skriv en prompt för att be chatbotten summera artikeln.
-        - Skriv in prompt där du ber om en quiz med 10 frågor baserat på innehållet i texten.
+        ### Chatta med rapporten:
+        - Fråga efter resultat.
+        - Be om konkreta förslag på aktiviteter.
+        
     """)
-    st.write("Tips. Skriv din prompt, gör sedan radbryt med hjälp av shift + enter och skriv in tre ---. Därefter ett ytterligare radbryt med shift + enter. Klistra sedan in texten du kopierat. Du kan även testa att kopiera länken till Wikipedia-sidan och därefter skriva in din prompt.")
+    #st.write("Tips. Skriv din prompt, gör sedan radbryt med hjälp av shift + enter och skriv in tre ---. Därefter ett ytterligare radbryt med shift + enter. Klistra sedan in texten du kopierat. Du kan även testa att kopiera länken till Wikipedia-sidan och därefter skriva in din prompt.")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
