@@ -24,7 +24,7 @@ styling()
 #with st.expander("### Chatta med rapporten"):
 st.markdown("""
         ### Hur kan Karlskoga kommun öka digitaliseringstakten?
-        Testa chatten här nedanför och fråga efter resultat eller be om konkreta förslag på aktiviteter. Eller utmana och fråga något annat om rapporten.
+        Testa chatten här nedanför och fråga efter resultat eller be om konkreta förslag på aktiviteter. Eller utmana den och fråga något annat🥳.
         
     """)
     #st.write("Tips. Skriv din prompt, gör sedan radbryt med hjälp av shift + enter och skriv in tre ---. Därefter ett ytterligare radbryt med shift + enter. Klistra sedan in texten du kopierat. Du kan även testa att kopiera länken till Wikipedia-sidan och därefter skriva in din prompt.")
@@ -68,7 +68,7 @@ if st.session_state['language'] == "Svenska":
     chat_choose_temp = "Temperatur"
     chat_system_prompt = "Systemprompt"
     chat_save = "Spara"
-    chat_imput_q = "Vad vill du veta om rapporten?"
+    chat_imput_q = "👋 Jag hjälper dig gärna. Vad vill du veta?"
 elif st.session_state['language'] == "English":
     chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
     chat_clear_chat = "Clear chat"
