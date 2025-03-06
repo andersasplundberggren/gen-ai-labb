@@ -21,7 +21,7 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-with st.expander("### Övning"):
+with st.expander("### Chatta med rapporten Hur kan Karlskoga kommun öka digitaliseringstakten?"):
     st.markdown("""
         ### Sammanfatta text och skapa quiz:
         - Gå till Wikipedia och hitta en artikel.
@@ -219,7 +219,7 @@ if "llm_chat_model" not in st.session_state:
 ### SIDEBAR
 menu()
 
-st.sidebar.warning("""Det här är en prototyp där information du matar in 
+#st.sidebar.warning("""Det här är en prototyp där information du matar in 
                        bearbetas med en språkmodell. 
                        Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
                        som körs på servrar i USA.""")
