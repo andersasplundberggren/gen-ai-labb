@@ -62,13 +62,13 @@ if st.session_state["pwd_on"] == "true":
 if st.session_state['language'] == "Svenska":
     chat_prompt = "Du är en hjälpsam AI-assistent. Svara på användarens frågor."
     chat_clear_chat = "Rensa chat"
-    chat_hello = "Hej! Vad vill du veta om rapporten? Skriv här nedanför🤔"
+    chat_hello = "Hej! Vad vill du veta om rapporten🤔 Skriv här nedanför👇"
     chat_settings = "Inställningar"
     chat_choose_llm = "Välj språkmodell"
     chat_choose_temp = "Temperatur"
     chat_system_prompt = "Systemprompt"
     chat_save = "Spara"
-    chat_imput_q = "Vad vill du vet om rapporten?"
+    chat_imput_q = "Vad vill du veta om rapporten?"
 elif st.session_state['language'] == "English":
     chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
     chat_clear_chat = "Clear chat"
