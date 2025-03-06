@@ -21,9 +21,9 @@ page_config()
 styling()
 
 # Utfällbar textruta med bilder och punktlista
-with st.expander("### Chatta med rapporten Hur kan Karlskoga kommun öka digitaliseringstakten?"):
+with st.expander("### Chatta med rapporten"):
     st.markdown("""
-        ### Chatta med rapporten:
+        ### Hur kan Karlskoga kommun öka digitaliseringstakten?:
         - Fråga efter resultat.
         - Be om konkreta förslag på aktiviteter.
         
@@ -69,7 +69,7 @@ if st.session_state['language'] == "Svenska":
     chat_choose_temp = "Temperatur"
     chat_system_prompt = "Systemprompt"
     chat_save = "Spara"
-    chat_imput_q = "Vad vill du prata om?"
+    chat_imput_q = "Vad vill du vet om rapporten?"
 elif st.session_state['language'] == "English":
     chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
     chat_clear_chat = "Clear chat"
