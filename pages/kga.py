@@ -20,42 +20,68 @@ st.logo("images/logome.png", icon_image="images/logo_small.png")
 page_config()
 styling()
 
-# Utfällbar textruta med bilder och punktlista
-#with st.expander("### Chatta med rapporten"):
+# Markdown for the header and description
 st.markdown("""
-        ### Hur kan Karlskoga kommun öka digitaliseringstakten?
-        Testa chatten här nedanför och fråga efter resultat eller be om konkreta förslag på aktiviteter. Eller utmana och fråga något annat om rapporten.
-        
-    """)
-    #st.write("Tips. Skriv din prompt, gör sedan radbryt med hjälp av shift + enter och skriv in tre ---. Därefter ett ytterligare radbryt med shift + enter. Klistra sedan in texten du kopierat. Du kan även testa att kopiera länken till Wikipedia-sidan och därefter skriva in din prompt.")
+    ### Hur kan Karlskoga kommun öka digitaliseringstakten?
+    Testa chatten här nedanför och fråga efter resultat eller be om konkreta förslag på aktiviteter. Eller utmana och fråga något annat om rapporten.
+""")
 
 # Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
     st.session_state['language'] = "Svenska"  # Default language
 
-st.session_state["pwd_on"] = st.secrets.pwd_on
+# Disable password requirement by default
+if "pwd_on" not in st.session_state:
+    st.session_state["pwd_on"] = "false"  # Set to "false" to disable password check
+else:
+    # Override password setting from secrets if needed
+    # st.session_state["pwd_on"] = "false"  # Uncomment this line to force disable password
 
-### PASSWORD
+st.session_state["is_admin"] = False  # Default to non-admin user
+
+### PASSWORD FOR ADMIN ACCESS (only if enabled)
 if st.session_state["pwd_on"] == "true":
     def check_password():
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
+            admin_passwd = st.secrets.get("admin_password", passwd)  # Use the same password if admin_password not set
         else:
             passwd = environ.get("password")
+            admin_passwd = environ.get("admin_password", passwd)
+            
         def password_entered():
+            # Check for regular password
             if hmac.compare_digest(st.session_state["password"], passwd):
                 st.session_state["password_correct"] = True
-                del st.session_state["password"]  # Rensa bort lösenordet
-            else:
-                st.session_state["password_correct"] = False
+                del st.session_state["password"]  # Clear the password
+                return
+            
+            # Check for admin password
+            if hmac.compare_digest(st.session_state["password"], admin_passwd):
+                st.session_state["password_correct"] = True
+                st.session_state["is_admin"] = True  # Set admin flag
+                del st.session_state["password"]  # Clear the password
+                return
+                
+            st.session_state["password_correct"] = False
+            
         if st.session_state.get("password_correct", False):
             return True
+            
         st.text_input("Lösenord", type="password", on_change=password_entered, key="password")
-        if "password_correct" in st.session_state:
+        if "password_correct" in st.session_state and not st.session_state["password_correct"]:
             st.error("😕 Ooops. Fel lösenord.")
         return False
+        
     if not check_password():
         st.stop()
+else:
+    # When password is disabled, set up a way for admins to access settings
+    # This could be a hidden button, query parameter, or other mechanism
+    # For example, you could check for a specific query parameter in the URL
+    query_params = st.experimental_get_query_params()
+    if query_params.get("admin") == ["true"]:
+        st.session_state["is_admin"] = True
 
 ### TRANSLATION OCH SYSTEMPROMPT
 
@@ -70,7 +96,7 @@ if st.session_state['language'] == "Svenska":
     chat_save = "Spara"
     chat_imput_q = "Vad vill du vet om rapporten?"
 elif st.session_state['language'] == "English":
-    chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
+    chat_prompt = "You are a helpful AI assistant. Answer the user's questions."
     chat_clear_chat = "Clear chat"
     chat_hello = "Hi! How can I help you?"
     chat_settings = "Settings"
@@ -81,7 +107,6 @@ elif st.session_state['language'] == "English":
     chat_imput_q = "What do you want to talk about?"
 
 # Här lägger vi in rapporttexten som kontext för chatten
-# OBS: Ersätt innehållet nedan med din faktiska rapporttext (11 sidor)
 report_text = """
 [Sammanfattning
 Denna rapport undersöker hur Karlskoga kommun kan öka takten i digitaliseringsarbetet för att möta nutidens och framtidens krav på effektiva, användarvänliga och hållbara digitala lösningar. En omfattande genomgång av nuläget visar på flera möjligheter till förbättring och utveckling, men också på utmaningar som måste adresseras för att framgångsrikt driva digitaliseringen framåt. 
@@ -217,10 +242,6 @@ if "llm_chat_model" not in st.session_state:
 ### SIDEBAR
 #menu()
 
-#st.sidebar.warning("""Det här är en prototyp där information du matar in bearbetas med en språkmodell. 
-                       #Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
-                       #som körs på servrar i USA.""")
-
 ### MAIN PAGE
 
 col1, col2 = st.columns(2)
@@ -230,40 +251,50 @@ with col1:
         # Nollställ chatt-historiken med en hälsning från assistenten
         st.session_state.messages = [{"role": "assistant", "content": f"{chat_hello}"}]
 
+# Only show settings if user is admin
 with col2:
-    with st.expander(f"{chat_settings}"):
-        llm_model = st.selectbox(
-            f"{chat_choose_llm}",
-            ["OpenAI GPT-4o", "OpenAI GPT-4o mini", "OpenAI o1-preview", "OpenAI o1-mini"],
-            index=["OpenAI GPT-4o", "OpenAI GPT-4o mini", "OpenAI o1-preview", "OpenAI o1-mini"].index(st.session_state["llm_chat_model"]),
-        )
-        llm_temp = st.slider(
-            f"{chat_choose_temp}",
-            min_value=0.0,
-            max_value=1.0,
-            step=0.1,
-            value=st.session_state["llm_temperature"],
-        )
-        # Uppdatera session_state direkt
-        st.session_state["llm_chat_model"] = llm_model
-        st.session_state["llm_temperature"] = llm_temp
-        
-        model_map = {
-            "OpenAI GPT-4o": "gpt-4o",
-            "OpenAI GPT-4o mini": "gpt-4o-mini",
-            "OpenAI o1-preview": "o1-preview", 
-            "OpenAI o1-mini": "o1-mini"
-        }
-        st.markdown("###### ")
-        with st.form("my_form"):
-            prompt_input = st.text_area(f"{chat_system_prompt}", st.session_state.system_prompt, height=200)
-            st.session_state.system_prompt = prompt_input   
-            st.form_submit_button(f"{chat_save}")
+    if st.session_state.get("is_admin", False):
+        with st.expander(f"{chat_settings}"):
+            llm_model = st.selectbox(
+                f"{chat_choose_llm}",
+                ["OpenAI GPT-4o", "OpenAI GPT-4o mini", "OpenAI o1-preview", "OpenAI o1-mini"],
+                index=["OpenAI GPT-4o", "OpenAI GPT-4o mini", "OpenAI o1-preview", "OpenAI o1-mini"].index(st.session_state["llm_chat_model"]),
+            )
+            llm_temp = st.slider(
+                f"{chat_choose_temp}",
+                min_value=0.0,
+                max_value=1.0,
+                step=0.1,
+                value=st.session_state["llm_temperature"],
+            )
+            # Uppdatera session_state direkt
+            st.session_state["llm_chat_model"] = llm_model
+            st.session_state["llm_temperature"] = llm_temp
+            
+            model_map = {
+                "OpenAI GPT-4o": "gpt-4o",
+                "OpenAI GPT-4o mini": "gpt-4o-mini",
+                "OpenAI o1-preview": "o1-preview", 
+                "OpenAI o1-mini": "o1-mini"
+            }
+            st.markdown("###### ")
+            with st.form("my_form"):
+                prompt_input = st.text_area(f"{chat_system_prompt}", st.session_state.system_prompt, height=200)
+                st.session_state.system_prompt = prompt_input   
+                st.form_submit_button(f"{chat_save}")
 
-if "OpenAI" in st.session_state["llm_chat_model"]:
-    st.sidebar.success("Språkmodell: " + llm_model)
-else:
-    st.sidebar.success("Språkmodell: " + llm_model)
+# Display current model in sidebar only for admins
+if st.session_state.get("is_admin", False):
+    model_map = {
+        "OpenAI GPT-4o": "gpt-4o",
+        "OpenAI GPT-4o mini": "gpt-4o-mini",
+        "OpenAI o1-preview": "o1-preview", 
+        "OpenAI o1-mini": "o1-mini"
+    }
+    if "OpenAI" in st.session_state["llm_chat_model"]:
+        st.sidebar.success("Språkmodell: " + st.session_state["llm_chat_model"])
+    else:
+        st.sidebar.success("Språkmodell: " + st.session_state["llm_chat_model"])
 
 # Initiera chatt-historiken om den inte finns
 if "messages" not in st.session_state:
