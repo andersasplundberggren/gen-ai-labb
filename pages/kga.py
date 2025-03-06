@@ -37,7 +37,7 @@ else:
     # Override password setting from secrets if needed
     # st.session_state["pwd_on"] = "false"  # Uncomment this line to force disable password
 
-st.session_state["is_admin"] = False  # Default to non-admin user
+#st.session_state["is_admin"] = False  # Default to non-admin user
 
 ### PASSWORD FOR ADMIN ACCESS (only if enabled)
 if st.session_state["pwd_on"] == "true":
