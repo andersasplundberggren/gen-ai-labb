@@ -216,7 +216,7 @@ if "llm_chat_model" not in st.session_state:
     st.session_state["llm_chat_model"] = "OpenAI GPT-4o mini"
 
 ### SIDEBAR
-menu()
+#menu()
 
 #st.sidebar.warning("""Det här är en prototyp där information du matar in bearbetas med en språkmodell. 
                        #Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
