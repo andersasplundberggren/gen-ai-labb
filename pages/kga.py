@@ -37,7 +37,7 @@ if 'language' not in st.session_state:
 st.session_state["pwd_on"] = st.secrets.pwd_on
 
 ### PASSWORD
-if st.session_state["pwd_on"] == "true":
+#if st.session_state["pwd_on"] == "true":
     def check_password():
         if c.deployment == "streamlit":
             passwd = st.secrets["password"]
