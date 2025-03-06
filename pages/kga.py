@@ -5,6 +5,7 @@ from openai import OpenAI
 from groq import Groq
 
 # Python imports
+import hmac
 import os
 from os import environ
 
@@ -19,13 +20,42 @@ st.logo("images/logome.png", icon_image="images/logo_small.png")
 page_config()
 styling()
 
+# Utfällbar textruta med bilder och punktlista
+#with st.expander("### Chatta med rapporten"):
 st.markdown("""
         ### Hur kan Karlskoga kommun öka digitaliseringstakten?
         Testa chatten här nedanför och fråga efter resultat eller be om konkreta förslag på aktiviteter. Eller utmana och fråga något annat om rapporten.
+        
     """)
+    #st.write("Tips. Skriv din prompt, gör sedan radbryt med hjälp av shift + enter och skriv in tre ---. Därefter ett ytterligare radbryt med shift + enter. Klistra sedan in texten du kopierat. Du kan även testa att kopiera länken till Wikipedia-sidan och därefter skriva in din prompt.")
 
+# Check if language is already in session_state, else initialize it with a default value
 if 'language' not in st.session_state:
-    st.session_state['language'] = "Svenska"
+    st.session_state['language'] = "Svenska"  # Default language
+
+st.session_state["pwd_on"] = st.secrets.pwd_on
+
+### PASSWORD
+if st.session_state["pwd_on"] == "true":
+    def check_password():
+        if c.deployment == "streamlit":
+            passwd = st.secrets["password"]
+        else:
+            passwd = environ.get("password")
+        def password_entered():
+            if hmac.compare_digest(st.session_state["password"], passwd):
+                st.session_state["password_correct"] = True
+                del st.session_state["password"]  # Rensa bort lösenordet
+            else:
+                st.session_state["password_correct"] = False
+        if st.session_state.get("password_correct", False):
+            return True
+        st.text_input("Lösenord", type="password", on_change=password_entered, key="password")
+        if "password_correct" in st.session_state:
+            st.error("😕 Ooops. Fel lösenord.")
+        return False
+    if not check_password():
+        st.stop()
 
 ### TRANSLATION OCH SYSTEMPROMPT
 
@@ -36,9 +66,9 @@ if st.session_state['language'] == "Svenska":
     chat_settings = "Inställningar"
     chat_choose_llm = "Välj språkmodell"
     chat_choose_temp = "Temperatur"
-    chat_system_prompt = "Systemprompt (endast admin)"
+    chat_system_prompt = "Systemprompt"
     chat_save = "Spara"
-    chat_imput_q = "Vad vill du veta om rapporten?"
+    chat_imput_q = "Vad vill du vet om rapporten?"
 elif st.session_state['language'] == "English":
     chat_prompt = "You are a helpful AI assistant. Answer the user’s questions."
     chat_clear_chat = "Clear chat"
@@ -46,11 +76,12 @@ elif st.session_state['language'] == "English":
     chat_settings = "Settings"
     chat_choose_llm = "Choose language model"
     chat_choose_temp = "Temperature"
-    chat_system_prompt = "System prompt (admin only)"
+    chat_system_prompt = "System prompt"
     chat_save = "Save"
     chat_imput_q = "What do you want to talk about?"
 
 # Här lägger vi in rapporttexten som kontext för chatten
+# OBS: Ersätt innehållet nedan med din faktiska rapporttext (11 sidor)
 report_text = """
 [Sammanfattning
 Denna rapport undersöker hur Karlskoga kommun kan öka takten i digitaliseringsarbetet för att möta nutidens och framtidens krav på effektiva, användarvänliga och hållbara digitala lösningar. En omfattande genomgång av nuläget visar på flera möjligheter till förbättring och utveckling, men också på utmaningar som måste adresseras för att framgångsrikt driva digitaliseringen framåt. 
@@ -173,9 +204,11 @@ Leda i digitalisering
 Stärkt digitalt ledarskap och samordning är också en central del i arbetet. Personalledare ska ha möjlighet att få det stöd som krävs för att driva digitaliseringsarbetet framåt. Att erbjuda kommunövergripande forum för personalledare möjliggör en gemensam vision och bidrar till att undvika att arbetet hamnar i silos utan samverkan. Dessa forum ska vara verksamhetsnära där praktiska arbetsuppgifter ska ha en stor del för att skapa trygghet och förståelse hos personalledare. Som personalledare ska vi möjliggöra och uppmuntra våra verksamheter att testa nya digitala lösningar, kanske i mindre pilotprojekt. ]
 """
 
+# Om ingen systemprompt finns sparad, sätt då en standardprompt som inkluderar rapporten
 if 'system_prompt' not in st.session_state:
     st.session_state.system_prompt = f"{chat_prompt}\n\nDu svarar endast baserat på följande rapport:\n{report_text}"
 
+# Check and set default values if not set in session_state
 if "llm_temperature" not in st.session_state:
     st.session_state["llm_temperature"] = 0.7
 if "llm_chat_model" not in st.session_state:
@@ -184,10 +217,17 @@ if "llm_chat_model" not in st.session_state:
 ### SIDEBAR
 #menu()
 
+#st.sidebar.warning("""Det här är en prototyp där information du matar in bearbetas med en språkmodell. 
+                       #Prototypen är __inte GDPR-säkrad__, då den använder AI-modeller 
+                       #som körs på servrar i USA.""")
+
+### MAIN PAGE
+
 col1, col2 = st.columns(2)
 
 with col1:
     if st.button(f"{chat_clear_chat}", type="secondary"):
+        # Nollställ chatt-historiken med en hälsning från assistenten
         st.session_state.messages = [{"role": "assistant", "content": f"{chat_hello}"}]
 
 with col2:
@@ -204,39 +244,97 @@ with col2:
             step=0.1,
             value=st.session_state["llm_temperature"],
         )
+        # Uppdatera session_state direkt
         st.session_state["llm_chat_model"] = llm_model
         st.session_state["llm_temperature"] = llm_temp
         
-        admin_code = st.text_input("Admin-kod", type="password")
-        if admin_code == "din_hemliga_kod":
+        model_map = {
+            "OpenAI GPT-4o": "gpt-4o",
+            "OpenAI GPT-4o mini": "gpt-4o-mini",
+            "OpenAI o1-preview": "o1-preview", 
+            "OpenAI o1-mini": "o1-mini"
+        }
+        st.markdown("###### ")
+        with st.form("my_form"):
             prompt_input = st.text_area(f"{chat_system_prompt}", st.session_state.system_prompt, height=200)
-            if st.button(f"{chat_save}"):
-                st.session_state.system_prompt = prompt_input
+            st.session_state.system_prompt = prompt_input   
+            st.form_submit_button(f"{chat_save}")
 
+if "OpenAI" in st.session_state["llm_chat_model"]:
+    st.sidebar.success("Språkmodell: " + llm_model)
+else:
+    st.sidebar.success("Språkmodell: " + llm_model)
+
+# Initiera chatt-historiken om den inte finns
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": f"{chat_hello}"}]
 
+# Visa chattmeddelanden med streamlits chat_message
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        # Om innehållet är en bild-URL
+        if message["content"].startswith("http"):
+            st.image(message["content"])
+        else:
+            st.markdown(message["content"])
 
+# Hämta systemprompten
+system_prompt = st.session_state.system_prompt
+
+# Använd st.chat_input för att fånga upp användarens fråga
 if prompt := st.chat_input(f"{chat_imput_q}"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
+
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
-        processed_messages = [{"role": m["role"], "content": (st.session_state.system_prompt + " " + m["content"] if m["role"] == "user" else m["content"])} for m in st.session_state.messages]
-        client = OpenAI(api_key=st.secrets.openai_key) if c.deployment == "streamlit" else OpenAI(api_key=environ.get("openai_key"))
-        for response in client.chat.completions.create(
-            model=st.session_state["llm_chat_model"],
-            temperature=st.session_state["llm_temperature"],
-            messages=processed_messages,
-            stream=True,
-        ):
-            if response.choices[0].delta.content:
-                full_response += str(response.choices[0].delta.content)
-            message_placeholder.markdown(full_response + "▌")  
+
+        # Förbered meddelanden: här prependas systemprompten till varje användarmeddelande
+        processed_messages = []
+        for m in st.session_state.messages:
+            if m["role"] == "user":
+                content_with_prompt = system_prompt + " " + m["content"]
+                processed_messages.append({"role": m["role"], "content": content_with_prompt})
+            else:
+                processed_messages.append(m)
+
+        # Anropa vald LLM via OpenAI eller Groq
+        if "OpenAI" in st.session_state["llm_chat_model"]:
+            if c.deployment == "streamlit":
+                client = OpenAI(api_key=st.secrets.openai_key)
+            else:
+                client = OpenAI(api_key=environ.get("openai_key"))
+    
+            for response in client.chat.completions.create(
+                model=model_map[st.session_state["llm_chat_model"]],
+                temperature=st.session_state["llm_temperature"],
+                messages=processed_messages,
+                stream=True,
+            ):
+                if response.choices[0].delta.content:
+                    full_response += str(response.choices[0].delta.content)
+                message_placeholder.markdown(full_response + "▌")  
+        else:
+            if c.deployment == "streamlit":
+                client = Groq(api_key=st.secrets.groq_key)
+            else:
+                client = Groq(api_key=environ.get("groq_key"))
+            # Ta bort eventuell 'avatar'-nyckel för Groq-meddelanden
+            processed_messages_no_avatar = [{"role": m["role"], "content": m["content"]} for m in processed_messages]
+            stream = client.chat.completions.create(
+                messages=processed_messages_no_avatar,
+                model=model_map[st.session_state["llm_chat_model"]],
+                temperature=st.session_state["llm_temperature"],
+                max_tokens=1024,
+                top_p=1,
+                stop=None,
+                stream=True,
+            )
+            for chunk in stream:
+                if chunk.choices[0].delta.content is not None:
+                    full_response += str(chunk.choices[0].delta.content)
+                message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
