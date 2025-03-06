@@ -68,7 +68,7 @@ def menu():
         st.sidebar.page_link("pages/image_analysis.py", label="Image analysis", icon=":material/image:")
         st.sidebar.page_link("pages/chat_with_document.py", label="Chat with your documents", icon=":material/description:")
         st.sidebar.page_link("pages/transcribe.py", label="Transcribe", icon=":material/transcribe:")
-        st.sidebar.page_link("pages/test.py", label="Dokumentera", icon=":material/edit_note:")
+        #st.sidebar.page_link("pages/test.py", label="Dokumentera", icon=":material/edit_note:")
 
         st.sidebar.markdown("# ")
         with st.sidebar.container(border = True):
