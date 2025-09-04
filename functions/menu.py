@@ -17,7 +17,14 @@ def menu():
     if 'update_date' not in st.session_state:
         st.session_state['update_date'] = c.update_date
 
-    
+    # Sidebar for language selection
+    st.sidebar.selectbox(
+        "Språk", 
+        ("Svenska", "Engelska"),
+        index = ["Svenska", "Engelska"].index(st.session_state['language']),
+        key = "selected_language",  # Temporary key for selected value
+        on_change = update_language,  # Trigger update when changed
+        label_visibility = "collapsed"
     )
 
     if st.session_state['language'] == "Svenska":
